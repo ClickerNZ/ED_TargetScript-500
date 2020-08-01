@@ -1,0 +1,685 @@
+
+//----------------------------------------------------------------------//
+//	CMDR Clicker's Elite Dangerous Thrustmaster Warthog + TFRP Script	//
+//----------------------------------------------------------------------//
+
+// This file: ED_StateTracker.tmh (v4.2.1) ... supports Elite Dangerous v3.7 (Fleet Carriers)
+
+// Refer Change Log.txt in same folder
+
+// LEGEND: 
+// ========================================================
+// fnName()					refer to ED_Functions file
+// initName()				refer to ED_Functions file
+// fnsName()				refer to ED_StateTracker file
+// tgName()					refer to ED_Toggles file
+// mName					refer to ED_Macros file
+// MapKey statements		refer to ED_MapKeyAssignment file
+// Global Defines			refer to ED_Defines file
+// Global Variables			refer to ED_GlobalVars file
+// User Config Settings		refer to ED_UserSettings file
+// ========================================================
+
+// Index:	Line		FUNCTION
+//			Line 43: 	int fnsReadStatusJson()
+//			Line 119: 	int fnsGetKeyValue()
+//			Line 235: 	int fnsProcessFlags()
+//			Line 495: 	int fnsProcessGuiFocus()
+//			Line 535: 	int fnsStartCheck()
+//			line 588:	int fnsMyStates()
+	
+// START
+
+
+	// FUNCTION:	Read in status.json into 'myJson'
+	// Requires:	'StatusFile' string variable to be correctly set in ED_UserSettings file
+
+	// GlobalVars
+
+	char	myJson;	
+
+	// ------------
+	
+	int fnsReadStatusJson() {
+
+		int 	VoiceTxt;
+		int 	fp;
+		int 	buf = 512;
+		int		myResult;
+		int		ReadErrorCount	= 0;
+		int		ReadErrorSent	= 0;
+		int		newJson			= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
+
+		Dim(&myJson, buf);
+		myJson[0] = 0;
+		
+		char	lastJson;
+ 		Dim(&lastJson, buf); 
+ 		lastJson[0]=0;		
+		
+		fp = fopen(&StatusFile, "r");
+		if (fp) {
+			myResult = fread(&myJson, 1, buf, fp);
+			fclose(fp);
+			if (myResult == 0) {
+				ReadErrorCount = ReadErrorCount + 1;
+				if (ReadErrorCount > 3) {
+					printf("File Read Error Count = %d : status.json\x0a", ReadErrorCount);
+					if (!ReadErrorSent) {
+						VoiceTxt = "File Read Error count exceeded";
+						fnTextToSpeech(VoiceTxt, 100);
+						ReadErrorSent = 1;
+					}
+				}
+			}
+			else {
+				ReadErrorCount = 0;
+				ReadErrorSent = 0;
+				myJson[myResult]=0;							// terminates char array with nul
+				
+				newJson = strcmp(&myJson, &lastJson);
+				if (newJson != 0) {
+					if (Debug) {
+						printf("Function: fnsReadStatusJson();\x0a"); 
+						printf("\x0a\myJson	  = %s \x0a", &myJson);
+						printf("strlen(myJson) = %d\x0a\x0a", strlen(&myJson));				
+					}
+					Flags = fnsGetKeyValue("Flags", 1);
+					if (OldFlags != Flags)	{
+						fnsProcessFlags(0);
+					}
+					OldFlags = Flags;
+				}			
+				sprintf(&lastJson, "%s", &myJson);
+				lastJson[strlen(&lastJson)] = 0;			//terminate char array 
+			}
+		}
+		else {
+			printf("\x0a");
+			VPOutput("FATAL ERROR: Status.jason file not found", 100);
+			Abort();
+		}		
+	}
+
+
+	// FUNCTION:	Extract json key value from status.json:
+	// Input:		Key (pattern = string), value vtype (0=float, 1=int, 2=string)
+	// Output:		Return key value
+	// Valid Patterns(vtype);
+	//				Flags(1), Pips(2), Firegroup(1), GuiFocus(1), FuelMain(0), FuelReservoir(0)
+	//				Cargo(1), LegalState(2), Latitude(0), Longitude(0), Altitude(1), Heading(1)
+	//				BodyName(2), PlanetRadius(1), timestamp(2), event(2)
+
+	// GlobalVars
+
+	char	keyvalue;	
+
+	// ----------
+
+	int fnsGetKeyValue(alias pattern, int vtype) {
+
+		if (Debug) {
+			printf("\x0a\Function: fnsGetKeyValue(\"%s\", %d))\x0a", &pattern, vtype);
+		}
+		
+		int 	PatLen = strlen(&pattern);
+				
+		int 	valstart	= 0;									// string position of where the key value starts
+		int 	vallen		= 0;									// string length of the key value
+		int 	chrpnt		= 0;									// character pointer used to determine where key value ends
+		int		EndValue	= 0;									// flag to set when we hit the end of value
+		
+		char 	thischr;											// char variable to detect end of value via a ',' or '}' or ' '	
+		Dim(&thischr, 2);
+		thischr[0]	= 0;
+		
+		char	myStr;
+		Dim(&myStr, PatLen);
+		myStr[0] 	= 0;
+
+		Dim(&keyvalue, 64);											// keyvalue char is global (used in status dump)
+		keyvalue[0] = 0;
+
+		float	fkeyvalue;											// floating point key values
+		int		ikeyvalue;											// integer key value
+		int		PseudoText = "";
+		int		myResult;
+		
+		// Find the Key (pattern) ...
+
+		int Start = findstr(&myJson, &pattern);
+		if (Start == -1) {
+			printf("Key %s NOT Found\x0a", &pattern);
+			return -1;
+		}
+		
+		// Now grab the key-value...
+		
+		valstart = Start + PatLen + 2;								// start of value we're after
+
+		chrpnt = 0;
+						
+		myResult = strcmp(&pattern, "Pips");
+		
+		if (myResult == 0) {										// pattern = "Pips"
+			vallen = 5;
+			while(chrpnt < vallen) {
+				strsub(&thischr, &myJson, valstart+chrpnt, valstart+chrpnt);
+				strcat(&keyvalue, &thischr);
+				chrpnt = chrpnt + 1;
+			}
+		}
+		else {
+			strsub(&thischr, &myJson, valstart, valstart);
+			myResult = strcmp(&thischr, ",");
+			if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+		
+			myResult = strcmp(&thischr, "}");
+			if (myResult == 0) EndValue = 1;
+			
+			myResult = strcmp(&thischr, " ");
+			if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+			
+			if (EndValue == 0) strcat(&keyvalue, &thischr);
+			
+			while (EndValue == 0 & chrpnt < 20) {
+				chrpnt = chrpnt + 1;
+				strsub(&thischr, &myJson, valstart+chrpnt, valstart+chrpnt);
+				
+				myResult = strcmp(&thischr, ",");					// end of value signalled by ',' or '}' or ' ' or '"' 
+				if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+				
+				myResult = strcmp(&thischr, "}");
+				if (myResult == 0) {
+					EndValue = 1;
+					chrpnt = chrpnt - 1;
+				}
+				
+				myResult = strcmp(&thischr, " ");
+				if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+
+				myResult = strcmp(&thischr, "\"");
+				if (myResult == 0 & vtype == 2) EndValue = 1;			
+				
+				if (EndValue == 0) strcat(&keyvalue, &thischr);		// continue building char array
+			}			
+		}
+		
+		keyvalue[chrpnt] = 0;										// terminate char array with a nul 
+		
+		if (Debug) {
+			printf("key:	%s	value:	%s\x0a", &pattern, &keyvalue);
+		}
+		
+		// Return converted key-value...
+		
+		if (vtype == 0) {											// convert string to float
+			return eval(&keyvalue);
+		}
+		if (vtype == 1) {											// convert string to integer
+			return ieval(&keyvalue);
+		}
+
+		if (vtype == 2) {			
+			strdel(&keyvalue, 0, 0);								// Just remove leading quote and...
+			return 0;												// ...use the global keyvalue on return
+		}
+	}
+	// End of fnsGetKeyValue()
+
+
+	// FUNCTION: Read and process "Flags" value from "status.json"
+	// Input: 'UpdateLEDs', 1 = update, 0 = no update
+	// Output: Flags value
+
+	int fnsProcessFlags(int UpdateLEDs=0) {
+
+		int VoiceTxt;
+		
+		int ll = fLatLong;												// Track in/out of orbit
+		int sc = fSupercruise;											// Track Supercruise changes
+		int wd = fsdJump;												// Track when we jump systems
+		int sh = fMainShip;												// Track in/out of MainShip
+		int dk = fDocked;												// Track when we dock in station or star port
+		int ld = fLanded;												// Track when landed
+		int oh = fOverHeating;											// Track when we overheat
+		int su = fShieldsUp;											// Track when shields drop
+		int dg = fDanger;												// Track when we are in danger
+		int tr = fSRVTurretRetracted;									// Track when SRV Turret is retracted
+		
+		int fa = fFAOff;												// LED 1 Tracking
+		int lt = fLights;												// LED 2 Tracking
+		int sr = fSilentRunning;										// LED 3 Tracking
+		int cs = fCargoScoop;											// LED 4 Tracking
+		int lg = fLandingGear;											// LED 5 Tracking
+		
+		
+		// TARGET uses 32 bit signed precision for its integers.
+		// Numbers larger than 2147483648 wrap around to negative number
+		// and can only mean bit 31 (fSRVHiBeam) is set.
+		// Note: "bitwise and" test won't work for negative numbers
+
+		// Process 'Flags' value...most significant bit order
+		
+		if (Flags == 0) {		
+			if(GameLoaded == 1) {										// Detects when Game halts
+				GameLoaded = 0;
+
+				VoiceTxt = "Game halted -";
+				if(TrainingEnabled){
+					TrainingMap();										// Load KeyMap profile for training
+					if (AnnounceTraining) {
+						VoiceTxt = "Game halted. Training mode enabled -";
+					}
+				}
+				
+				printf("\x0a- ");
+				fnVPOutput(VoiceTxt);
+				
+				if (TrainingEnabled & !AnnounceTraining) {
+					printf("Training Mode enabled\x0a");
+				}
+				
+				if (ReverseThrust) {
+					ReverseThrust = !ReverseThrust;
+				}
+				
+				fnSetLEDs();											// Turn off Status LEDs
+				fnsMyStates(SAVE);
+			}
+		}
+		else {		// Flags != 0
+		
+			if (Flags < 0) {
+				fSRVHiBeam			= 1;
+			}
+			else {
+				fSRVHiBeam			= 0;
+			}
+					
+			fsdJump				= ((Flags & ED_FSDJump) > 0);
+			fAltFromAvgRad		= ((Flags & ED_AltFromAvgRad) > 0);
+			fNightVision		= ((Flags & ED_NightVision) > 0);
+			fHUDAnalysis		= ((Flags & ED_HudInAnalysisMode) > 0);
+			fSRV				= ((Flags & ED_InSRV) > 0);
+			fFighter			= ((Flags & ED_InFighter) > 0);
+			fMainShip			= ((Flags & ED_InMainShip) > 0);
+			fInterdicted		= ((Flags & ED_BeingInterdicted) > 0);
+			fDanger				= ((Flags & ED_IsInDanger) > 0);
+			fLatLong			= ((Flags & ED_HasLatLong) > 0);
+			fOverHeating		= ((Flags & ED_OverHeating) > 0);
+			fLowFuel			= ((Flags & ED_LowFuel) > 0);
+			fFSDCooldown		= ((Flags & ED_FSDCooldown) > 0);
+			fFSDCharging		= ((Flags & ED_FSDCharging) > 0);
+			fMassLocked			= ((Flags & ED_FSDMassLocked) > 0);
+			fSRVDriveAssist		= ((Flags & ED_SRVDriveAssist) > 0);
+			fSRVTurretRetracted	= ((Flags & ED_SRVTurretRetracted) > 0);
+			fSRVTurretView		= ((Flags & ED_SRVTurret) > 0);
+			fSRVHandbrake		= ((Flags & ED_SRVHandbrake) > 0);
+			fFuelScoop			= ((Flags & ED_ScoopingFuel) > 0);
+			fSilentRunning		= ((Flags & ED_SilentRunning) > 0);
+			fCargoScoop			= ((Flags & ED_CargoScoopDeployed) > 0);
+			fLights				= ((Flags & ED_LightsOn) > 0);
+			fInWing				= ((Flags & ED_InWing) > 0);
+			fHardpoints			= ((Flags & ED_HardpointsDeployed) > 0);
+			fFAOff				= ((Flags & ED_FlightAssistOff) > 0);
+			fSupercruise		= ((Flags & ED_Supercruise) > 0);
+			fShieldsUp			= ((Flags & ED_ShieldsUp) > 0);
+			fLandingGear		= ((Flags & ED_LandingGearDown) > 0);
+			fLanded				= ((Flags & ED_Landed) > 0);
+			fDocked				= ((Flags & ED_Docked) > 0);
+
+			if (fLatLong != ll) {
+				OrbitalCruise = !OrbitalCruise;			
+			}
+
+			if (fSupercruise != sc) {									// Detect when Supercruise toggles
+				fnGetFlightMode();										// Line up slider curves
+				if (!fSupercruise) {
+					if (SelectDrop == 0) {								// Uninitiated drop
+						
+						if (OrbitalCruise & !fInterdicted) {
+							VoiceTxt = "Entering Glide Mode\x0a";
+						}
+						else { 
+							VoiceTxt = "Drop detected\x0a";
+						}
+						
+						fnVPOutput(VoiceTxt);
+						
+						if (fInterdicted | fDanger) {
+							printf("!!! DANGER DETECTED !!!\x0a");
+							if (fHUDAnalysis) {
+								tgHUDMode();							// Select Combat HUD
+							}
+							if (!fHardpoints) {
+								tgHardpoints();
+							}
+							DeferCall(1500, &ActKey, PULSE+KEYON+SelectHighestThreat);
+							
+							fnTextToSpeech("Warning! Danger! Combat Mode Initiated", 100);				// Sound warning 
+						}
+					}
+					else {												// Initiated drop
+						SelectDrop=0;
+					}
+					UpdateLEDs = 1;
+				}
+			}
+
+			if (fsdJump != wd) {
+				if (fsdJump) {
+					if (!fHUDAnalysis & AutoHUD) {
+						tgHUDMode();		
+					}
+				}
+			}
+			
+			if (!fShieldsUp & su & !fSilentRunning) {		// Shields just dropped
+				if (fDanger) {
+					if (AutoStrobe) {
+						DeferCall(750, &fnVPOutput, "Activating Silent Strobe\x0a");
+						tgSilentRunning(STROBE);
+					}
+					else {
+						DeferCall(750, &fnTextToSpeech, "Consider using Silent Strobe commander");
+					}
+				}
+			}
+
+			if (fMainShip & (fLanded != ld)) {		// Framework for future functionality
+							
+				if (fLanded) {
+					printf("Landed @ %s\x0a", fnGetTOD());
+				}
+				else {
+					printf("Lift off @ %s\x0a", fnGetTOD());
+					if (AutoGearUP) {
+						ActKey(PULSE+KEYON+LandingGear);
+					}
+					ShipDismissed = 0;			
+				}
+			}
+			
+			if (fDocked != dk) {		// Framework - currently testing - may not be viable in current form without additional information from journal
+							
+				if (fDocked) {							
+					if (AutoHanger) {
+						DeferCall(2500, &fnHangerServices, 1);			// Cannot use Auto feature until determine if in a Starport v Carrier
+					}
+					DeferCall(1000, &ActKey, PULSE+KEYON+BalancePower);
+					printf("Docked @ %s\x0a", fnGetTOD());
+				}
+				else	{	
+					InHanger = 0;
+					if (AutoGearUP) {
+						DeferCall(1500, &ActKey, PULSE+KEYON+LandingGear);
+					}
+					printf("Launch @ %s\x0a", fnGetTOD());					
+				}
+			}
+			
+			if (fOverHeating & !oh) {
+				if (AutoHeatsink) {			// Fire a heatsink if we have one
+					fnVPOutput("Auto Heat sink engaged!");
+					ActKey(PULSE+KEYON+DeployHeatSink);
+				}
+				else {
+					fnTextToSpeech("Consider firing a heat sink commander", 100);
+				}
+			}
+			
+			if (fSRV & fSRVTurretRetracted != tr) {
+				if (fSRVTurretRetracted) {
+					fnTextToSpeech("Turret Retracted");
+				}
+				else {
+					fnTextToSpeech("Turret Deployed");
+				}
+			}
+									
+			if (fa != fFAOff | lt != fLights | sr != fSilentRunning | cs != fCargoScoop | lg != fLandingGear | sh != fMainShip) UpdateLEDs = 1;
+
+			if(GameLoaded == 0) {			// Game started...as opposed to re-started.
+				fnGameStarted();
+			}
+			else if(UpdateLEDs) {
+				fnSetLEDs();
+			}
+			
+			OldFlags = Flags;				// Keep track of last Flags Value to track when Flags Changes
+			
+			if (ShowFlags) {
+				printf("\x0a===============\x0a");
+				if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
+				if (fsdJump) 				printf("Hyperjump\x0a");
+				if (fAltFromAvgRad) 		printf("Radius-ALT\x0a");
+				if (fNightVision) 			printf("Night Vision\x0a");
+				if (fHUDAnalysis) 			printf("AnalysisHUD\x0a");
+				if (fSRV) 					printf("In SRV\x0a");
+				if (fFighter) 				printf("In Fighter\x0a");
+				if (fMainShip) 				printf("In MainShip\x0a");
+				if (fInterdicted) 			printf("Being Interdicted\x0a");
+				if (fDanger) 				printf("!!! DANGER !!!\x0a");
+				if (fLatLong) 				printf("Lat\\Lon available\x0a");
+				if (fOverHeating) 			printf("Over Heating\x0a");
+				if (fLowFuel) 				printf("Low Fuel\x0a");
+				if (fFSDCooldown) 			printf("FSD Cooldown\x0a");
+				if (fFSDCharging) 			printf("FSD Charging\x0a");
+				if (fMassLocked) 			printf("FSD Masslocked\x0a");
+				if (fSRVDriveAssist) 		printf("SRV Drive Assist\x0a");
+				if (fSRVTurretRetracted) 	printf("SRV Turret Retracted\x0a");
+				if (fSRVTurretView) 		printf("SRV Turret View\x0a");
+				if (fSRVHandbrake) 			printf("SRV Handbrake\x0a");
+				if (fFuelScoop) 			printf("Fuel Scoop Deployed\x0a");
+				if (fSilentRunning) 		printf("Silent Running\x0a");
+				if (fCargoScoop) 			printf("Cargo Scoop Deployed\x0a");
+				if (fLights) 				printf("Lights On\x0a");
+				if (fInWing) 				printf("In Wing\x0a");
+				if (fHardpoints) 			printf("Hardpoints Deployed\x0a");
+				if (fFAOff) 				printf("Flight Assist OFF\x0a");
+				if (fSupercruise) 			printf("Supercruise Engaged\x0a");
+				if (fShieldsUp) 			printf("Shields Up\x0a");
+				if (fLandingGear) 			printf("Landing Gear Deployed\x0a");
+				if (fLanded) 				printf("Landed on planet\x0a");
+				if (fDocked) 				printf("Docked\x0a");
+				printf("===============\x0a");
+			}			
+		}
+	}
+	// END of fnsProcessFlags()
+
+
+	// FUNCTION: Read and process 'GuiFocus' key value in status.json
+
+	int fnsProcessGuiFocus() {
+		int GUIFocus;
+		int prttxt;
+
+		if (Flags != 0) {
+			GUIFocus = fnsGetKeyValue("GuiFocus", 1);
+			if (GUIFocus == GUI_None)			prttxt = "No Focus";
+			if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
+			if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
+			if (GUIFocus == GUI_CommsPanel)		prttxt = "Comms Panel";
+			if (GUIFocus == GUI_RolePanel)		prttxt = "Role Panel";
+			if (GUIFocus == GUI_StationSvcs)	prttxt = "Station Services";
+			if (GUIFocus == GUI_GalaxyMap)		prttxt = "Galaxy Map";
+			if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
+			if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
+			if (GUIFocus == GUI_FSSMode) {		prttxt = "FSS Mode";
+				FSSMode = 1;
+			}
+			else FSSMode = 0;
+			
+			if (GUIFocus == GUI_SAAMode) {		prttxt = "SAA Mode";
+				SAAMode = 1;
+			}
+			else SAAMode = 0;
+			
+			if (GUIFocus == GUI_Codex)			prttxt = "Codex";
+
+			if (Debug) {
+				printf("Function: fnsProcessGuiFocus();\x0a");
+				printf("GUIFocus		%d, %s\x0a", GUIFocus, prttxt);
+			}
+			return GUIFocus;
+		}
+	}
+
+
+	// FUNCTION: Initial check to see if game is already running after we've restarted the script.
+	
+	int fnsStartCheck() {
+		int fp;								// file pointer (handle)
+		int ValidStatusFile = 0;
+		
+		fp = fopen(&StatusFile, "r");
+		if (fp) {
+			fclose(fp);
+			ValidStatusFile = 1;
+			printf("\x0a\status.json file set correctly in ED_UserSettings");
+		}
+		else {
+			printf("\x0a\x0a\!!! FATAL ERROR !!!\x0a\x0a");
+			printf("status.json file not found.\x0a\x0a");
+			printf("Please set 'StatusFile' alias correctly in ED_UserSettings file\x0a");
+			printf("Refer ED_UserSettings.tmh file for instructions.\x0a");
+			Abort();
+		}
+		
+		if (StartupLock) {
+			printf("\x0a\status.json location set to %s\x0a\x0a", &StatusFile);			
+		}
+		
+		if (ValidStatusFile) {
+			fnsReadStatusJson();
+			ActKey(KEYON+REXEC(3, StatusReadRate, "fnsReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
+		}
+
+		Flags = fnsGetKeyValue("Flags", 1);
+		
+		if(Flags != 0) {
+			fnsProcessFlags(0);
+		}
+		else {
+			fnSoundFX("tada");
+		}
+	}
+
+	// FUNCTION:	Save states not included in status.json
+	// PURPOSE:		Save current status of certain variables when mode switching or restarting the game
+	// REQUIRES:	'MyStatusFile' path to be set correctly within ED_UserSettings.tmh file
+	// PARAMETERS:	action = SAVE or LOAD
+
+	// Global declarions
+	
+	struct MyStruct {
+		int		sVolume;
+		int 	sDismissed;
+		int 	sCurves;
+		int 	sLEDLevel;
+	}
+	
+	MyStruct MyStates;
+	
+	// -----------------
+
+	int fnsMyStates(int action)	{
+
+		int fnName = "MyStates";
+		int reason;
+		int fh;														// General File Pointer Variable 
+		int fpresult;
+
+		if (action == SAVE)	{
+						
+			if (Debug) {
+				printf("Function: fnsMyStates();\x0a");
+				printf("Size of MyStates = %d\x0a", sizeof(&MyStates));
+			}
+
+			// Build our struct array
+			MyStates.sVolume	=	VoiceVolume;
+			MyStates.sDismissed =	ShipDismissed;
+			MyStates.sCurves	=	OldCurves;
+			MyStates.sLEDLevel	=	LEDLevel;
+			
+			fh = fopen(&MyStatusFile, "w");								// creates the file if it doesn't exist
+			
+			if (fh) {
+			
+				fpresult = fwrite(&MyStates, sizeof(&MyStates), 1, fh);				
+				fclose(fh);
+				
+				if (fpresult == -1) {
+					fnVPOutput("Error writing MyStates to status file", 100);
+				}	
+				else {
+					if (Debug) {
+						printf("MyStates successfully saved: \x0a");
+						printf("sVolume	= [%d]\x0a", MyStates.sVolume);
+						printf("sDismissed	= [%d]\x0a", MyStates.sDismissed);
+						printf("sCurves	= [%d]\x0a", MyStates.sCurves);
+						printf("sLEDLevel	= [%d]\x0a", MyStates.sLEDLevel);
+						printf("Timestamp	= [%s]\x0a", fnGetTOD());
+					}
+					else {
+						printf("MyStates successfully saved @ %s\x0a", fnGetTOD());
+					}
+				}
+			}
+			else {
+				fnTextToSpeech("Error writing to My Status File");
+				printf("Error opening file to write @ %s: %s\x0a", fnGetTOD(), &MyStatusFile);
+			}		
+		}
+		
+		else if (action == LOAD) {
+
+			fh = fopen(&MyStatusFile, "r");								// open file to read
+			
+			if (fh) {
+
+				fpresult = fread(&MyStates, sizeof(&MyStates), 1, fh);	// Load MyStates from file				
+				
+				if (fpresult > 0) {	// Read from file was successful
+					fclose(fh);							
+
+					// Extract our variables from our struct array
+					VoiceVolume		= MyStates.sVolume;
+					ShipDismissed	= MyStates.sDismissed;
+					OldCurves		= MyStates.sCurves;
+					LEDLevel		= MyStates.sLEDLevel;
+					
+					if (Debug) {
+						printf("\x0a\MyStates successfully loaded:-\x0a");
+						printf("VoiceVolume	= [%d]\x0a", VoiceVolume);
+						printf("ShipDismissed	= [%d]\x0a", ShipDismissed);
+						printf("OldCurves	= [%d]\x0a", OldCurves);
+						printf("LEDLevel	= [%d]\x0a", LEDLevel); 						
+						printf("Timestamp	= [%s]\x0a", fnGetTOD());
+					}
+					else {
+						printf("\x0a\MyStates successfully loaded @ %s\x0a\x0a", fnGetTOD());
+					}					
+				}
+				else {
+					fnVPOutput("Error reading MyStates from status file", 100);
+				}
+			}
+			else {
+				fnTextToSpeech("Non fatal error, my Status File not found or invalid, check con sole message"); 
+				printf("\x0a\!!! Non-Fatal Error opening file to read: %s\x0a", &MyStatusFile);
+				printf("This can happen if the file does not exist or is missing array elements\x0a");
+			}
+		}
+		
+		else {
+			reason = "action not valid";
+			fnNotValid(fnName, reason);
+			printf("fnsMyStates Action = %d\x0a", action);
+		}
+	}
+
+// END
