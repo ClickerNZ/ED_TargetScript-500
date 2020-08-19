@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Root PresetName="Clicker-Warthog-v430" MajorVersion="3" MinorVersion="0">
+<Root PresetName="Clicker-Warthog-v500" MajorVersion="3" MinorVersion="0">
 	<KeyboardLayout>en-AU</KeyboardLayout>
 	<MouseXMode Value="" />
 	<MouseXDecay Value="1" />
@@ -642,7 +642,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</HeadLookPitchDown>
 	<HeadLookPitchAxisRaw>
-		<Binding Device="16D00AEC" Key="Joy_YAxis" />
+		<Binding Device="{NoDevice}" Key="" />
 		<Inverted Value="0" />
 		<Deadzone Value="0.01000000" />
 	</HeadLookPitchAxisRaw>
@@ -655,7 +655,7 @@
 		<Secondary Device="{NoDevice}" Key="" />
 	</HeadLookYawRight>
 	<HeadLookYawAxis>
-		<Binding Device="16D00AEC" Key="Joy_XAxis" />
+		<Binding Device="{NoDevice}" Key="" />
 		<Inverted Value="0" />
 		<Deadzone Value="0.01000000" />
 	</HeadLookYawAxis>

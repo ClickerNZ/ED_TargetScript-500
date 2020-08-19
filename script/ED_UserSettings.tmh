@@ -3,7 +3,7 @@
 //	CMDR Clicker's Elite Dangerous Thrustmaster Warthog + TFRP Script	//
 //----------------------------------------------------------------------//
 
-// This file: ED_UserSettings.tmh (v4.3.0) ... supports Elite Dangerous v3.7 (Fleet Carriers)
+// This file: ED_UserSettings.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
 // Refer Change Log.txt in same folder
 
@@ -117,7 +117,7 @@
 	alias	VoiceCMD			= "-r 0";
 	
 	define	TrainingEnabled		ENABLED					// ENABLED or DISABLED. When game stopped pressing a button/switch announces basic function
-	define	AnnounceTraining	ENABLED					// DISABLED = Do not annnounce training mode, ENABLED = Announce training mode
+	define	AnnounceTraining	DISABLED				// DISABLED = Do not annnounce training mode, ENABLED = Announce training mode
 
 //------------------//
 // WAV Sound Player //

@@ -3,7 +3,7 @@
 //	CMDR Clicker's Elite Dangerous Thrustmaster Warthog + TFRP Script	//
 //----------------------------------------------------------------------//
 
-// This file: ED_Defines.tmh (v4.2.1) ... supports Elite Dangerous v3.7 (Fleet Carriers)
+// This file: ED_Defines.tmh (v4.2.1) ... supports Elite Dangerous (Odyssey)
 
 // Refer Change Log.txt in same folder
 
@@ -65,8 +65,8 @@
 // VERSION VARIABLES                                                    //
 //----------------------------------------------------------------------//
 
-	define VMajor		 						4						// Script Version Major Value			ie. 2.x.x
-	define VMinor		 						3						// Script Version Minor Value			ie. x.3.x
+	define VMajor		 						5						// Script Version Major Value			ie. 2.x.x
+	define VMinor		 						0						// Script Version Minor Value			ie. x.3.x
 	define VPoint								"0_DEV"					// Script Version Point Update			ie. x.x.4
 
 //----------------------------------------------------------------------//

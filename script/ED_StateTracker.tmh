@@ -3,7 +3,7 @@
 //	CMDR Clicker's Elite Dangerous Thrustmaster Warthog + TFRP Script	//
 //----------------------------------------------------------------------//
 
-// This file: ED_StateTracker.tmh (v4.3.0) ... supports Elite Dangerous v3.7 (Fleet Carriers)
+// This file: ED_StateTracker.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
 // Refer Change Log.txt in same folder
 
@@ -572,7 +572,7 @@
 	// REQUIRES:	'MyStatusFile' path to be set correctly within ED_UserSettings.tmh file
 	// PARAMETERS:	action = SAVE or LOAD
 
-	// Global declarions
+	// Global declarations
 	
 	struct MyStruct {
 		int		sVolume;
@@ -583,7 +583,7 @@
 	
 	MyStruct MyStates;
 	
-	// -----------------
+	// -------------------
 
 	int fnsMyStates(int action)	{
 

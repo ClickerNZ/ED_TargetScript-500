@@ -1,8 +1,10 @@
 // CMDR Clicker Thrustmaster TARGET Script Change Log //
 
-v4.3.0	-
+v5.0.0	- New Major release - Odyssey 
+		- 
 
-v4.2.1	- Fix name of TrainingMap in fnCustomCommands()
+v4.2.1	- New Point Release
+		- Fix name of TrainingMap in fnCustomCommands()
 		- Expand tgSilentRunning() to include a 'strobe' option (ON/OFF every 2 seconds)
 		- Create 'AutoStrobe' define in ED_UserSettings.tmh and code in ED_StateTracker.tmh to strobe silent running if in danger and shields drop
 		- Create 'AutoHUD' define in ED_UserSettings to enable HUD=Analysis Mode on FSD 
