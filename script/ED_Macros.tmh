@@ -236,10 +236,10 @@
 			PULSE+UIBack,
 			LOCK);
 
-		// MACRO: Send '/clear' command to clear any text in all 3 chat box windows
+		// MACRO: Send '/clear' command to clear any text in all chat box windows
 		mClearAllChatBox = CHAIN(
 			LOCK+PULSE+QuickCommsPanel, D(500),					// enter, enter, 2, left, enter, /, c, l, e, a, r, enter, left, down
-			PULSE+QuickCommsPanel, D(500),							// repeat 3x
+			PULSE+QuickCommsPanel, D(500),							// repeat twice, 3x if in a squadron
 			PULSE+CommsPanel, D(500),
 			PULSE+UILeft, D(),
 			PULSE+QuickCommsPanel, D(),
@@ -260,16 +260,16 @@
 			PULSE+'a', D(),
 			PULSE+'r', D(),
 			PULSE+QuickCommsPanel, D(500),
-			PULSE+UILeft, D(),
-			PULSE+UIDown, D(),
-			PULSE+QuickCommsPanel, D(),
-			PULSE+'\/', D(),
-			PULSE+'c', D(),
-			PULSE+'l', D(),
-			PULSE+'e', D(),
-			PULSE+'a', D(),
-			PULSE+'r', D(),
-			PULSE+QuickCommsPanel, D(500),
+//			PULSE+UILeft, D(),									// Uncomment this and the following lines if you are a member of a squadron
+//			PULSE+UIDown, D(),									// .
+//			PULSE+QuickCommsPanel, D(),							// .
+//			PULSE+'\/', D(),									// .
+//			PULSE+'c', D(),										// .
+//			PULSE+'l', D(),										// .
+//			PULSE+'e', D(),										// .
+//			PULSE+'a', D(),										// .
+//			PULSE+'r', D(),										// .
+//			PULSE+QuickCommsPanel, D(500),						// .
 			PULSE+UILeft, D(),
 			PULSE+UIDown, D(),
 			PULSE+CommsPanel, D(),			
@@ -287,7 +287,7 @@
 			PULSE+QuickCommsPanel, D(500),
 			LOCK);
 
-		// MACRO: Enter hanger then facilities + refuel/repair/restock
+		// MACRO: Enter hanger then facilities + refuel/repair/restock >>> NOTE: Due to differences between Carrier and Starport we need to comment a bunch of key presses		
 		mEnterHanger = CHAIN(
 			LOCK,
 			// Fleet Carriers New Menu items when docked
