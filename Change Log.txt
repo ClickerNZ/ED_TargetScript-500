@@ -1,7 +1,10 @@
 // CMDR Clicker Thrustmaster TARGET Script Change Log //
 
 v5.0.0	- New Major release - Odyssey 
-		- 
+		- Add reg scrap folder and scraps for extra voices
+		- Added more comments in ED_UserSettings.tmh to include how to add TTS voices to Win10
+		- Comment out 3rd iteration of "mClearAllChatBox" macro (not reqd if not in a squadron)
+		- Changed Header in ED_Main.tmc to call out version numbers required.
 
 v4.2.1	- New Point Release
 		- Fix name of TrainingMap in fnCustomCommands()
