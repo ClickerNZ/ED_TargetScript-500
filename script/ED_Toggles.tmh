@@ -35,6 +35,7 @@
 //			Line 435: 	int tgPlanetView()
 //			Line 459: 	int tgWarpDrive()
 //			Line 516: 	int tgExtCamera()
+//			Line xxx:	int tgXAxis()
 	
 	
 // START
@@ -524,6 +525,27 @@
 		else {
 			printf("External Camera:	OFF\x0a");
 		}
+	}
+	
+	// TOGGLE:	X-Axis between Roll and Yaw
+	
+	int tgXAxis(int dummy = 0) {
+		
+		int VoiceTxt;
+
+		ActKey(PULSE+KEYON+SwapRollYaw);
+		XAxisMode = !XAxisMode;
+		
+		if (XAxisMode) {
+			VoiceTxt = "X Axis set to Yaw";
+		}
+		else {
+			VoiceTxt = "X Axis set to Roll";
+		}
+		
+//		if (StartupLock == 0) {
+			fnVPOutput(VoiceTxt);
+//		}	
 	}
 
 // END
