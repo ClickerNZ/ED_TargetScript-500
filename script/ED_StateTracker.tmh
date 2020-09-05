@@ -266,7 +266,7 @@
 				GameLoaded = 0;
 
 				VoiceTxt = "Game halted -";
-				if(TrainingEnabled){
+				if(TrainingMode == ENABLED){
 					TrainingMap();										// Load KeyMap profile for training
 					if (AnnounceTraining) {
 						VoiceTxt = "Game halted. Training mode enabled -";
@@ -276,7 +276,7 @@
 				printf("\x0a- ");
 				fnVPOutput(VoiceTxt);
 				
-				if (TrainingEnabled & !AnnounceTraining) {
+				if (TrainingMode == ENABLED & AnnounceTraining == DISABLED) {
 					printf("Training Mode enabled\x0a");
 				}
 				
