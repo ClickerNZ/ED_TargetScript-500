@@ -563,7 +563,7 @@
 		MainKeyMap();													// MapKey profile for 'Game Running'
 		
 		if (SwapRoll4Yaw) {
-			DeferCall(1250, &tgXAxis, 0);								// Give 'MainKeyMap()' call a chance to finish
+			DeferCall(1500, &tgXAxis, 0);								// Give 'MainKeyMap()' call a chance to finish
 		}				
 	}
 
