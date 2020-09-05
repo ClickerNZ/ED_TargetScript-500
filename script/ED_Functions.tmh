@@ -50,6 +50,7 @@
 //			Line 912: 	int fnRequestDock()
 //			Line 934: 	int fnHangerServices()
 //			Line 978:	int fnIdleLock()
+//			Line 1012:	int fnClearChatBox()
 //			Line 1012: 	int fnModeSwitch()
 //			Line 1067:	int fnVPOutput()
 //			Line 1079: 	int fnPrintState()
@@ -499,12 +500,8 @@
 		
 		printf("\x0a  !!! GAME STARTED @ %s !!!\x0a\x0a", fnGetTOD());
 		
-		if (SwapRoll4Yaw) {
-			DeferCall(1000, &ActKey, PULSE+KEYON+SwapRollYaw);			// Give above 'MainKeyMap()' call a chance to finish
-		}
-
 		GameLoaded = 1;
-		StartupLock = 0;		
+		StartupLock = 0;
 
 		DefEventHandler(EV_HID_INPUT_DATA, &Throttle, THR_FC);			// Forces re-read of slider axis								
 		
@@ -559,12 +556,15 @@
 		printf("\x0a\SoundFXStatus = %s\x0a", SoundFXStatus);
 
 		fnTextToSpeech("Welcome back Commander");
-		
+				
 		fnPrintState();
 		printf("\x0a\Script running....waiting for input...\x0a\x0a");
 
 		MainKeyMap();													// MapKey profile for 'Game Running'
-				
+		
+		if (SwapRoll4Yaw) {
+			DeferCall(1250, &tgXAxis, 0);								// Give 'MainKeyMap()' call a chance to finish
+		}				
 	}
 
 
@@ -1002,6 +1002,57 @@
 		}
 	}
 
+
+	// FUNCTION:	Clears the chat boxes
+	// Parameter:	'mode'. Valid = 0 or 1
+	//				mode 0 clears current selected chatbox. mode 1 clears all chatbaxes
+	
+	int fnClearChatBox(int mode = 0) {
+		int loop = 1;
+		
+		if (mode == 1) 			loop = 2;
+		if (SqdrnMember == YES) loop = 3;
+		
+		
+		ActKey(PULSE+KEYON+
+			CHAIN(
+			LOCK+PULSE+QuickCommsPanel, D(500),					// enter, enter, 2, left, enter, /, c, l, e, a, r, enter, left, down
+			PULSE+QuickCommsPanel, D(500),						// repeat twice, 3x if in a squadron
+			PULSE+CommsPanel, D(500),
+			PULSE+UILeft, D(),
+			PULSE+QuickCommsPanel, D(),
+			PULSE+'\/', D(),
+			PULSE+'c', D(),
+			PULSE+'l', D(),
+			PULSE+'e', D(),
+			PULSE+'a', D(),
+			PULSE+'r', D(),
+			PULSE+QuickCommsPanel, D(500), 
+			LOCK)
+		);
+		
+		while (loop > 1) {
+			ActKey(PULSE+KEYON+
+				CHAIN(
+				LOCK+PULSE+UILeft, D(),
+				PULSE+UIDown, D(),
+				PULSE+QuickCommsPanel, D(),
+				PULSE+'\/', D(),
+				PULSE+'c', D(),
+				PULSE+'l', D(),
+				PULSE+'e', D(),
+				PULSE+'a', D(),
+				PULSE+'r', D(),
+				PULSE+QuickCommsPanel, D(500),
+				PULSE+UILeft, D(),
+				PULSE+UIDown, D(), 
+				LOCK)
+			);
+			loop = loop - 1;
+		}
+		ActKey(PULSE+KEYON+CommsPanel);	
+	}
+	
 
 	// FUNCTION:	Menulog
 	// Parameter:	'mode'. Valid = 0, 1 or 2
