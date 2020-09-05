@@ -24,7 +24,13 @@
 
 // Index:	Line		FUNCTION
 //			Line 38: 	int MainKeyMap()
+//			Line 51:		Joystick Triggers
+//			Line 256:		Throttle Lever Switches
+//			Line 390:		Throttle Base Switches
 //			Line 613: 	int TrainingMap()
+//			Line xxx:		Joystick Triggers
+//			Line xxx:		Throttle Lever Switches
+//			Line xxx:		Throttle Base Switches
 
 
 // START
@@ -76,7 +82,7 @@
 			MapKeyUMD(&Joystick, S1,
 				EXEC("tgHUDMode();"),																			// U - Toggle - Analysis/Combat Mode
 				EXEC("tgHardpoints();"),																		// M - Deploy/Retract Hard-points
-				PULSE+SwapRollYaw																				// D - Toggle Joystick X-Axis between Roll and Yaw
+				EXEC("tgXAxis();")																				// D - Toggle Joystick X-Axis between Roll and Yaw
 				);
 		}
 	
@@ -305,7 +311,7 @@
 			MapKey(&Throttle, CSR, PULSE+OrbitLines);				// Toggle: Turn Orbit lines ON/OFF
 		}
 		
-//		(Mike Switch)		// Communications Controller functions
+//		(Mike Switch)		// Alternate Roll/Yaw or Communications Controller functions
 //		-------------
 
 		if (EnableTFRPRudder == 0) {
@@ -444,8 +450,8 @@
 		}
 		else {
 			MapKeyIO(&Throttle, LDGH, 
-				PULSE+mClearAllChatBox,															// Clear all 3 chat box windows
-				PULSE+mClearChatBox																// Clear currently selected chat box window
+				EXEC("fnClearChatBox(1);"),															// Clear all chat box windows
+				EXEC("fnClearChatBox(0);")															// Clear currently selected chat box window
 				);
 		}
 
@@ -607,7 +613,7 @@
 //  KeyMaps for Training Mode  //
 // --------------------------- //
 
-	// FUNCTION:	This MapKey set is called at startup if game is not running and user setting 'TrainingEnabled' is set to 1
+	// FUNCTION:	This MapKey set is called at startup if game is not running and user setting 'TrainingMode' is set to ENABLED
 	//				Also called from fnsProcessFlags() when we detect Game has halted
 
 	int TrainingMap() {
