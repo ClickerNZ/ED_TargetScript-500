@@ -33,8 +33,6 @@
 //			Line 170: 		mReportCrimesToggle
 //			Line 191: 		mNAVBeaconWing
 //			Line 216: 		mNAVBeaconOff
-//			Line 240: 		mClearAllChatBox
-//			Line 279: 		mClearChatBox
 //			Line 291: 		mEnterHanger
 //			Line 317: 		mLaunch
 //			Line 328:		mChangeColours
@@ -45,8 +43,7 @@
 	// Declare macros (must be declared as global)
 
 	int	mRequestDock, mDeploySRV, mShowGameStats, mReportCrimesToggle, mNAVBeaconWing, mNAVBeaconOff;
-	int	mFastModeSwitch0, mFastModeSwitch1, mFastModeSwitch2, mClearAllChatBox, mClearChatBox, mBoardShip;
-	int mEnterHanger, mLaunch, mChangeColours;
+	int	mFastModeSwitch0, mFastModeSwitch1, mFastModeSwitch2, mBoardShip, mEnterHanger, mLaunch, mChangeColours;
 
 //---------------//
 // CUSTOM MACROS //			// MACROS Include a series of automated key presses to perform a specific task.
@@ -62,7 +59,7 @@
 	int fnCustomCommands() {
 
 		// Select MapKey Assignment profile
-		if (Flags == 0 & TrainingEnabled) {
+		if (Flags == 0 & TrainingMode == ENABLED) {
 			printf("\x0a\Training Mode Enabled\x0a");		
 			if (AnnounceTraining) {
 				fnTextToSpeech("Training mode enabled, press a button or switch to hear what it does");
@@ -234,57 +231,6 @@
 			PULSE+UIPrevPanel, D(),
 			PULSE+UIPrevPanel, D(),
 			PULSE+UIBack,
-			LOCK);
-
-		// MACRO: Send '/clear' command to clear any text in all chat box windows
-		mClearAllChatBox = CHAIN(
-			LOCK+PULSE+QuickCommsPanel, D(500),					// enter, enter, 2, left, enter, /, c, l, e, a, r, enter, left, down
-			PULSE+QuickCommsPanel, D(500),							// repeat twice, 3x if in a squadron
-			PULSE+CommsPanel, D(500),
-			PULSE+UILeft, D(),
-			PULSE+QuickCommsPanel, D(),
-			PULSE+'\/', D(),
-			PULSE+'c', D(),
-			PULSE+'l', D(),
-			PULSE+'e', D(),
-			PULSE+'a', D(),
-			PULSE+'r', D(),
-			PULSE+QuickCommsPanel, D(500),
-			PULSE+UILeft, D(),
-			PULSE+UIDown, D(),
-			PULSE+QuickCommsPanel, D(),
-			PULSE+'\/', D(),
-			PULSE+'c', D(),
-			PULSE+'l', D(),
-			PULSE+'e', D(),
-			PULSE+'a', D(),
-			PULSE+'r', D(),
-			PULSE+QuickCommsPanel, D(500),
-//			PULSE+UILeft, D(),									// Uncomment this and the following lines if you are a member of a squadron
-//			PULSE+UIDown, D(),									// .
-//			PULSE+QuickCommsPanel, D(),							// .
-//			PULSE+'\/', D(),									// .
-//			PULSE+'c', D(),										// .
-//			PULSE+'l', D(),										// .
-//			PULSE+'e', D(),										// .
-//			PULSE+'a', D(),										// .
-//			PULSE+'r', D(),										// .
-//			PULSE+QuickCommsPanel, D(500),						// .
-			PULSE+UILeft, D(),
-			PULSE+UIDown, D(),
-			PULSE+CommsPanel, D(),			
-			LOCK);
-
-		// MACRO: Send '/clear' command to clear any text in the chat box.
-		mClearChatBox = CHAIN(
-			LOCK+PULSE+QuickCommsPanel, D(500),					// enter, /, c, l, e, a, r, enter
-			PULSE+'\/', D(),
-			PULSE+'c', D(),
-			PULSE+'l', D(),
-			PULSE+'e', D(),
-			PULSE+'a', D(),
-			PULSE+'r', D(),
-			PULSE+QuickCommsPanel, D(500),
 			LOCK);
 
 		// MACRO: Enter hanger then facilities + refuel/repair/restock >>> NOTE: Due to differences between Carrier and Starport we need to comment a bunch of key presses		
