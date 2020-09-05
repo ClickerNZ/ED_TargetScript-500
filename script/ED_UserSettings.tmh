@@ -118,7 +118,7 @@
 
 	alias	VoiceCMD			= "-r 0";
 	
-	define	TrainingEnabled		ENABLED					// ENABLED or DISABLED. When game stopped pressing a button/switch announces basic function
+	define	TrainingMode		ENABLED					// ENABLED or DISABLED. When game stopped pressing a button/switch announces basic function
 	define	AnnounceTraining	DISABLED				// DISABLED = Do not annnounce training mode, ENABLED = Announce training mode
 
 //------------------//
@@ -154,7 +154,7 @@
 	//
 	//	Refer fnPIPManager() function within ED_Functions for more info.
 	
-	define DefaultPIPMode		3							// Set this to your preferred PIPMode. Value is set on the fly via H4P (see fnPIPMode() in ED_Functions.tmh)
+	define DefaultPIPMode		3						// Set this to your preferred PIPMode. Value is set on the fly via H4P (see fnPIPMode() in ED_Functions.tmh)
 
 
 //---------//
@@ -165,56 +165,58 @@
 	// If you find the macros are dropping characters, then the delay is too short.
 	// "LongPress" is a personal setting. I find a half second is about right for me.
 	
-	define 	PulseTime 			33							// PULSE+ Delay time (ms) - Used as key-hold-down time.
-	define 	DelayTime 			75							// D() Delay time 	 (ms) - Used in macros as the time between releasing one key and pressing the next.
-	define 	LongPress	 		500							// Tempo Delay 		 (ms) - Used in Tempos. ie hold switch/button for 0.5 seconds for alternate function
+	define 	PulseTime 			33						// PULSE+ Delay time (ms) - Used as key-hold-down time.
+	define 	DelayTime 			75						// D() Delay time 	 (ms) - Used in macros as the time between releasing one key and pressing the next.
+	define 	LongPress	 		500						// Tempo Delay 		 (ms) - Used in Tempos. ie hold switch/button for 0.5 seconds for alternate function
 	
-	define 	DiscoDelay			6100						// Discovery scanner 'hold-trigger' timer (6.1 seconds)
+	define 	DiscoDelay			6100					// Discovery scanner 'hold-trigger' timer (6.1 seconds)
 	
 
 //--------------------------//
 // General Status Variables //
 //--------------------------//
 
-	define	AutoHanger			DISABLED			 		// !! TESTING !!	// 1 = Initiate Hanger+Station Services automatically when docked, 0 = don't
-															// !! TESTING !!	// Hanger services on Carrier is completely different to stations
+	define	AutoHanger			DISABLED				// !! TESTING !!	// 1 = Initiate Hanger+Station Services automatically when docked, 0 = don't
+														// !! TESTING !!	// Hanger services on Carrier is completely different to stations
 															
-	define	AutoHUD				DISABLED					//	Enable to toggle HUD to Analysis Mode when FSD engaged
-	define	AutoGearUP			DISABLED					//	Enable to retract landing gear when lifting off
-	define	AutoGearDOWN		DISABLED					//	Enable to deploy landing gear when request docking
-	define	AutoHeatsink		ENABLED						//	Enable to fire a heatsink when temp > 100% (requires launcher and ammo)
-	define	AutoStrobe			ENABLED						//	Enable to strobe silent running if in danger and shields drop
+	define	AutoHUD				DISABLED				//	Enable to toggle HUD to Analysis Mode when FSD engaged
+	define	AutoGearUP			DISABLED				//	Enable to retract landing gear when lifting off
+	define	AutoGearDOWN		DISABLED				//	Enable to deploy landing gear when request docking
+	define	AutoHeatsink		ENABLED					//	Enable to fire a heatsink when temp > 100% (requires launcher and ammo)
+	define	AutoStrobe			ENABLED					//	Enable to strobe silent running if in danger and shields drop
 	
-	define	CommsModule			DISABLED					//	ED_CommsControl still in testing
+	define	CommsModule			DISABLED				//	ED_CommsControl still in testing
+	
+	define	SqdrnMember			NO						//	Are you a Squadron Member? YES or NO. Used by fnClearChatBox();
 
-//-------------//
-// Axis Curves //
-//-------------//
+//--------------------------//
+// Axis Curves and Settings //
+//--------------------------//
 
 	// Refer "Axes" chapter (p27) in the Target Script Editor Basics v1.5 manual for more detail
 	// The below constructs support S-Curves
 
 	// Define the deadzones and zoom factor
 	// ------------------------------------
-	define	Joystick_L_DZ 		0							// Set Joystick Left	Deadzone
-	define	Joystick_C_DZ 		1							// Set Joystick Centre	Deadzone
-	define	Joystick_R_DZ 		0							// Set Joystick Right	Deadzone
-	define	Joystick_Zoom		0							// Set Joystick Zoom factor
+	define	Joystick_L_DZ 		0						// Set Joystick Deadzone	Left
+	define	Joystick_C_DZ 		1						// Set Joystick Deadzone	Centre
+	define	Joystick_R_DZ 		0						// Set Joystick Deadzone	Right
+	define	Joystick_Zoom		0						// Set Joystick Zoom factor
 	
-	define	Rudder_L_DZ			0							// Set Rudder Left 		Deadzone
-	define	Rudder_C_DZ			10							// Set Rudder Centre	Deadzone
-	define	Rudder_R_DZ			0							// Set Rudder Right		Deadzone
-	define	Rudder_Zoom			0							// Set Rudder Zoom factor
+	define	Rudder_L_DZ			0						// Set Rudder 	Deadzone	Left
+	define	Rudder_C_DZ			10						// Set Rudder 	Deadzone	Centre
+	define	Rudder_R_DZ			0						// Set Rudder 	Deadzone	Right
+	define	Rudder_Zoom			0						// Set Rudder 	Zoom factor
 	
-	define	Slew_L_DZ			0							// Set Slew Left		Deadzone
-	define	Slew_C_DZ			15							// Set Slew Centre		Deadzone
-	define	Slew_R_DZ			0							// Set Slew Right		Deadzone
-	define	Slew_Zoom			0							// Set Slew Zoom factor 
+	define	Slew_L_DZ			0						// Set Slew 	Deadzone	Left
+	define	Slew_C_DZ			15						// Set Slew 	Deadzone	Centre
+	define	Slew_R_DZ			0						// Set Slew 	Deadzone	Right
+	define	Slew_Zoom			0						// Set Slew 	Zoom factor 
 
-	define	FAOFFCurves			SLOW						// Set Curve profile desired for FA-OFF. Valid settings = OFF, MILD, MEDIUM or SLOW (see below) 
-	define	CurveInfo			NOPRINT						// Set if you want curve info printed to console each time we change. Valid settings = PRINT or NOPRINT
-	define	EnableTFRPRudder	ENABLED						// Set to 0 if you do not have a Thrustmaster TFRP Rudder.
-	define	SwapRoll4Yaw		DISABLED					// Set to 1 if you wish to swap Roll and Yaw Axes
+	define	FAOFFCurves			SLOW					// Set Curve profile desired for FA-OFF. Valid settings = OFF, MILD, MEDIUM or SLOW (see below) 
+	define	CurveInfo			NOPRINT					// Set if you want curve info printed to console each time we change. Valid settings = PRINT or NOPRINT
+	define	EnableTFRPRudder	ENABLED					// Set to DISABLED if you do not have a Thrustmaster TFRP Rudder.
+	define	SwapRoll4Yaw		DISABLED				// Set to ENABLED if you wish to set X-Axis to Yaw (Default = Roll)
 
 	// The below curve arrays are set for "off", "mild", "medium" or "slow" and controlled via the Autopilot switch
 	// Eg 	AP Switch set at APPAT-O	= (Curve = 1)
@@ -231,5 +233,6 @@
 	 
 	short	Slew_Curve[]		= {	2,		2,		0,		2,		2 };	// Set Slew Curve
 								//	MILD	MEDIUM	NONE	SLOW	SLOWEST
+
 
 // END
