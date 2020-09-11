@@ -1010,8 +1010,9 @@
 	int fnClearChatBox(int mode = 0) {
 		int loop = 1;
 		
-		if (mode == 1) 			loop = 2;
-		if (SqdrnMember == YES) loop = 3;
+		if (mode == 1) {
+			loop = ChatTABs;									// Set in ED_UserSettings.tmh
+		}		
 		
 		
 		ActKey(PULSE+KEYON+

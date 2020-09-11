@@ -187,7 +187,7 @@
 	
 	define	CommsModule			DISABLED				//	ED_CommsControl still in testing
 	
-	define	SqdrnMember			NO						//	Are you a Squadron Member? YES or NO. Used by fnClearChatBox();
+	define	ChatTABs			3						//	Set to number of Chat Tabs you have setup within the Comms Panel, in game. (Valid = 1-4)
 
 //--------------------------//
 // Axis Curves and Settings //
