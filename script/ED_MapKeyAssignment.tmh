@@ -258,7 +258,7 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, SC,
-				PULSE+ShowConnectionStatus,							// U - Display Bandwidth counters only. Alt = "mShowGameStats"
+				PULSE+mShowGameStats,								// U - Display Bandwidth and FPS counters only. Alt = "ShowConnectionStatus", or "ShowFrameRate"
 				PULSE+ResetHeadOrientation,							// M - default - reset EDTracker centre
 				0													// D - 
 				);
@@ -806,7 +806,7 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, SC,
-				EXEC("fnVPOutput(\"Show connection status\");"),
+				EXEC("fnVPOutput(\"Show connection status and FPS\");"),
 				EXEC("fnVPOutput(\"Re-centre E D Tracker\");"),
 				EXEC("fnVPOutput(\"Not mapped\");")
 				);
