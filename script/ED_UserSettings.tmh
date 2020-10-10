@@ -86,7 +86,7 @@
 	// To make the voices visible to non MS apps (voice.exe), you need to tweak the registry using the method described here;
 	// https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/
 	// VoiceVolume should be set to the relative volume level (%) for voice.exe 
-	// VoiceCMD is example on how to set command line arguments. -r <rate> (>0 = faster, <0 = slower)
+	// VoiceCMD is example on how to set command line arguments. -r <rate> ... range = -10 (slowest) to +10 (fastest)
 	// Refer fnTextToSpeech() function in ED_Functions.tmh for usage examples
 
 	int		EnableVoice			= ENABLED;				// ENABLED or DISABLED. Enable this if you wish to use "voice.exe". 
@@ -116,7 +116,7 @@
 	
 	int		DefaultVoice		= &Catherine;			// Set your preferred (installed) voice here
 
-	alias	VoiceCMD			= "-r 0";
+	alias	VoiceCMD			= "-r 1";				// "-r 0" = normal rate. "-r 2" = 20% faster
 	
 	define	TrainingMode		ENABLED					// ENABLED or DISABLED. When game stopped pressing a button/switch announces basic function
 	define	AnnounceTraining	DISABLED				// DISABLED = Do not annnounce training mode, ENABLED = Announce training mode
