@@ -524,7 +524,7 @@
 		if (fDocked) 			InHanger = 1;
 		
 		if (!ConnectionStatus) {
-			ActKey(PULSE+KEYON+ShowConnectionStatus);					// ...turn on connection status
+			ActKey(PULSE+KEYON+mShowGameStats);							// ...turn on connection status. Alt="ShowConnectionStatus"
 			ConnectionStatus = 1;										// tracks if above has already been turned on
 		}
 		
@@ -1015,43 +1015,45 @@
 		}		
 		
 		
-		ActKey(PULSE+KEYON+
+		ActKey(PULSE+KEYON+										// Reset chat panel
 			CHAIN(
-			LOCK+PULSE+QuickCommsPanel, D(500),					// enter, enter, 2, left, enter, /, c, l, e, a, r, enter, left, down
-			PULSE+QuickCommsPanel, D(500),						// repeat twice, 3x if in a squadron
-			PULSE+CommsPanel, D(500),
-			PULSE+UILeft, D(),
-			PULSE+QuickCommsPanel, D(),
-			PULSE+'\/', D(),
-			PULSE+'c', D(),
-			PULSE+'l', D(),
-			PULSE+'e', D(),
-			PULSE+'a', D(),
-			PULSE+'r', D(),
-			PULSE+QuickCommsPanel, D(500), 
-			LOCK)
+				LOCK,
+				PULSE+QuickCommsPanel, D(500),
+				PULSE+QuickCommsPanel, D(500),
+				PULSE+CommsPanel, D(500),
+				PULSE+UILeft, D(),
+				LOCK
+			)
 		);
 		
-		while (loop > 1) {
+		while (loop > 0) {										// Send '/clear' command 
 			ActKey(PULSE+KEYON+
 				CHAIN(
-				LOCK+PULSE+UILeft, D(),
-				PULSE+UIDown, D(),
-				PULSE+QuickCommsPanel, D(),
-				PULSE+'\/', D(),
-				PULSE+'c', D(),
-				PULSE+'l', D(),
-				PULSE+'e', D(),
-				PULSE+'a', D(),
-				PULSE+'r', D(),
-				PULSE+QuickCommsPanel, D(500),
-				PULSE+UILeft, D(),
-				PULSE+UIDown, D(), 
-				LOCK)
+					LOCK,
+					PULSE+QuickCommsPanel, D(),
+					PULSE+'\/', D(),
+					PULSE+'c', D(),
+					PULSE+'l', D(),
+					PULSE+'e', D(),
+					PULSE+'a', D(),
+					PULSE+'r', D(),
+					PULSE+QuickCommsPanel, D(500),
+					LOCK
+				)
 			);
+			if (mode == 1) {									// Send 'left'+'down' when processing more than 1 chatbox 
+				ActKey(PULSE+KEYON+
+					CHAIN(
+						LOCK,
+						PULSE+UILeft, D(),
+						PULSE+UIDown, D(250),
+						LOCK
+					)
+				);					
+			}
 			loop = loop - 1;
 		}
-		ActKey(PULSE+KEYON+CommsPanel);	
+		ActKey(PULSE+KEYON+CommsPanel);							// Return to default view
 	}
 	
 
