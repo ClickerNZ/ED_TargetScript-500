@@ -258,7 +258,7 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, SC,
-				PULSE+mShowGameStats,								// U - Display Bandwidth and FPS counters only. Alt = "ShowConnectionStatus", or "ShowFrameRate"
+				PULSE+ShowConnectionStatus,							// U - Display Bandwidth. Alt = "mShowGameStats", or "ShowFrameRate"
 				PULSE+ResetHeadOrientation,							// M - default - reset EDTracker centre
 				0													// D - 
 				);
@@ -347,7 +347,7 @@
 	
 			MapKeyR(&Throttle, SPDF, EXEC("tgReverseThrust(1);"));	// RELEASE - Turn off Reverse Throttle
 			
-			MapKey(&Throttle, SPDB, PULSE+EngineBoost);				// Boost
+			MapKey(&Throttle, SPDB, EXEC("tgBoost();"));			// Boost
 		}
 		
 //		(Boat Switch)		//
