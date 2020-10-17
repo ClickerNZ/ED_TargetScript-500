@@ -29,6 +29,7 @@
 //			Line 244: 	int tgCargoScoop()
 //			Line 286: 	int tgLandingGear()
 //			Line 322: 	int tgReverseThrust()
+//			Line xxx:	int tgBoost()
 //			Line 353: 	int tgHardpoints()
 //			Line 391: 	int tgHUDMode()
 //			Line 407: 	int tgFSSMode()
@@ -349,7 +350,31 @@
 	}
 
 
-	// TOGGLE: Hardpoints
+	// TOGGLE:	Engine Boost
+	
+	int tgBoost() {
+		int fnName;
+		int reason;
+		
+		if (!fLandingGear & !fSupercruise & !fSRV) {
+			ActKey(PULSE+KEYON+EngineBoost);
+		}
+		else {
+			fnName = "Engine Boost";
+			if (fLandingGear) {
+				reason = "Landing gear";
+			}
+			if (fSupercruise) {
+				reason = "Supercruise";
+			}
+			if (fSRV) {
+				reason = "SRV";
+			}
+			fnNotValid(fnName, reason);
+		}
+	}
+
+	// TOGGLE:	Hardpoints
 
 	int tgHardpoints() {
 		int fnName;
