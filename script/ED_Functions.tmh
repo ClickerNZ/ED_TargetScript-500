@@ -524,7 +524,7 @@
 		if (fDocked) 			InHanger = 1;
 		
 		if (!ConnectionStatus) {
-			ActKey(PULSE+KEYON+mShowGameStats);							// ...turn on connection status. Alt="ShowConnectionStatus"
+			ActKey(PULSE+KEYON+ShowConnectionStatus);					// ...turn on connection status. Alt="mShowGameStats"
 			ConnectionStatus = 1;										// tracks if above has already been turned on
 		}
 		
@@ -942,7 +942,7 @@
 				if(x) {	
 					if(!InHanger) {
 						VoiceTxt = "Enter Hanger and Station Services";
-						fnVPOutput(VoiceTxt);
+						fnVPOutput(VoiceTxt, 60);
 						fnPIPMapper();
 						ActKey(PULSE+KEYON+mEnterHanger);
 						InHanger = 1;
