@@ -942,7 +942,7 @@
 				if(x) {	
 					if(!InHanger) {
 						VoiceTxt = "Enter Hanger and Station Services";
-						fnVPOutput(VoiceTxt, 60);
+						fnVPOutput(VoiceTxt, VoiceVolume-15);
 						fnPIPMapper();
 						ActKey(PULSE+KEYON+mEnterHanger);
 						InHanger = 1;
