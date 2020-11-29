@@ -512,11 +512,33 @@
 			fnNotValid(fnName, reason);
 			return 0;
 		}
-		if (fMassLocked) {
-			printf("%s	MASSLOCKED	<<\x0a", EngineText);
-			reason = "we are currently masslocked";
+		if (fDocked) {
+			printf("%s	DOCKED	<<\x0a", EngineText);
+			reason = "we are currently docked";
 			fnNotValid(fnName, reason);
 			return 0;
+		}
+		if (fLanded) {
+			printf("%s	LANDED	<<\x0a", EngineText);
+			reason = "we are currently landed";
+			fnNotValid(fnName, reason);
+			return 0;
+		}
+		if (fMassLocked) {
+			printf("%s	MASSLOCKED	... ", EngineText);
+		
+			if (retries < 5) {
+				retries = retries + 1;
+				printf("Retry #%d of 5\x0a", retries);
+				DeferCall(500, &tgWarpDrive, JumpType);
+				return 0;
+			}
+			else {
+				reason = "we are currently masslocked";
+				fnNotValid(fnName, reason);
+				retries = 0;
+				return 0;
+			}
 		}
 		if (fsdJump) {
 			printf("%s	HYPERSPACE	<<\x0a", EngineText);
