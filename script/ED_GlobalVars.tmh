@@ -61,6 +61,8 @@
 	int ShipDismissed		= 0;		// Track when Ship is dismissed/recalled via EORIGN-U
 	int SilentStrobe		= 0;		// Used to track when we are using the Silent Running Strobe feature
 	int XAxisMode			= 0;		// Used to track which mode X-Axis is, Roll (default) or Yaw
+	
+	int retries				= 0;		// Some functions will retry up to 3 times if a state variable fails (eg MassLocked when trying to go to supercruise)
 
 	define SYS				1			// Used in fnPIPMapper for managing System  PIPs (see EDFunctions.tmh) (DO NOT modify!)
 	define ENG				2			// Used in fnPIPMapper for managing Engine  PIPs (see EDFunctions.tmh) (DO NOT modify!)
