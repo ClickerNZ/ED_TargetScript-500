@@ -44,7 +44,6 @@ include "target.tmh"
 // These are bundled with the TARGET software.
 // You do not need to package with your script bundle unless you have modified them.
 
-//include "ED_GlobalVars.tmh"				// The order that these files are 'included' matters
 include "ED_Defines.ttm"				// The order that these files are 'included' matters
 include "ED_GlobalVars.tmh"
 include "ED_UserSettings.tmh"
@@ -73,7 +72,7 @@ include "ED_Toggles.tmh"
 		Exclude(&A320Pilot);
 		Exclude(&A320Copilot);
 		
-		if (EnableTFRPRudder) {
+		if (EnableTFRPRudder) {													// (see ED_UserSettings.tmh)
 			Configure(&TFRPRudder, MODE_FILTERED);
 		}
 		else {
@@ -91,7 +90,7 @@ include "ED_Toggles.tmh"
 	
 		printf("\x0a\++	Initialise hardware	...	Start	++\x0a"); 
 
-		SetShiftButton(&Joystick, S3, &Throttle, PSF, PSB);						// ** DO NOT TOUCH **  Joystick S3 for IO, Throttle pinky SWITCH for UMD
+		SetShiftButton(&Joystick, S3, &Throttle, PSF, PSB);						// ** DO NOT TOUCH **  Joystick Nosewheel Switch (S3) = IO, Throttle pinky switch (PSF/PSB) = UMD
 
 		SetKBRate(PulseTime, DelayTime);										// Base Settings 	(See ED_UserSettings.tmh)
 		SetKBLayout(KBLayout);													//					(See ED_Defines.ttm)
@@ -115,12 +114,13 @@ include "ED_Toggles.tmh"
 		initTFRPRudder();
 
 		printf("\x0a\++	Initialise Hardware	...	Complete	++\x0a");
+		printf("\x0a\++	Check Game state ...\x0a");
 		
 		fnsStartCheck();														// Check for vital files and game start
 				
 		if(Flags == 0) {
-			printf("Script initialized @ %s \x0a", fnGetTOD());
-			printf("\x0aWaiting for Game to load...\x0a");	
+			printf("++	Waiting for Game to load...\x0a");	
+			printf("\x0a\Script initialized and running @ %s \x0a", fnGetTOD());
 		}
 
 	}	// end of int main()
