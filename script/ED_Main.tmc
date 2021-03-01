@@ -5,7 +5,7 @@
 
 // This file:	ED_Main.tmc 		v5.0.0
 // Supports:	Elite Dangerous 	v?.? (Odyssey)
-// Requires:	TARGET 				v3.0.20.427
+// Requires:	TARGET 				v3.0.20.826
 //				Joystick firmware	v12
 //				Throttle firmware 	v23
 
@@ -39,10 +39,10 @@
 include "target.tmh"
 
 // 'target.tmh' include is mandatory.
-// defines.tmh and hid.tmh are included via target.tmh
-// sys.tmh is included via hid.tmh
-// These are bundled with the TARGET software.
-// You do not need to package with your script bundle unless you have modified them.
+// 		when loaded, target.tmh then includes "defines.tmh" and "hid.tmh"
+// 		when loaded, hid.tmh then includes "sys.tmh"
+//		...this ensures these critical files are loaded in the correct order
+// The above .tmh files are bundled with the TARGET software.
 
 include "ED_Defines.ttm"				// The order that these files are 'included' matters
 include "ED_GlobalVars.tmh"
@@ -59,7 +59,7 @@ include "ED_Toggles.tmh"
 
 	int main() {
 	
-		printf("\x0a\++	Exclude unwanted controllers	...	");
+		printf("\x0a\++	Exclude unwanted controllers	...	");					// Eliminates error messages relating to unfound devices
 			
 		Exclude(&HCougar);
 		Exclude(&T16000);
@@ -71,6 +71,8 @@ include "ED_Toggles.tmh"
 		Exclude(&RMFD);
 		Exclude(&A320Pilot);
 		Exclude(&A320Copilot);
+		Exclude(&TCAQuadrant12);
+		Exclude(&TCAQuadrant34);
 		
 		if (EnableTFRPRudder) {													// (see ED_UserSettings.tmh)
 			Configure(&TFRPRudder, MODE_FILTERED);
