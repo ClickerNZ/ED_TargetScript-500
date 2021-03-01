@@ -3,11 +3,12 @@
 v5.0.0	- New Major release - Odyssey 
 		- Add reg scrap folder and scraps for extra voices
 		- Added more comments in ED_UserSettings.tmh to include how to add TTS voices to Win10
-		- Changed Header in ED_Main.tmc to call out version numbers required
+		- Changed Header in ED_Main.tmc to include version numbers required
 		- Create ChatTABs alias in UserSettings and Create fnClearChatBox(); function to replace mClearChatbox and mClearAllChatBox macros
 		- Create tgXAxis() to toggle X-Axis between Roll and Yaw + announce when switching
 		- Create tgBoost() to catch invalid selection
 		- tgWarpDrive() - Add more tests. Include retries if Masslocked
+		- Update TARGET software to 3.0.20.826 and update ED_Main.tmc to exclude the new hardware
 
 v4.2.1	- New Point Release
 		- Fix name of TrainingMap in fnCustomCommands()
