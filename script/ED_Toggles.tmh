@@ -21,22 +21,22 @@
 // ========================================================
 
 // Index:	Line		FUNCTION
-//			Line 48: 	int tgTxt2Speech()
-//			Line 71: 	int tgEnhancedFAOFF()
-//			Line 100: 	int tgTriggerMode()
-//			Line 142: 	int tgLights()
-//			Line 201: 	int tgSilentRunning()
-//			Line 244: 	int tgCargoScoop()
-//			Line 286: 	int tgLandingGear()
-//			Line 322: 	int tgReverseThrust()
-//			Line xxx:	int tgBoost()
-//			Line 353: 	int tgHardpoints()
-//			Line 391: 	int tgHUDMode()
-//			Line 407: 	int tgFSSMode()
-//			Line 435: 	int tgPlanetView()
-//			Line 459: 	int tgWarpDrive()
-//			Line 516: 	int tgExtCamera()
-//			Line xxx:	int tgXAxis()
+//			Line 50: 	int tgTxt2Speech()
+//			Line 73: 	int tgEnhancedFAOFF()
+//			Line 102: 	int tgTriggerMode()
+//			Line 144: 	int tgLights()
+//			Line 203: 	int tgSilentRunning()
+//			Line 246: 	int tgCargoScoop()
+//			Line 288: 	int tgLandingGear()
+//			Line 324: 	int tgReverseThrust()
+//			Line 355:	int tgBoost()
+//			Line 379: 	int tgHardpoints()
+//			Line 417: 	int tgHUDMode()
+//			Line 433: 	int tgFSSMode()
+//			Line 461: 	int tgPlanetView()
+//			Line 485: 	int tgWarpDrive()
+//			Line 574: 	int tgExtCamera()
+//			Line 589:	int tgXAxis()
 	
 	
 // START
@@ -524,22 +524,32 @@
 			fnNotValid(fnName, reason);
 			return 0;
 		}
+		
+		// *** UNDER TEST *** //
+		// ================== //
+		
 		if (fMassLocked) {
 			printf("%s	MASSLOCKED	... ", EngineText);
 		
-			if (retries < 5) {
-				retries = retries + 1;
-				printf("Retry #%d of 5\x0a", retries);
-				DeferCall(500, &tgWarpDrive, JumpType);
-				return 0;
-			}
-			else {
+			if (retries > 3) {
 				reason = "we are currently masslocked";
 				fnNotValid(fnName, reason);
 				retries = 0;
-				return 0;
+//				return 0;
 			}
+			else {
+				retries = retries + 1;
+				printf("Retry #%d of 3\x0a", retries);
+				DeferCall(retries*500, &tgWarpDrive, JumpType);
+//				return 0;
+			}
+			return 0;
 		}
+		
+		// ================== //
+		// ================== //
+
+		
 		if (fsdJump) {
 			printf("%s	HYPERSPACE	<<\x0a", EngineText);
 			return 0;		
