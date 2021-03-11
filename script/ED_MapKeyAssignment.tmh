@@ -23,14 +23,14 @@
 // ========================================================
 
 // Index:	Line		FUNCTION
-//			Line 38: 	int MainKeyMap()
-//			Line 51:		Joystick Triggers
+//			Line 44: 	int MainKeyMap()
+//			Line 56:		Joystick Triggers
 //			Line 256:		Throttle Lever Switches
 //			Line 390:		Throttle Base Switches
-//			Line 613: 	int TrainingMap()
-//			Line xxx:		Joystick Triggers
-//			Line xxx:		Throttle Lever Switches
-//			Line xxx:		Throttle Base Switches
+//			Line 619: 	int TrainingMap()
+//			Line 628:		Joystick Triggers
+//			Line 804:		Throttle Lever Switches
+//			Line 930:		Throttle Base Switches
 
 
 // START
@@ -686,8 +686,8 @@
 
 		if (MapKeyProfile == BASIC) {
 			MapKey(&Joystick, H1U, EXEC("fnVPOutput(\"Select next fire group\");"));
-			MapKey(&Joystick, H1D, EXEC("fnVPOutput(\"Select Previous fire group\");"));
-			MapKey(&Joystick, H1L, EXEC("fnVPOutput(\"Toggle Landing gear\");"));
+			MapKey(&Joystick, H1D, EXEC("fnVPOutput(\"Select previous fire group\");"));
+			MapKey(&Joystick, H1L, EXEC("fnVPOutput(\"Toggle landing gear\");"));
 			MapKey(&Joystick, H1R, EXEC("fnVPOutput(\"Toggle ship lights\");"));
 		}
 		else {		
@@ -697,9 +697,9 @@
 				EXEC("fnVPOutput(\"Exit D S S Mode\");")
 				);
 	
-			MapKey(&Joystick, H1D, EXEC("fnVPOutput(\"Select Previous fire group\");"));
+			MapKey(&Joystick, H1D, EXEC("fnVPOutput(\"Select previous fire group\");"));
 			
-			MapKey(&Joystick, H1L, EXEC("fnVPOutput(\"Hold for half second to Toggle Landing gear\");"));
+			MapKey(&Joystick, H1L, EXEC("fnVPOutput(\"Hold for half second to toggle landing gear\");"));
 	
 			
 			MapKeyUMD(&Joystick, H1R,
@@ -740,7 +740,7 @@
 			MapKeyUMD(&Joystick, H2R,
 				EXEC("fnVPOutput(\"Not mapped\");"),
 				EXEC("fnVPOutput(\"Target next hostile\");"),
-				EXEC("fnVPOutput(\"Select Wingmans NAV Lock\");")
+				EXEC("fnVPOutput(\"Select wingmans NAV target\");")
 				);
 		}
 	
