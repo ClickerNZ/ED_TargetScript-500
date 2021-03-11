@@ -21,23 +21,23 @@
 // ========================================================
 
 // Index:	Line		FUNCTION
-//			Line 69: 	int initJoystickAxis()
-//			Line 79: 	int initThrottleAxis()
-//			Line 97: 	int initTFRPRudder()
-//			Line 110: 	int initTextToSpeech()
-//			Line 126: 	int initSoundFX()
-//			Line 145: 	int fnNotValid()
-//			Line 168: 	int fnSetCurves()
-//			Line 237: 	int fnSetSliderCurve()
-//			Line 268: 	int fnGetFlightMode()
-//			Line 286:	int fnLEDBrightness()
-//			Line 306: 	int fnFlashLED()
-//			Line 322: 	int fnSetLEDs()
-//			Line 353: 	int fnFlashStart()
-//			Line 387: 	int fnTextToSpeech()
-//			Line 419: 	int fnVoiceVolume()
-//			Line 472: 	int fnSoundFX()
-//			Line 493: 	int fnGameStarted()
+//			Line 70: 	int initJoystickAxis()
+//			Line 80: 	int initThrottleAxis()
+//			Line 98: 	int initTFRPRudder()
+//			Line 111: 	int initTextToSpeech()
+//			Line 127: 	int initSoundFX()
+//			Line 146: 	int fnNotValid()
+//			Line 169: 	int fnSetCurves()
+//			Line 238: 	int fnSetSliderCurve()
+//			Line 269: 	int fnGetFlightMode()
+//			Line 287:	int fnLEDBrightness()
+//			Line 307: 	int fnFlashLED()
+//			Line 323: 	int fnSetLEDs()
+//			Line 354: 	int fnFlashStart()
+//			Line 388: 	int fnTextToSpeech()
+//			Line 420: 	int fnVoiceVolume()
+//			Line 473: 	int fnSoundFX()
+//			Line 494: 	int fnGameStarted()
 //			Line 574: 	int fnPIPMode()
 //			Line 625: 	int fnPIPManager()
 //			Line 662: 	int fnPIPMapper()
@@ -50,15 +50,15 @@
 //			Line 912: 	int fnRequestDock()
 //			Line 934: 	int fnHangerServices()
 //			Line 978:	int fnIdleLock()
-//			Line 1012:	int fnClearChatBox()
-//			Line 1012: 	int fnModeSwitch()
-//			Line 1067:	int fnVPOutput()
-//			Line 1079: 	int fnPrintState()
-//			Line 1090: 	int fnStateDump()
-//			Line 1179: 	int fnDebug()
-//			Line 1204:	int fnGetTOD()
-//			Line 1221:	int fnGetDate()
-//			Line 1244:	int findstr()
+//			Line 1010:	int fnClearChatBox()
+//			Line 1066: 	int fnModeSwitch()
+//			Line 1121:	int fnVPOutput()
+//			Line 1133: 	int fnPrintState()
+//			Line 1144: 	int fnStateDump()
+//			Line 1233: 	int fnDebug()
+//			Line 1258:	int fnGetTOD()
+//			Line 1275:	int fnGetDate()
+//			Line 1298:	int findstr()
 
 // START
 
@@ -400,7 +400,7 @@
 			if (!GameLoaded) {				// Serial - wait until voice.exe finishes before processing next line in script 
 				sprintf(&SysCmd, "%s -v %s %s %s %s", &VoicePath, &volume, &VoiceCMD, Voice, text);			
 			}
-			else {							// Parallel - send text to voice the process next line in script. No waiting
+			else {							// Parallel - send text to voice then immediately process next line in script. No waiting
 				sprintf(&SysCmd, "start %s -v %s %s %s %s", &VoicePath, &volume, &VoiceCMD, Voice, text);
 			}
 			SysCmd[strlen(&SysCmd)] = 0;							// terminate char array with nul
