@@ -21,21 +21,21 @@
 // ========================================================
 
 // Index:	Line			FUNCTION
-//			Line 58:		int ModKey()
-//			Line 62:		fnCustomCommands()
-//			Line 83: 		mRequestDock
-//			Line 96: 		mDeploySRV
-//			Line 108: 		mBoardShip
-//			Line 127: 		mShowGameStats
-//			Line 132: 		mFastModeSwitch0
-//			Line 143: 		mFastModeSwitch1
-//			Line 157: 		mFastModeSwitch2
-//			Line 170: 		mReportCrimesToggle
-//			Line 191: 		mNAVBeaconWing
-//			Line 216: 		mNAVBeaconOff
-//			Line 291: 		mEnterHanger
-//			Line 317: 		mLaunch
-//			Line 328:		mChangeColours
+//			Line 55:		int ModKey()
+//			Line 59:		fnCustomCommands()
+//			Line 80: 		mRequestDock
+//			Line 93: 		mDeploySRV
+//			Line 105: 		mBoardShip
+//			Line 124: 		mShowGameStats
+//			Line 129: 		mFastModeSwitch0
+//			Line 140: 		mFastModeSwitch1
+//			Line 154: 		mFastModeSwitch2
+//			Line 167: 		mReportCrimesToggle
+//			Line 188: 		mNAVBeaconWing
+//			Line 213: 		mNAVBeaconOff
+//			Line 237: 		mEnterHanger
+//			Line 263: 		mLaunch
+//			Line 274:		mChangeColours
 
 
 // START
