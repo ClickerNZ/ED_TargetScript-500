@@ -37,7 +37,7 @@
 	// GlobalVars
 
 	char	myJson;	
-	int		ReadErrorCount	= 0;
+	int	ReadErrorCount	= 0;
 	
 	// ------------
 	
@@ -46,10 +46,10 @@
 		int 	VoiceTxt;
 		int 	fp;
 		int 	buf = 512;
-		int		myResult;
-//		int		ReadErrorCount	= 0;
-		int		ReadErrorSent	= 0;
-		int		newJson			= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
+		int	myResult;
+//		int	ReadErrorCount	= 0;	// move to global
+		int	ReadErrorSent	= 0;
+		int	newJson		= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
 
 		Dim(&myJson, buf);
 		myJson[0] = 0;
