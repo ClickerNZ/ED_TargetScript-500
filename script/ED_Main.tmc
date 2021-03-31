@@ -49,6 +49,7 @@ include "ED_GlobalVars.tmh"
 include "ED_UserSettings.tmh"
 include "ED_Macros.tmh"
 include "ED_MapKeyAssignment.tmh"
+include "ED_Initialise.tmh"
 include "ED_Functions.tmh"
 include "ED_StateTracker.tmh"
 include "ED_Toggles.tmh"
@@ -97,7 +98,7 @@ include "ED_Toggles.tmh"
 		SetKBRate(PulseTime, DelayTime);										// Base Settings 	(See ED_UserSettings.tmh)
 		SetKBLayout(KBLayout);													//					(See ED_Defines.ttm)
 	
-		fnCustomCommands();														// Initialise Custom Macros (See EDMacros.tmh)
+//		fnCustomCommands();														// Initialise Custom Macros (See EDMacros.tmh)
 		fnPIPMode(0);															// Reset PIPMode
 
 		fnsMyStates(LOAD);														// Load my status variables
@@ -105,6 +106,8 @@ include "ED_Toggles.tmh"
 		fnLEDBrightness();														// Set initial LED Brightness levels
 		initTextToSpeech();														// Initialise Text-To-Speech engine
 		initSoundFX();															// Initialise Sound Effects engine
+		
+		fnCustomCommands();														// Initialise Custom Macros (See EDMacros.tmh)
 		
 
 	// -------------------------- //
