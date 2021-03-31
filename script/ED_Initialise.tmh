@@ -1,0 +1,110 @@
+
+//----------------------------------------------------------------------//
+//	CMDR Clicker's Elite Dangerous Thrustmaster Warthog + TFRP Script	//
+//----------------------------------------------------------------------//
+
+// This file: ED_Initialise.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
+
+// Refer Change Log.txt in same folder
+
+// LEGEND: 
+// ========================================================
+// fnName()					refer to ED_Functions file
+// initName()				refer to ED_Initialise file
+// fnsName()				refer to ED_StateTracker file
+// tgName()					refer to ED_Toggles file
+// mName					refer to ED_Macros file
+// MapKey statements		refer to ED_MapKeyAssignment file
+// Global Defines			refer to ED_Defines file
+// Global Variables			refer to ED_GlobalVars file
+// User Config Settings		refer to ED_UserSettings file
+// ========================================================
+
+// Index:	Line		FUNCTION
+//			Line 37: 	int initJoystickAxis()
+//			Line 47: 	int initThrottleAxis()
+//			Line 65: 	int initTFRPRudder()
+//			Line 78: 	int initTextToSpeech()
+//			Line 98: 	int initSoundFX()
+
+// START
+
+//--------------------------//
+// INITIALISATION FUNCTIONS //			// Define All Axis Curves/Trim/Deadzones for Included Devices
+//--------------------------//
+
+	// FUNCTION: Initialise Joystick Axes 
+	int initJoystickAxis() { 																	// Set Default Joystick Axis
+		printf("\x0a\Initialising: v%d.%d.%s\x0a", VMajor, VMinor, VPoint);
+		printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
+		MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+		MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+		printf("Joystick Axis	... done		");
+	}
+
+
+	//FUNCTION: Initialise Throttle Axes
+	int initThrottleAxis() {																	// Set Default Throttle Axis
+		
+		// Throttle mapping...
+		MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);					// Set Left Throttle. Right throttle not used.
+		printf("Throttle Axis	... done\x0a");
+
+		// Slider Mapping...
+		MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);					// Set Friction Control Axis Curve (Sensor Range Zoom Scaling)
+		printf("Slider Axis	... done		");
+		fnSetSliderCurve(1);
+		
+		// Slew Control Mapping...
+		MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);						// Set Slew Control X Axis		
+		MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);						// Set Slew Control Y Axis
+	}
+
+
+	// FUNCTION: Initialise Rudder Axis 
+	int initTFRPRudder() {																		// Initialise Thrustmaster TFRP Rudder
+		if(EnableTFRPRudder) {
+			MapAxis(&TFRPRudder, TRUDDER, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+			printf("Rudder Axis	... done\x0a");
+		}
+		else {
+			printf("Rudder Axis	... disabled\x0a");		
+		}
+		printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");		
+	}
+
+
+	// FUNCTION: Initialise Text To Speech Engine	
+	int initTextToSpeech() {
+		VoiceExists = fopen(&VoicePath, "r");
+		if (VoiceExists) {
+			fclose(VoiceExists);
+			printf("Voice.exe present at %s\x0a", &VoicePath);
+		}
+		else {
+			EnableVoice = 0;
+			printf("\x0a\Voice.exe not present at %s\x0a", &VoicePath);
+			printf("Set correct path in ED_UserSettings.tmh\x0a");
+			printf("\x0a\Voice feedback via 'fnTextToSpeech()' not available\x0a");
+		}
+	}
+
+
+	// FUNCTION: Initialise Sound Effacts Engine 
+	int initSoundFX() {
+		SounderExists = fopen(&SoundPath, "r");
+		if (SounderExists) {
+			fclose(VoiceExists);
+			printf("Sounder.exe present at %s\x0a", &SoundPath);
+		}
+		else {
+			EnableSoundFX = 0;
+			printf("\x0a\Sounder.exe not present at %s\x0a", &SoundPath);
+			printf("Set correct path in ED_UserSettings.tmh\x0a");
+			printf("\x0a\Sound Effects via 'fnSoundFX()' not available\x0a");
+		}
+	}
+
+	
+//	END
+
