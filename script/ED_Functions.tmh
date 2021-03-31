@@ -21,122 +21,40 @@
 // ========================================================
 
 // Index:	Line		FUNCTION
-//			Line 70: 	int initJoystickAxis()
-//			Line 80: 	int initThrottleAxis()
-//			Line 98: 	int initTFRPRudder()
-//			Line 111: 	int initTextToSpeech()
-//			Line 127: 	int initSoundFX()
-//			Line 146: 	int fnNotValid()
-//			Line 169: 	int fnSetCurves()
-//			Line 238: 	int fnSetSliderCurve()
-//			Line 269: 	int fnGetFlightMode()
-//			Line 287:	int fnLEDBrightness()
-//			Line 307: 	int fnFlashLED()
-//			Line 323: 	int fnSetLEDs()
-//			Line 354: 	int fnFlashStart()
-//			Line 388: 	int fnTextToSpeech()
-//			Line 420: 	int fnVoiceVolume()
-//			Line 473: 	int fnSoundFX()
-//			Line 494: 	int fnGameStarted()
-//			Line 574: 	int fnPIPMode()
-//			Line 625: 	int fnPIPManager()
-//			Line 662: 	int fnPIPMapper()
-//			Line 702: 	int fnAdvFireControl()
-//			Line 775: 	int fnAdvancedSCB()
-//			Line 807: 	int fnHeatsink()
-//			Line 821: 	int fnChaff()
-//			Line 839: 	int fnDeploySRV()
-//			line 883:	int fnDRShip()
-//			Line 912: 	int fnRequestDock()
-//			Line 934: 	int fnHangerServices()
-//			Line 978:	int fnIdleLock()
-//			Line 1010:	int fnClearChatBox()
-//			Line 1066: 	int fnModeSwitch()
-//			Line 1121:	int fnVPOutput()
-//			Line 1133: 	int fnPrintState()
-//			Line 1144: 	int fnStateDump()
-//			Line 1233: 	int fnDebug()
-//			Line 1258:	int fnGetTOD()
-//			Line 1275:	int fnGetDate()
-//			Line 1298:	int findstr()
-
-// START
-
-//--------------------------//
-// INITIALISATION FUNCTIONS //			// Define All Axis Curves/Trim/Deadzones for Included Devices
-//--------------------------//
-
-	// FUNCTION: Initialise Joystick Axes 
-	int initJoystickAxis() { 																	// Set Default Joystick Axis
-		printf("\x0a\Initialising: v%d.%d.%s\x0a", VMajor, VMinor, VPoint);
-		printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
-		MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-		MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-		printf("Joystick Axis	... done		");
-	}
-
-
-	//FUNCTION: Initialise Throttle Axes
-	int initThrottleAxis() {																	// Set Default Throttle Axis
-		
-		// Throttle mapping...
-		MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);					// Set Left Throttle. Right throttle not used.
-		printf("Throttle Axis	... done\x0a");
-
-		// Slider Mapping...
-		MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);					// Set Friction Control Axis Curve (Sensor Range Zoom Scaling)
-		printf("Slider Axis	... done		");
-		fnSetSliderCurve(1);
-		
-		// Slew Control Mapping...
-		MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);						// Set Slew Control X Axis		
-		MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);						// Set Slew Control Y Axis
-	}
-
-
-	// FUNCTION: Initialise Rudder Axis 
-	int initTFRPRudder() {																		// Initialise Thrustmaster TFRP Rudder
-		if(EnableTFRPRudder) {
-			MapAxis(&TFRPRudder, TRUDDER, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-			printf("Rudder Axis	... done\x0a");
-		}
-		else {
-			printf("Rudder Axis	... disabled\x0a");		
-		}
-		printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");		
-	}
-
-
-	// FUNCTION: Initialise Text To Speech Engine	
-	int initTextToSpeech() {
-		VoiceExists = fopen(&VoicePath, "r");
-		if (VoiceExists) {
-			fclose(VoiceExists);
-			printf("Voice.exe present at %s\x0a", &VoicePath);
-		}
-		else {
-			EnableVoice = 0;
-			printf("\x0a\Voice.exe not present at %s\x0a", &VoicePath);
-			printf("Set correct path in ED_UserSettings.tmh\x0a");
-			printf("\x0a\Voice feedback via 'fnTextToSpeech()' not available\x0a");
-		}
-	}
-
-
-	// FUNCTION: Initialise Sound Effacts Engine 
-	int initSoundFX() {
-		SounderExists = fopen(&SoundPath, "r");
-		if (SounderExists) {
-			fclose(VoiceExists);
-			printf("Sounder.exe present at %s\x0a", &SoundPath);
-		}
-		else {
-			EnableSoundFX = 0;
-			printf("\x0a\Sounder.exe not present at %s\x0a", &SoundPath);
-			printf("Set correct path in ED_UserSettings.tmh\x0a");
-			printf("\x0a\Sound Effects via 'fnSoundFX()' not available\x0a");
-		}
-	}
+//			Line 63: 	int fnNotValid()
+//			Line 86: 	int fnSetCurves()
+//			Line 155: 	int fnSetSliderCurve()
+//			Line 186: 	int fnGetFlightMode()
+//			Line 204:	int fnLEDBrightness()
+//			Line 224: 	int fnFlashLED()
+//			Line 240: 	int fnSetLEDs()
+//			Line 271: 	int fnFlashStart()
+//			Line 305: 	int fnTextToSpeech()
+//			Line 337: 	int fnVoiceVolume()
+//			Line 390: 	int fnSoundFX()
+//			Line 411: 	int fnGameStarted()
+//			Line 491: 	int fnPIPMode()
+//			Line 542: 	int fnPIPManager()
+//			Line 579: 	int fnPIPMapper()
+//			Line 619: 	int fnAdvFireControl()
+//			Line 692: 	int fnAdvancedSCB()
+//			Line 724: 	int fnHeatsink()
+//			Line 738: 	int fnChaff()
+//			Line 756: 	int fnDeploySRV()
+//			line 800:	int fnDRShip()
+//			Line 829: 	int fnRequestDock()
+//			Line 851: 	int fnHangerServices()
+//			Line 895:	int fnIdleLock()
+//			Line 927:	int fnClearChatBox()
+//			Line 983: 	int fnModeSwitch()
+//			Line 1038:	int fnVPOutput()
+//			Line 1050: 	int fnPrintState()
+//			Line 1061: 	int fnStateDump()
+//			Line 1150: 	int fnDebug()
+//			Line 1175:	int fnGetTOD()
+//			Line 1192:	int fnGetDate()
+//			Line 1215:	int findstr()
+//			Line 1241:	int ModKey()			// not used
 
 //------------------//
 // CUSTOM FUNCTIONS //
@@ -1314,6 +1232,14 @@
 			strstart = strstart + 1;
 		}
 		return -1;
+	}
+
+
+	// Not yet used...found in discord provided by Dar|{cyde
+	// Usage example: ModKey(L_ALT, 1);
+	// Note: Potentially better than defining a macro in ED-Defines.ttm as it relaeases 'mod' after 'key' and not before
+	int ModKey(int mod=0, int key=0) { 
+	    return CHAIN(DOWN+mod, D(), PULSE+key, D(), UP+mod);
 	}
 
 
