@@ -49,29 +49,24 @@
 // CUSTOM MACROS //			// MACROS Include a series of automated key presses to perform a specific task.
 //---------------//
 
-	// Not yet used...found in discord provided by Dar|{cyde
-	// Usage example: ModKey(L_ALT, 1);
-	// Note: Potentially better than defining a macro in ED-Defines.ttm as it relaeases 'mod' after 'key' and not before
-	int ModKey(int mod=0, int key=0) { 
-	    return CHAIN(DOWN+mod, D(), PULSE+key, D(), UP+mod);
-	}
-
 	int fnCustomCommands() {
 
+		// Being Lazy...I've put this here rather than create yet another function
 		// Select MapKey Assignment profile
+		
 		if (Flags == 0 & TrainingMode == ENABLED) {
 			printf("\x0a\Training Mode Enabled\x0a");		
 			if (AnnounceTraining) {
 				fnTextToSpeech("Training mode enabled, press a button or switch to hear what it does");
 			}
-			TrainingMap();
+			TrainingMap();										// Selects Training MapKey Profile
 		}
 		else {
 			printf("\x0a\Training Mode Disabled\x0a");			
 			if (AnnounceTraining) {
 				fnTextToSpeech("Training mode disabled. Enable this feature via E D User Settings file");
 			}
-			MainKeyMap();
+			MainKeyMap();										// Selects Main Mapkey Profile if TrainingMode is disabled 
 		}
 		
 		// Define macros...
