@@ -4,11 +4,14 @@ v5.0.0	- New Major release - Odyssey
 		- Add reg scrap folder and scraps for extra voices
 		- Added more comments in ED_UserSettings.tmh to include how to add TTS voices to Win10
 		- Changed Header in ED_Main.tmc to include version numbers required
-		- Create ChatTABs alias in UserSettings and Create fnClearChatBox(); function to replace mClearChatbox and mClearAllChatBox macros
+		- Create ChatTABs alias variable in ED_UserSettings and create fnClearChatBox() function to replace mClearChatbox and mClearAllChatBox macros
 		- Create tgXAxis() to toggle X-Axis between Roll and Yaw + announce when switching
 		- Create tgBoost() to catch invalid selection
 		- tgWarpDrive() - Add more tests. Include retries if Masslocked
 		- Update TARGET software to 3.0.20.826 and update ED_Main.tmc to exclude the new hardware
+		- Split init functions into dedicated .tmh file
+		- Add various additional comments in code
+		- Move  (unused) ModKey() function to bottom of ED_Functions.tmh
 
 v4.2.1	- New Point Release
 		- Fix name of TrainingMap in fnCustomCommands()
@@ -41,7 +44,9 @@ v4.2.1	- New Point Release
 		- Add aliases for additional Microsoft TTS voices in ED_UserSettings.tmh and...
 		- Add ability to parse different voices to fnTextToSpeech()
 		- Add "Text To Speech" section in user guide to describe how to set TextToSpeech up and how to add additional voices to a user's PC
-		- Create fnGetDate() function 
+		- Create fnGetDate() function
+		- Update TARGET software  to 3.0.20.826 and update ED-Main.tmc to exclude the new hardware 
+		- Minor bug fixes
 
 v4.2.0	- New Minor Release (Elite Dangerous 3.7 - Fleet Carriers)
 		- Ported code from 4.1.0b
