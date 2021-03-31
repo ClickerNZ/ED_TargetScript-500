@@ -393,7 +393,7 @@
 			if(fSRV) {
 				fnName = "Deploy Turret";
 				if(fSRVTurretRetracted) {
-					reason = "move away from the ship";
+					reason = "too close to the ship";
 					fnNotValid(fnName, reason);
 				}
 				else {
