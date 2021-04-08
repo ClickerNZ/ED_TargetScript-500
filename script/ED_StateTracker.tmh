@@ -560,7 +560,7 @@
 		}
 		
 		if (ValidStatusFile) {
-			fnsReadStatusJson();
+			fnsReadStatusJson();														// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
 			ActKey(KEYON+REXEC(3, StatusReadRate, "fnsReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
 		}
 
