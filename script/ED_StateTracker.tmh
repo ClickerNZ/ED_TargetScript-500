@@ -10,7 +10,7 @@
 // LEGEND: 
 // ========================================================
 // fnName()					refer to ED_Functions file
-// initName()				refer to ED_Functions file
+// initName()				refer to ED_Initialise file
 // fnsName()				refer to ED_StateTracker file
 // tgName()					refer to ED_Toggles file
 // mName					refer to ED_Macros file
@@ -31,7 +31,7 @@
 // START
 
 
-	// FUNCTION:	Read in status.json into 'myJson'
+	// FUNCTION:	Read status.json into 'myJson'
 	// Requires:	'StatusFile' string variable to be correctly set in ED_UserSettings file
 
 	// GlobalVars
@@ -49,7 +49,7 @@
 		int	myResult;
 //		int	ReadErrorCount	= 0;	// move to global
 		int	ReadErrorSent	= 0;
-		int	newJson		= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
+		int	newJson			= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
 
 		Dim(&myJson, buf);
 		myJson[0] = 0;
@@ -67,7 +67,7 @@
 				if (ReadErrorCount > 3) {
 					printf("File Read Error Count = %d : status.json\x0a", ReadErrorCount);
 					if (!ReadErrorSent) {
-						VoiceTxt = "File Read Error count exceeded";
+						VoiceTxt = "Status Jason Read Error count exceeded";
 						fnTextToSpeech(VoiceTxt, 100);
 						ReadErrorSent = 1;
 					}
@@ -76,7 +76,7 @@
 			else {
 				ReadErrorCount = 0;
 				ReadErrorSent = 0;
-				myJson[myResult]=0;							// terminates char array with nul
+				myJson[myResult]=0;								// terminates char array with nul
 				
 				newJson = strcmp(&myJson, &lastJson);
 				if (newJson != 0) {
@@ -97,16 +97,17 @@
 		}
 		else {
 			printf("\x0a");
-			VPOutput("FATAL ERROR: Status.jason file not found", 100);
+			fnVPOutput("FATAL ERROR: Status.jason file not found", 100);
 			Abort();
 		}		
 	}
 
 
-	// FUNCTION:	Extract json key value from status.json:
-	// Input:		Key (pattern = string), value vtype (0=float, 1=int, 2=string)
-	// Output:		Return key value
-	// Valid Patterns(vtype);
+	// FUNCTION:	Extract json key value by name from status.json
+	// Input:		Key name (pattern: string), key value type (vtype: 0=float, 1=int, 2=string)
+	// Output:		Returns key value
+	
+	// Valid Key Names: pattern(vtype);
 	//				Flags(1), Pips(2), Firegroup(1), GuiFocus(1), FuelMain(0), FuelReservoir(0)
 	//				Cargo(1), LegalState(2), Latitude(0), Longitude(0), Altitude(1), Heading(1)
 	//				BodyName(2), PlanetRadius(1), timestamp(2), event(2)
@@ -148,7 +149,7 @@
 		
 		// Find the Key (pattern) ...
 
-		int Start = findstr(&myJson, &pattern);
+		int Start = findstr(&myJson, &pattern);						// 'findstr()' is my version of 'strstr()' in sys.tmh...which doesn't work...defined in ED_Functions.tmh 
 		if (Start == -1) {
 			printf("Key %s NOT Found\x0a", &pattern);
 			return -1;
@@ -230,7 +231,7 @@
 
 
 	// FUNCTION: Read and process "Flags" value from "status.json"
-	// Input: 'UpdateLEDs', 1 = update, 0 = no update
+	// Input: 'UpdateLEDs', 1 = update, 0 = no update (default)
 	// Output: Flags value
 
 	int fnsProcessFlags(int UpdateLEDs=0) {
@@ -240,7 +241,7 @@
 		// These 2-letter shorthand duplicate variables enable me to track when certain status bits change.
 		// Set these first before re-decoding latest flags key value
 		
-		int ll = fLatLong;												// Track in/out of orbit
+		int ll = fLatLong;												// Track in/out of orbit (lower case LL)
 		int sc = fSupercruise;											// Track Supercruise changes
 		int wd = fsdJump;												// Track when we jump systems
 		int sh = fMainShip;												// Track in/out of MainShip
@@ -256,15 +257,7 @@
 		int sr = fSilentRunning;										// LED 3 Tracking
 		int cs = fCargoScoop;											// LED 4 Tracking
 		int lg = fLandingGear;											// LED 5 Tracking
-		
-		
-		// TARGET uses 32 bit signed precision for its integers.
-		// Numbers larger than 2147483648 wrap around to negative number
-		// and can only mean bit 31 (fSRVHiBeam) is set.
-		// Note: "bitwise and" test won't work for negative numbers
-
-		// Process 'Flags' value...most significant bit order
-		
+				
 		if (Flags == 0) {		
 			if(GameLoaded == 1) {										// Detects when Game halts
 				GameLoaded = 0;
@@ -292,14 +285,23 @@
 				fnsMyStates(SAVE);
 			}
 		}
-		else {		// Flags != 0
+		else {		// Flags != 0										// Game is running 
+
+		// TARGET uses 32 bit signed precision for its integers.
+		// Integers larger than 2,147,483,648 wrap around to negative number
+		// Note: "bitwise and" (&) test won't work for a negative number
+		// and can only mean bit 31 (fSRVHiBeam) is set.
+
+		// Process 'Flags' value...most significant bit order
 		
-			if (Flags < 0) {
+			if (Flags < 0) {											// Most significant bit is set 
 				fSRVHiBeam			= 1;
 			}
 			else {
 				fSRVHiBeam			= 0;
 			}
+			
+			// Bitwise-And of the negative number works for all bits other than most significant bit 
 					
 			fsdJump				= ((Flags & ED_FSDJump) > 0);
 			fAltFromAvgRad		= ((Flags & ED_AltFromAvgRad) > 0);
@@ -333,7 +335,7 @@
 			fLanded				= ((Flags & ED_Landed) > 0);
 			fDocked				= ((Flags & ED_Docked) > 0);
 
-			if (fLatLong != ll) {
+			if (fLatLong != ll) {										// ie lower case LL. Detect when we cross the Orbital Cruise boundary
 				OrbitalCruise = !OrbitalCruise;			
 			}
 
@@ -349,7 +351,7 @@
 							VoiceTxt = "Drop detected\x0a";
 						}
 						
-						fnVPOutput(VoiceTxt);
+						fnVPOutput(VoiceTxt);							//  Announce drop type
 						
 						if (fInterdicted | fDanger) {
 							printf("!!! DANGER DETECTED !!!\x0a");
@@ -357,9 +359,9 @@
 								tgHUDMode();							// Select Combat HUD
 							}
 							if (!fHardpoints) {
-								tgHardpoints();
+								tgHardpoints();							// Deploy weapons
 							}
-							DeferCall(1500, &ActKey, PULSE+KEYON+SelectHighestThreat);
+							DeferCall(1500, &ActKey, PULSE+KEYON+SelectHighestThreat);					// Select shooter
 							
 							fnTextToSpeech("Warning! Danger! Combat Mode Initiated", 100);				// Sound warning 
 						}
@@ -371,7 +373,7 @@
 				}
 			}
 
-			if (fsdJump != wd) {
+			if (fsdJump != wd) {										// Detect when Supercruise or Hyperjump has been toggled
 				if (fsdJump) {
 					if (!fHUDAnalysis & AutoHUD) {
 						tgHUDMode();		
@@ -379,7 +381,7 @@
 				}
 			}
 			
-			if (!fShieldsUp & su & !fSilentRunning) {		// Shields just dropped
+			if (!fShieldsUp & su & !fSilentRunning) {					// Shields just dropped
 				if (fDanger) {
 					if (AutoStrobe) {
 						DeferCall(750, &fnVPOutput, "Activating Silent Strobe\x0a");
@@ -391,7 +393,7 @@
 				}
 			}
 
-			if (fMainShip & (fLanded != ld)) {		// Framework for future functionality
+			if (fMainShip & (fLanded != ld)) {							// Framework for future functionality
 							
 				if (fLanded) {
 					printf("Landed @ %s\x0a", fnGetTOD());
@@ -409,7 +411,7 @@
 							
 				if (fDocked) {							
 					if (AutoHanger) {
-						DeferCall(2500, &fnHangerServices, 1);			// Cannot use Auto feature until determine if in a Starport v Carrier
+						DeferCall(2500, &fnHangerServices, 1);			// Cannot use 'Auto' feature until we can determine if in a Starport v Carrier
 					}
 					DeferCall(1000, &ActKey, PULSE+KEYON+BalancePower);
 					printf("Docked @ %s\x0a", fnGetTOD());
@@ -423,8 +425,8 @@
 				}
 			}
 			
-			if (fOverHeating & !oh) {
-				if (AutoHeatsink) {			// Fire a heatsink if we have one
+			if (fOverHeating & !oh) {									// Detect when we start overheation
+				if (AutoHeatsink) {										// If 'AutoHeatSink' is set, fire a heatsink if we have one
 					fnVPOutput("Auto Heat sink engaged!");
 					ActKey(PULSE+KEYON+DeployHeatSink);
 				}
@@ -433,7 +435,7 @@
 				}
 			}
 			
-			if (fSRV & fSRVTurretRetracted != tr) {
+			if (fSRV & (fSRVTurretRetracted != tr)) {					// Detect when the turret deploys or retracts
 				if (fSRVTurretRetracted) {
 					fnTextToSpeech("Turret Retracted");
 				}
@@ -441,19 +443,20 @@
 					fnTextToSpeech("Turret Deployed");
 				}
 			}
-									
+
+			// Detect if we need to update the LEDs						
 			if (fa != fFAOff | lt != fLights | sr != fSilentRunning | cs != fCargoScoop | lg != fLandingGear | sh != fMainShip) UpdateLEDs = 1;
 
-			if(GameLoaded == 0) {			// Game started...as opposed to re-started.
+			if(GameLoaded == 0) {										// Game started...as opposed to re-started.
 				fnGameStarted();
 			}
 			else if(UpdateLEDs) {
 				fnSetLEDs();
 			}
 			
-			OldFlags = Flags;				// Keep track of last Flags Value to track when Flags Changes
+			OldFlags = Flags;											// Keep track of last Flags Value to track when Flag bits change
 			
-			if (ShowFlags) {
+			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
 				printf("\x0a===============\x0a");
 				if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
 				if (fsdJump) 				printf("Hyperjump\x0a");
