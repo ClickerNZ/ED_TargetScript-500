@@ -12,7 +12,7 @@
 // LEGEND: 
 // ========================================================
 // fnName()					refer to ED_Functions file
-// initName()				refer to ED_Functions file
+// initName()				refer to ED_Initialise file
 // fnsName()				refer to ED_StateTracker file
 // tgName()					refer to ED_Toggles file
 // mName					refer to ED_Macros file
