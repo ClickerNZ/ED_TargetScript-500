@@ -10,7 +10,7 @@
 // LEGEND: 
 // ========================================================
 // fnName()					refer to ED_Functions file
-// initName()				refer to ED_Functions file
+// initName()				refer to ED_Initialise file
 // fnsName()				refer to ED_StateTracker file
 // tgName()					refer to ED_Toggles file
 // mName					refer to ED_Macros file
@@ -47,7 +47,7 @@
 //			Line 895:	int fnIdleLock()
 //			Line 927:	int fnClearChatBox()
 //			Line 983: 	int fnModeSwitch()
-//			Line 1038:	int fnVPOutput()
+//			Line 1039:	int fnVPOutput()
 //			Line 1050: 	int fnPrintState()
 //			Line 1061: 	int fnStateDump()
 //			Line 1150: 	int fnDebug()
@@ -1034,7 +1034,8 @@
 
 
 	// FUNCTION:	Voice + Print output
-	// Parameter:	vpOutput string to send to fnTextToSpeech() and printf
+	// Parameter:	vpOutput: string to send to fnTextToSpeech() and printf
+	//				VolumeOverride: integer, 0 = no override, 1 - 100 = Volume. Default Volume = 75
 
 	int fnVPOutput(int VPOutput, int VolumeOverride=0) {
 		printf("%s\x0a", VPOutput);		
