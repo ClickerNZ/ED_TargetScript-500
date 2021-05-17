@@ -7,18 +7,21 @@
 
 // Refer Change Log.txt in same folder
 
-// LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Functions file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+/// LEGEND: 
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
+
+// START
 
 // For the purposes of this exercise I'm going to use the following;
 //
@@ -39,10 +42,9 @@
 		
 // Global Vars
 // =================================================================================================== 
-	define MuteChannel1			L_ALT+USB[0x3B]			// LALT+F2		(Map this to VoiceAttack)
+	define MuteChannel1			L_ALT+USB[0x3B]			// LALT+F2		(Map this to VoiceAttack and set to mute while key pressed)
 	define MuteChannel2			L_ALT+USB[0x3C]			// LALT+F3		(Map this to E:D in game Voice Channel
-//	define MuteChannel3			L_ALT+USB[0x55]			// LALT+NUMPAD * This causes TARGET to play windows 'brring' wav??
-	define MuteChannel3			L_ALT+USB[0x3E]			// LALT+F5		(Map this to Discord/Twitch/OBS/Youtube)
+	define MuteChannel3			USB[0x5D]				// NUMPAD 5		(Map this to Discord/Twitch/OBS/Youtube)
 
 // General
 
@@ -51,7 +53,7 @@
 
 // Radio Modes
 
-	int PTTMode				=	0;			// HOLD or TOGGLE:	0 = Press to OPEN, Release to Close, 1 = Press to OPEN, Press to CLOSED
+	int PTTMode				=	0;			// PTT or TOGGLE:	0 = Press to OPEN, Release to CLOSE, 1 = Press to OPEN, Press to CLOSE
 	int Channel				=	0;			// CHANNEL:			0 = Off, 1 = Internal, 2 = External-1, 3 = External-2, 4 = All Open
 
 // Channel Selection						// Default: All channels OPEN
@@ -67,7 +69,6 @@
 // Initialisation status
 
 	int CommsInitialised	=	0;
-	
 		
 // End Global Variables	
 
