@@ -529,7 +529,7 @@
 			
 			// Bitwise-And of the negative number works for all bits other than most significant bit 
 					
-			fOnFoot				= ((Flags2 & ED_OnFFoot) > 0);
+			fOnFoot				= ((Flags2 & ED_OnFoot) > 0);
 			fInTaxi				= ((Flags2 & ED_InTaxi) > 0);
 			fInMultiCrew		= ((Flags2 & ED_InMultiCrew) > 0);
 			fOnFootInStation	= ((Flags2 & ED_OnFootInStation) > 0);
