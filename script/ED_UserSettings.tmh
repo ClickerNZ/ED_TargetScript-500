@@ -8,17 +8,18 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ===========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ===========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // START
 
@@ -176,6 +177,8 @@
 // General Status Variables //
 //--------------------------//
 
+	int 	ShowFlags			= DISABLED;				// Set/Reset in fnDebug() and used in stfnProcessFlags()
+	
 	define	AutoHanger			DISABLED				// !! TESTING !!	// 1 = Initiate Hanger+Station Services automatically when docked, 0 = don't
 														// !! TESTING !!	// Hanger services on Carrier is completely different to stations
 															

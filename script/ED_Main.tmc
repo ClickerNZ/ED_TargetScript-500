@@ -12,22 +12,39 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 39:	include statements
-//			Line 60: 	int main()
-//			Line 131:	int EventHandle()
+//			Line 65:	include statements
+//			Line 82: 	int main()
+//			Line 154:	int EventHandle()
+
+// PREFACE
+//
+// This script is provided as is and without any warranties, explicit or implied.
+//
+// This package contains a single required '.tmc' file (this is it), a '.ttm' which defines MANY constants and variables used by the rest
+// of the script (muliple '.tmh' files) in order to (hopefully) make the code easier to follow.
+//
+// Also included within the package is a change log to document where I've added features (intended and unintended!) and some sample 
+// Windows batch files to assist in lanching ED, this script and any attendant apps you may wish to use at run time.
+//
+// I am not a proffessional coder/programmer however, the philosophy I've chosen for this script package is to try to keep the code
+// within a '.tmh' file relevant to the function title and below 1000 lines where possible.
+//
+// Indexes near the top of each file should assist in finding functions of interest.
+ 
 
 
 // START
@@ -44,7 +61,9 @@ include "target.tmh"
 //		...this ensures these critical files are loaded in the correct order
 // The above .tmh files are bundled with the TARGET software.
 
-include "ED_Defines.ttm"				// The order that these files are 'included' matters
+// include "ED_Defines.ttm"				// The order that these files are 'included' matters
+include "ED_ScriptDefines.ttm"			// The order that these files are 'included' matters
+include "ED_GameBindings.ttm"
 include "ED_GlobalVars.tmh"
 include "ED_UserSettings.tmh"
 include "ED_Macros.tmh"
@@ -53,6 +72,8 @@ include "ED_Initialise.tmh"
 include "ED_Functions.tmh"
 include "ED_StateTracker.tmh"
 include "ED_Toggles.tmh"
+// include "ED_CommsControl.tmh"		// ENABLE 'CommsModule' in UserSettings to use CommsControl
+
 
 // --------------- //
 // program startup //
@@ -98,10 +119,9 @@ include "ED_Toggles.tmh"
 		SetKBRate(PulseTime, DelayTime);										// Base Settings 	(See ED_UserSettings.tmh)
 		SetKBLayout(KBLayout);													//					(See ED_Defines.ttm)
 	
-//		fnCustomCommands();														// Initialise Custom Macros (See EDMacros.tmh)
-		fnPIPMode(0);															// Reset PIPMode
+		fnPIPMode(RESET);														// Reset PIPMode
 
-		fnsMyStates(LOAD);														// Load my status variables
+		stfnMyStates(LOAD);														// Load my status variables
 		
 		fnLEDBrightness();														// Set initial LED Brightness levels
 		initTextToSpeech();														// Initialise Text-To-Speech engine
@@ -121,7 +141,7 @@ include "ED_Toggles.tmh"
 		printf("\x0a\++	Initialise Hardware	...	Complete	++\x0a");
 		printf("\x0a\++	Check Game state ...\x0a");
 		
-		fnsStartCheck();														// Check for vital files and game start
+		stfnStartCheck();														// Check for vital files and game start
 				
 		if(Flags == 0) {
 			printf("++	Waiting for Game to load...\x0a");	

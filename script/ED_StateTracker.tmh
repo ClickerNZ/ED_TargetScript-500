@@ -8,25 +8,27 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 43: 	int fnsReadStatusJson()
-//			Line 119: 	int fnsGetKeyValue()
-//			Line 235: 	int fnsProcessFlags()
-//			Line 495: 	int fnsProcessGuiFocus()
-//			Line 533: 	int fnsStartCheck()
-//			line 588:	int fnsMyStates()
+//			Line 46: 	int stfnReadStatusJson()
+//			Line 129: 	int stfnGetKeyValue()
+//			Line 245: 	int stfnProcessFlags()
+//			Line 512:	int stfnProcessFlags2()
+//			Line 612: 	int stfnProcessGuiFocus()
+//			Line 650: 	int stfnStartCheck()
+//			line 707:	int stfnMyStates()
 	
 // START
 
@@ -41,22 +43,22 @@
 	
 	// ------------
 	
-	int fnsReadStatusJson() {
+	int stfnReadStatusJson() {
 
 		int 	VoiceTxt;
 		int 	fp;
 		int 	buf = 512;
-		int	myResult;
-//		int	ReadErrorCount	= 0;	// move to global
-		int	ReadErrorSent	= 0;
-		int	newJson			= 0;								// set when myJson != lastJson...we then call fnsProcessFlags();		
+		int		myResult;
+//		int		ReadErrorCount	= 0;	// move to global
+		int		ReadErrorSent	= 0;
+		int		newJson			= 0;								// set when myJson != lastJson...we then call stfnProcessFlags();		
 
 		Dim(&myJson, buf);
-		myJson[0] = 0;
+		myJson[0] = NUL;
 		
 		char	lastJson;
  		Dim(&lastJson, buf); 
- 		lastJson[0]=0;		
+ 		lastJson[0] = NUL;		
 		
 		fp = fopen(&StatusFile, "r");
 		if (fp) {
@@ -74,25 +76,31 @@
 				}
 			}
 			else {
-				ReadErrorCount = 0;
-				ReadErrorSent = 0;
-				myJson[myResult]=0;								// terminates char array with nul
+				ReadErrorCount 		= 0;
+				ReadErrorSent 		= 0;
+				myJson[myResult] 	= 0;								// terminates char array with nul
 				
 				newJson = strcmp(&myJson, &lastJson);
 				if (newJson != 0) {
 					if (Debug) {
-						printf("Function: fnsReadStatusJson();\x0a"); 
+						printf("Function: stfnReadStatusJson();\x0a"); 
 						printf("\x0a\myJson	  = %s \x0a", &myJson);
 						printf("strlen(myJson) = %d\x0a\x0a", strlen(&myJson));				
 					}
-					Flags = fnsGetKeyValue("Flags", 1);
+					Flags = stfnGetKeyValue("Flags", INTEGER);
 					if (OldFlags != Flags)	{
-						fnsProcessFlags(0);
+						stfnProcessFlags(0);
 					}
 					OldFlags = Flags;
+
+					Flags2 = stfnGetKeyValue("Flags2", INTEGER);
+					if (OldFlags2 != Flags2)	{
+						stfnProcessFlags2();
+					}
+					OldFlags2 = Flags2;
 				}			
 				sprintf(&lastJson, "%s", &myJson);
-				lastJson[strlen(&lastJson)] = 0;			//terminate char array 
+				lastJson[strlen(&lastJson)] = NUL;			//terminate char array 
 			}
 		}
 		else {
@@ -104,13 +112,13 @@
 
 
 	// FUNCTION:	Extract json key value by name from status.json
-	// Input:		Key name (pattern: string), key value type (vtype: 0=float, 1=int, 2=string)
+	// Input:		Key name (pattern: string), key value type (vtype: FLOAT, INTEGER, STRING)
 	// Output:		Returns key value
 	
 	// Valid Key Names: pattern(vtype);
-	//				Flags(1), Pips(2), Firegroup(1), GuiFocus(1), FuelMain(0), FuelReservoir(0)
-	//				Cargo(1), LegalState(2), Latitude(0), Longitude(0), Altitude(1), Heading(1)
-	//				BodyName(2), PlanetRadius(1), timestamp(2), event(2)
+	//				Flags(INTEGER), Flags2 (INTEGER), Pips(STRING), Firegroup(INTEGER), GuiFocus(INTEGER), FuelMain(FLOAT), FuelReservoir(FLOAT)
+	//				Cargo(INTEGER), LegalState(STRING), Latitude(FLOAT), Longitude(FLOAT), Altitude(INTEGER), Heading(INTEGER)
+	//				BodyName(STRING), PlanetRadius(INTEGER), timestamp(STRING), event(STRING)
 
 	// GlobalVars
 
@@ -118,10 +126,10 @@
 
 	// ----------
 
-	int fnsGetKeyValue(alias pattern, int vtype) {
+	int stfnGetKeyValue(alias pattern, int vtype) {
 
 		if (Debug) {
-			printf("\x0a\Function: fnsGetKeyValue(\"%s\", %d))\x0a", &pattern, vtype);
+			printf("\x0a\Function: stfnGetKeyValue(\"%s\", %d))\x0a", &pattern, vtype);
 		}
 		
 		int 	PatLen = strlen(&pattern);
@@ -133,14 +141,14 @@
 		
 		char 	thischr;											// char variable to detect end of value via a ',' or '}' or ' '	
 		Dim(&thischr, 2);
-		thischr[0]	= 0;
+		thischr[0]	= NUL;
 		
 		char	myStr;
 		Dim(&myStr, PatLen);
-		myStr[0] 	= 0;
+		myStr[0] 	= NUL;
 
 		Dim(&keyvalue, 64);											// keyvalue char is global (used in status dump)
-		keyvalue[0] = 0;
+		keyvalue[0] = NUL;
 
 		float	fkeyvalue;											// floating point key values
 		int		ikeyvalue;											// integer key value
@@ -174,13 +182,13 @@
 		else {
 			strsub(&thischr, &myJson, valstart, valstart);
 			myResult = strcmp(&thischr, ",");
-			if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+			if (myResult == 0 & (vtype == FLOAT | vtype == INTEGER)) EndValue = 1;
 		
 			myResult = strcmp(&thischr, "}");
 			if (myResult == 0) EndValue = 1;
 			
 			myResult = strcmp(&thischr, " ");
-			if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+			if (myResult == 0 & (vtype == FLOAT | vtype == INTEGER)) EndValue = 1;
 			
 			if (EndValue == 0) strcat(&keyvalue, &thischr);
 			
@@ -189,7 +197,7 @@
 				strsub(&thischr, &myJson, valstart+chrpnt, valstart+chrpnt);
 				
 				myResult = strcmp(&thischr, ",");					// end of value signalled by ',' or '}' or ' ' or '"' 
-				if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+				if (myResult == 0 & (vtype == FLOAT | vtype == INTEGER)) EndValue = 1;
 				
 				myResult = strcmp(&thischr, "}");
 				if (myResult == 0) {
@@ -198,16 +206,16 @@
 				}
 				
 				myResult = strcmp(&thischr, " ");
-				if (myResult == 0 & (vtype == 0 | vtype == 1)) EndValue = 1;
+				if (myResult == 0 & (vtype == FLOAT | vtype == INTEGER)) EndValue = 1;
 
 				myResult = strcmp(&thischr, "\"");
-				if (myResult == 0 & vtype == 2) EndValue = 1;			
+				if (myResult == 0 & vtype == STRING) EndValue = 1;			
 				
 				if (EndValue == 0) strcat(&keyvalue, &thischr);		// continue building char array
 			}			
 		}
 		
-		keyvalue[chrpnt] = 0;										// terminate char array with a nul 
+		keyvalue[chrpnt] = NUL;										// terminate char array with a nul 
 		
 		if (Debug) {
 			printf("key:	%s	value:	%s\x0a", &pattern, &keyvalue);
@@ -215,26 +223,26 @@
 		
 		// Return converted key-value...
 		
-		if (vtype == 0) {											// convert string to float
+		if (vtype == FLOAT) {											// convert string to float
 			return eval(&keyvalue);
 		}
-		if (vtype == 1) {											// convert string to integer
+		if (vtype == INTEGER) {											// convert string to integer
 			return ieval(&keyvalue);
 		}
 
-		if (vtype == 2) {			
+		if (vtype == STRING) {			
 			strdel(&keyvalue, 0, 0);								// Just remove leading quote and...
 			return 0;												// ...use the global keyvalue on return
 		}
 	}
-	// End of fnsGetKeyValue()
+	// End of stfnGetKeyValue()
 
 
 	// FUNCTION: Read and process "Flags" value from "status.json"
 	// Input: 'UpdateLEDs', 1 = update, 0 = no update (default)
-	// Output: Flags value
+	// Output: Flags variables set/reset
 
-	int fnsProcessFlags(int UpdateLEDs=0) {
+	int stfnProcessFlags(int UpdateLEDs = NO) {
 
 		int VoiceTxt;
 
@@ -259,8 +267,8 @@
 		int lg = fLandingGear;											// LED 5 Tracking
 				
 		if (Flags == 0) {		
-			if(GameLoaded == 1) {										// Detects when Game halts
-				GameLoaded = 0;
+			if(GameLoaded == YES) {										// Detects when Game halts
+				GameLoaded = NO;
 
 				VoiceTxt = "Game halted -";
 				if(TrainingMode == ENABLED){
@@ -282,7 +290,7 @@
 				}
 				
 				fnSetLEDs();											// Turn off Status LEDs
-				fnsMyStates(SAVE);
+				stfnMyStates(SAVE);
 			}
 		}
 		else {		// Flags != 0										// Game is running 
@@ -295,10 +303,10 @@
 		// Process 'Flags' value...most significant bit order
 		
 			if (Flags < 0) {											// Most significant bit is set 
-				fSRVHiBeam			= 1;
+				fSRVHiBeam			= ON;
 			}
 			else {
-				fSRVHiBeam			= 0;
+				fSRVHiBeam			= OFF;
 			}
 			
 			// Bitwise-And of the negative number works for all bits other than most significant bit 
@@ -342,7 +350,7 @@
 			if (fSupercruise != sc) {									// Detect when Supercruise toggles
 				fnGetFlightMode();										// Line up slider curves
 				if (!fSupercruise) {
-					if (SelectDrop == 0) {								// Uninitiated drop
+					if (SelectDrop == NO) {								// Uninitiated drop
 						
 						if (OrbitalCruise & !fInterdicted) {
 							VoiceTxt = "Entering Glide Mode\x0a";
@@ -367,9 +375,9 @@
 						}
 					}
 					else {												// Initiated drop
-						SelectDrop=0;
+						SelectDrop  = NO;
 					}
-					UpdateLEDs = 1;
+					UpdateLEDs = YES;
 				}
 			}
 
@@ -388,7 +396,7 @@
 						tgSilentRunning(STROBE);
 					}
 					else {
-						DeferCall(750, &fnTextToSpeech, "Consider using Silent Strobe commander");
+						DeferCall(750, &fnTextToSpeech, "Consider using Silent Running commander");
 					}
 				}
 			}
@@ -403,7 +411,7 @@
 					if (AutoGearUP) {
 						ActKey(PULSE+KEYON+LandingGear);
 					}
-					ShipDismissed = 0;			
+					ShipDismissed = NO;			
 				}
 			}
 			
@@ -417,7 +425,7 @@
 					printf("Docked @ %s\x0a", fnGetTOD());
 				}
 				else	{	
-					InHanger = 0;
+					InHanger = NO;
 					if (AutoGearUP) {
 						DeferCall(1500, &ActKey, PULSE+KEYON+LandingGear);
 					}
@@ -445,12 +453,12 @@
 			}
 
 			// Detect if we need to update the LEDs						
-			if (fa != fFAOff | lt != fLights | sr != fSilentRunning | cs != fCargoScoop | lg != fLandingGear | sh != fMainShip) UpdateLEDs = 1;
+			if (fa != fFAOff | lt != fLights | sr != fSilentRunning | cs != fCargoScoop | lg != fLandingGear | sh != fMainShip) UpdateLEDs = YES;
 
-			if(GameLoaded == 0) {										// Game started...as opposed to re-started.
+			if(GameLoaded == NO) {										// Game started...as opposed to re-started.
 				fnGameStarted();
 			}
-			else if(UpdateLEDs) {
+			else if(UpdateLEDs == YES) {
 				fnSetLEDs();
 			}
 			
@@ -458,6 +466,7 @@
 			
 			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
 				printf("\x0a===============\x0a");
+				printf("Set FLAGS:\X0A");				
 				if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
 				if (fsdJump) 				printf("Hyperjump\x0a");
 				if (fAltFromAvgRad) 		printf("Radius-ALT\x0a");
@@ -494,17 +503,118 @@
 			}			
 		}
 	}
-	// END of fnsProcessFlags()
+	// END of stfnProcessFlags()
 
 
+	// FUNCTION:	Read and process "Flags2" value from "status.json"
+	// Output:		Flags2 variables set/reset
+	
+	int stfnProcessFlags2() {
+	
+		int VoiceTxt;
+
+		// TARGET uses 32 bit signed precision for its integers.
+		// Integers larger than 2,147,483,648 wrap around to negative number
+		// Note: "bitwise and" (&) test won't work for a negative number
+		// and can only mean bit 31 (fSRVHiBeam) is set.
+
+		// Process 'Flags2' value...most significant bit order
+		
+//			if (Flags2 < 0) {											// Most significant bit is set 
+//				fRESERVED			= ON;
+//			}
+//			else {
+//				fRESERVED			= OFF;
+//			}
+			
+			// Bitwise-And of the negative number works for all bits other than most significant bit 
+					
+			fOnFoot				= ((Flags2 & ED_OnFFoot) > 0);
+			fInTaxi				= ((Flags2 & ED_InTaxi) > 0);
+			fInMultiCrew		= ((Flags2 & ED_InMultiCrew) > 0);
+			fOnFootInStation	= ((Flags2 & ED_OnFootInStation) > 0);
+			fOnFootOnPlanet		= ((Flags2 & ED_OnFootOnPlanet) > 0);
+			fAimDownSight		= ((Flags2 & ED_AimDownSight) > 0);
+			fLowOxygen			= ((Flags2 & ED_LowOxygen) > 0);
+			fLowHealth			= ((Flags2 & ED_LowHealth) > 0);
+			fCold				= ((Flags2 & ED_Cold) > 0);
+			fHot				= ((Flags2 & ED_Hot) > 0);
+			fVeryCold			= ((Flags2 & ED_VeryCold) > 0);
+			fVeryHot			= ((Flags2 & ED_VeryHot) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+
+
+			OldFlags2 = Flags2;											// Keep track of last Flags Value to track when Flag bits change
+			
+			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
+				printf("\x0a===============\x0a");
+				printf("Set FLAGS2:\X0A");
+				if (fOnFoot)	 			printf("On Foot\x0a");
+				if (fInTaxi) 				printf("In Taxi\x0a");
+				if (fInMultiCrew) 			printf("In Multi Crew\x0a");
+				if (fOnFootInStation) 		printf("On Foot In Station\x0a");
+				if (fOnFootOnPlanet) 		printf("On Foot On Planet\x0a");
+				if (fAimDownSight) 			printf("Aim Down Sight\x0a");
+				if (fLowOxygen) 			printf("Low Oxygen\x0a");
+				if (fLowHealth) 			printf("Low Health\x0a");
+				if (fCold) 					printf("Cold\x0a");
+				if (fHot) 					printf("Hot\x0a");
+				if (fVeryCold) 				printf("Very Cold\x0a");
+				if (fVeryHot) 				printf("Very Hot\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+//				if (fRESERVED) 				printf("RESERVED\x0a");
+				printf("===============\x0a");
+			}			
+
+	
+	}
+	//END of stfnProcessFlags2()
+	
+	
 	// FUNCTION: Read and process 'GuiFocus' key value in status.json
 
-	int fnsProcessGuiFocus() {
+	int stfnProcessGuiFocus() {
 		int GUIFocus;
 		int prttxt;
 
 		if (Flags != 0) {
-			GUIFocus = fnsGetKeyValue("GuiFocus", 1);
+			GUIFocus = stfnGetKeyValue("GuiFocus", INTEGER);
 			if (GUIFocus == GUI_None)			prttxt = "No Focus";
 			if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
 			if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
@@ -515,19 +625,19 @@
 			if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
 			if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
 			if (GUIFocus == GUI_FSSMode) {		prttxt = "FSS Mode";
-				FSSMode = 1;
+				FSSMode = ON;
 			}
-			else FSSMode = 0;
+			else FSSMode = OFF;
 			
 			if (GUIFocus == GUI_SAAMode) {		prttxt = "SAA Mode";
-				SAAMode = 1;
+				SAAMode = ON;
 			}
-			else SAAMode = 0;
+			else SAAMode = OFF;
 			
 			if (GUIFocus == GUI_Codex)			prttxt = "Codex";
 
 			if (Debug) {
-				printf("Function: fnsProcessGuiFocus();\x0a");
+				printf("Function: stfnProcessGuiFocus();\x0a");
 				printf("GUIFocus		%d, %s\x0a", GUIFocus, prttxt);
 			}
 			return GUIFocus;
@@ -537,14 +647,14 @@
 
 	// FUNCTION: Initial check to see if game is already running after we've restarted the script.
 	
-	int fnsStartCheck() {
+	int stfnStartCheck() {
 		int fp;								// file pointer (handle)
 		int ValidStatusFile = 0;
 		
 		fp = fopen(&StatusFile, "r");
 		if (fp) {
 			fclose(fp);
-			ValidStatusFile = 1;
+			ValidStatusFile = YES;
 			printf("\x0a\status.json file set correctly in ED_UserSettings");
 		}
 		else {
@@ -555,19 +665,21 @@
 			Abort();
 		}
 		
-		if (StartupLock) {
+		if (StartupLock == ON) {
 			printf("\x0a\status.json location set to %s\x0a\x0a", &StatusFile);			
 		}
 		
-		if (ValidStatusFile) {
-			fnsReadStatusJson();														// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
-			ActKey(KEYON+REXEC(3, StatusReadRate, "fnsReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
+		if (ValidStatusFile == YES) {
+			stfnReadStatusJson();																	// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
+			ActKey(KEYON+REXEC(hReadStatusJson, StatusReadRate, "stfnReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
 		}
 
-		Flags = fnsGetKeyValue("Flags", 1);
+		Flags	= stfnGetKeyValue("Flags", INTEGER);
+		Flags2	= stfnGetKeyValue("Flags2", INTEGER);
 		
 		if(Flags != 0) {
-			fnsProcessFlags(0);
+			stfnProcessFlags(0);
+			stfnProcessFlags2();
 		}
 		else {
 			fnSoundFX("tada");
@@ -592,17 +704,17 @@
 	
 	// -------------------
 
-	int fnsMyStates(int action)	{
+	int stfnMyStates(int action)	{
 
 		int fnName = "MyStates";
 		int reason;
-		int fh;														// General File Pointer Variable 
+		int fh;															// General File Pointer Variable 
 		int fpresult;
 
 		if (action == SAVE)	{
 						
 			if (Debug) {
-				printf("Function: fnsMyStates();\x0a");
+				printf("Function: stfnMyStates();\x0a");
 				printf("Size of MyStates = %d\x0a", sizeof(&MyStates));
 			}
 
@@ -685,7 +797,7 @@
 		else {
 			reason = "action not valid";
 			fnNotValid(fnName, reason);
-			printf("fnsMyStates Action = %d\x0a", action);
+			printf("stfnMyStates Action = %d\x0a", action);
 		}
 	}
 

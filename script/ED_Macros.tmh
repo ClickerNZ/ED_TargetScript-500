@@ -8,34 +8,34 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // Index:	Line			FUNCTION
-//			Line 55:		int ModKey()
-//			Line 59:		fnCustomCommands()
-//			Line 80: 		mRequestDock
-//			Line 93: 		mDeploySRV
-//			Line 105: 		mBoardShip
-//			Line 124: 		mShowGameStats
-//			Line 129: 		mFastModeSwitch0
-//			Line 140: 		mFastModeSwitch1
-//			Line 154: 		mFastModeSwitch2
-//			Line 167: 		mReportCrimesToggle
-//			Line 188: 		mNAVBeaconWing
-//			Line 213: 		mNAVBeaconOff
-//			Line 237: 		mEnterHanger
-//			Line 263: 		mLaunch
-//			Line 274:		mChangeColours
+//			Line 53:		fnCustomCommands()
+//			Line 75: 		mRequestDock
+//			Line 88: 		mDeploySRV
+//			Line 100: 		mBoardShip
+//			Line 119: 		mShowGameStats
+//			Line 124: 		mFastModeSwitch0
+//			Line 135: 		mFastModeSwitch1
+//			Line 149: 		mFastModeSwitch2
+//			Line 162: 		mReportCrimesToggle
+//			Line 183: 		mNAVBeaconWing
+//			Line 208: 		mNAVBeaconOff
+//			Line 232: 		mEnterHanger
+//			Line 258: 		mLaunch
+//			Line 269:		mChangeColours
 
 
 // START
@@ -45,9 +45,9 @@
 	int	mRequestDock, mDeploySRV, mShowGameStats, mReportCrimesToggle, mNAVBeaconWing, mNAVBeaconOff;
 	int	mFastModeSwitch0, mFastModeSwitch1, mFastModeSwitch2, mBoardShip, mEnterHanger, mLaunch, mChangeColours;
 
-//---------------//
-// CUSTOM MACROS //			// MACROS Include a series of automated key presses to perform a specific task.
-//---------------//
+//---------------//			// MACROS Include a series of automated key presses to perform a specific task.
+// CUSTOM MACROS //			// The actual keys pressed can be found within the 'ED_Defines.ttm' file.
+//---------------//			// NOTE: Keys pressed are also defined within the game's bind file and MUST match what we're using here. 
 
 	int fnCustomCommands() {
 
@@ -127,7 +127,7 @@
 			PULSE+UIUp, D(500),
 			PULSE+UISelect, D(600),
 			PULSE+UISelect, D(6500),							// ** Depending on the load times of your PC, this value may need to be
-			PULSE+UISelect, D(600),								// changed/increased (6000ms is default)
+			PULSE+UISelect, D(600),								// 	  changed/increased (6000ms is default)
 			PULSE+UISelect, D(600),								// Select OPEN Mode
 			LOCK);
 

@@ -10,27 +10,28 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 44: 	int MainKeyMap()
-//			Line 56:		Joystick Triggers
-//			Line 256:		Throttle Lever Switches
-//			Line 390:		Throttle Base Switches
-//			Line 619: 	int TrainingMap()
-//			Line 628:		Joystick Triggers
-//			Line 804:		Throttle Lever Switches
-//			Line 930:		Throttle Base Switches
+//			Line 45: 	int MainKeyMap()
+//			Line 57:		Joystick Triggers
+//			Line 257:		Throttle Lever Switches
+//			Line 391:		Throttle Base Switches
+//			Line 620: 	int TrainingMap()
+//			Line 629:		Joystick Triggers
+//			Line 805:		Throttle Lever Switches
+//			Line 931:		Throttle Base Switches
 
 
 // START
@@ -142,8 +143,8 @@
 			MapKey(&Joystick, H1L, TEMPO(0, EXEC("tgLandingGear(0);"), LongPress));								// Long Press = Toggle Landing Gear (avoids accidental toggle)
 		
 			MapKeyUMD(&Joystick, H1R,
-				EXEC("tgLights(1);"),																			// U - Turn on Night Vision
-				TEMPO(0,	EXEC("tgLights(0);"), LongPress),													// M - Long Press = Toggle Ship Lights (avoids accidental toggle)
+				EXEC("tgLights(ON);"),																			// U - Turn on Night Vision
+				TEMPO(0,	EXEC("tgLights(OFF);"), LongPress),													// M - Long Press = Toggle Ship Lights (avoids accidental toggle)
 				0																								// D - 
 				);
 		}
@@ -241,9 +242,9 @@
 				);
 				
 			MapKeyUMD(&Joystick, H4P,
-				EXEC("fnPIPMode(0);"),																		// U - Reset PIPMode 
-				EXEC("fnPIPMode(1);"),																		// M - Increment PIPMode
-				EXEC("fnPIPMode(2);")																		// D - Decrement PIPMode 
+				EXEC("fnPIPMode(RESET);"),																	// U - Reset PIPMode 
+				EXEC("fnPIPMode(NEXT);"),																	// M - Increment PIPMode
+				EXEC("fnPIPMode(PREVIOUS);")																// D - Decrement PIPMode 
 				);
 		}
 			
@@ -286,13 +287,13 @@
 			MapKey(&Throttle, PSB, 0);								//  ** DO NOT TOUCH ** Used as ShiftButton for IOUMD
 		}
 		else {
-			MapKey(&Throttle, PSF, REXEC(9, 3000, "fnSoundFX(\"boop\", 50);", RNOSTOP));	//  ShiftButton: Sound Reminder every 3 seconds
-			MapKeyR(&Throttle, PSF, EXEC("StopAutoRepeat(9);"));		//RELEASE			//  Cancel reminder soundfx
+			MapKey(&Throttle, PSF, REXEC(hSoundFX, 3000, "fnSoundFX(\"boop\", 50);", RNOSTOP));	//  ShiftButton: Sound Reminder every 3 seconds
+			MapKeyR(&Throttle, PSF, EXEC("StopAutoRepeat(hSoundFX);"));		//RELEASE			//  Cancel reminder soundfx
 
-			MapKey(&Throttle, PSM, 0);														//  ShiftButton for IOUMD
+			MapKey(&Throttle, PSM, 0);															//  ShiftButton for IOUMD
 			
-			MapKey(&Throttle, PSB, REXEC(9, 3000, "fnSoundFX(\"boop\", 50);", RNOSTOP));	//  ShiftButton: Sound reminder every 3 seconds
-			MapKeyR(&Throttle, PSB, EXEC("StopAutoRepeat(9);"));		//RELEASE			//  Cancel reminder soundfx					
+			MapKey(&Throttle, PSB, REXEC(hSoundFX, 3000, "fnSoundFX(\"boop\", 50);", RNOSTOP));	//  ShiftButton: Sound reminder every 3 seconds
+			MapKeyR(&Throttle, PSB, EXEC("StopAutoRepeat(hSoundFX);"));		//RELEASE			//  Cancel reminder soundfx					
 		}
 
 //		(Coolie Switch)		// Frame Shift Drive functions
@@ -314,7 +315,7 @@
 //		(Mike Switch)		// Alternate Roll/Yaw or Communications Controller functions
 //		-------------
 
-		if (EnableTFRPRudder == 0) {
+		if (EnableTFRPRudder == DISABLED) {
 			MapKey(&Throttle, MSU, RollLeft);					// Alternate Roll Control - Counter Clockwise
 			MapKey(&Throttle, MSD, RollRight);					// Alternate Roll Control - Clockwise
 			MapKey(&Throttle, MSL, YawRight);					// Alternate Yaw Control - Left 
@@ -582,7 +583,7 @@
 			MapKeyR(&Throttle, EFLNORM, EXEC("fnDebug(0);"));	// RELEASE						// Debug tool: Turn Debug and ShowFlags OFF 
 		}
 				
-		MapKey(&Throttle, EFLOVER, 0);														// <not currently used>
+		MapKey(&Throttle, EFLOVER, 0);															// <not currently used>
 
 //		(Engine Idle - Left)
 //		--------------------
@@ -614,7 +615,7 @@
 // --------------------------- //
 
 	// FUNCTION:	This MapKey set is called at startup if game is not running and user setting 'TrainingMode' is set to ENABLED
-	//				Also called from fnsProcessFlags() when we detect Game has halted
+	//				Also called from stfnProcessFlags() when we detect Game has halted
 
 	int TrainingMap() {
 
@@ -849,7 +850,7 @@
 
 
 		MapKey(&Throttle, CSU, EXEC("fnVPOutput(\"Toggle Supercruise\");"));
-		MapKey(&Throttle, CSD, EXEC("fnVPOutput(\"Toggle Hyperjump\");"));
+		MapKey(&Throttle, CSD, EXEC("fnVPOutput(\"Toggle System jump\");"));
 		MapKey(&Throttle, CSL, EXEC("fnVPOutput(\"Select next system in route\");"));
 		MapKey(&Throttle, CSR, EXEC("fnVPOutput(\"Toggle orbit lines\");"));
 

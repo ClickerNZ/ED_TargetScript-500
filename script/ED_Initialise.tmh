@@ -8,24 +8,25 @@
 // Refer Change Log.txt in same folder
 
 // LEGEND: 
-// ========================================================
-// fnName()					refer to ED_Functions file
-// initName()				refer to ED_Initialise file
-// fnsName()				refer to ED_StateTracker file
-// tgName()					refer to ED_Toggles file
-// mName					refer to ED_Macros file
-// MapKey statements		refer to ED_MapKeyAssignment file
-// Global Defines			refer to ED_Defines file
-// Global Variables			refer to ED_GlobalVars file
-// User Config Settings		refer to ED_UserSettings file
-// ========================================================
+// ========================================================================
+// fnName()								refer to ED_Functions file
+// initName()							refer to ED_Initialise file
+// stfnName()							refer to ED_StateTracker file
+// tgName()								refer to ED_Toggles file
+// mName								refer to ED_Macros file
+// MapKey statements					refer to ED_MapKeyAssignment file
+// Global State and Boolean Defines		refer to ED_ScriptDefines file
+// Global Game Key Bind Defines			refer to ED_GameBindings file 
+// Global Variables						refer to ED_GlobalVars file
+// User Config Settings					refer to ED_UserSettings file
+// ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 37: 	int initJoystickAxis()
-//			Line 47: 	int initThrottleAxis()
-//			Line 65: 	int initTFRPRudder()
-//			Line 78: 	int initTextToSpeech()
-//			Line 98: 	int initSoundFX()
+//			Line 38: 	int initJoystickAxis()
+//			Line 48: 	int initThrottleAxis()
+//			Line 66: 	int initTFRPRudder()
+//			Line 79: 	int initTextToSpeech()
+//			Line 95: 	int initSoundFX()
 
 // START
 
@@ -82,7 +83,7 @@
 			printf("Voice.exe present at %s\x0a", &VoicePath);
 		}
 		else {
-			EnableVoice = 0;
+			EnableVoice = DISABLED;
 			printf("\x0a\Voice.exe not present at %s\x0a", &VoicePath);
 			printf("Set correct path in ED_UserSettings.tmh\x0a");
 			printf("\x0a\Voice feedback via 'fnTextToSpeech()' not available\x0a");
@@ -98,7 +99,7 @@
 			printf("Sounder.exe present at %s\x0a", &SoundPath);
 		}
 		else {
-			EnableSoundFX = 0;
+			EnableSoundFX = DISABLED;
 			printf("\x0a\Sounder.exe not present at %s\x0a", &SoundPath);
 			printf("Set correct path in ED_UserSettings.tmh\x0a");
 			printf("\x0a\Sound Effects via 'fnSoundFX()' not available\x0a");
@@ -107,4 +108,3 @@
 
 	
 //	END
-
