@@ -49,7 +49,6 @@
 		int 	fp;
 		int 	buf = 512;
 		int		myResult;
-//		int		ReadErrorCount	= 0;	// move to global
 		int		ReadErrorSent	= 0;
 		int		newJson			= 0;								// set when myJson != lastJson...we then call stfnProcessFlags();		
 
@@ -61,6 +60,7 @@
  		lastJson[0] = NUL;		
 		
 		fp = fopen(&StatusFile, "r");
+		
 		if (fp) {
 			myResult = fread(&myJson, 1, buf, fp);
 			fclose(fp);
@@ -93,11 +93,11 @@
 					}
 					OldFlags = Flags;
 
-					Flags2 = stfnGetKeyValue("Flags2", INTEGER);
-					if (OldFlags2 != Flags2)	{
-						stfnProcessFlags2();
-					}
-					OldFlags2 = Flags2;
+//					Flags2 = stfnGetKeyValue("Flags2", INTEGER);
+//					if (OldFlags2 != Flags2)	{
+//						stfnProcessFlags2();
+//					}
+//					OldFlags2 = Flags2;
 				}			
 				sprintf(&lastJson, "%s", &myJson);
 				lastJson[strlen(&lastJson)] = NUL;			//terminate char array 
@@ -529,37 +529,37 @@
 			
 			// Bitwise-And of the negative number works for all bits other than most significant bit 
 					
-			fOnFoot				= ((Flags2 & ED_OnFoot) > 0);
-			fInTaxi				= ((Flags2 & ED_InTaxi) > 0);
-			fInMultiCrew		= ((Flags2 & ED_InMultiCrew) > 0);
-			fOnFootInStation	= ((Flags2 & ED_OnFootInStation) > 0);
-			fOnFootOnPlanet		= ((Flags2 & ED_OnFootOnPlanet) > 0);
-			fAimDownSight		= ((Flags2 & ED_AimDownSight) > 0);
-			fLowOxygen			= ((Flags2 & ED_LowOxygen) > 0);
-			fLowHealth			= ((Flags2 & ED_LowHealth) > 0);
-			fCold				= ((Flags2 & ED_Cold) > 0);
-			fHot				= ((Flags2 & ED_Hot) > 0);
-			fVeryCold			= ((Flags2 & ED_VeryCold) > 0);
-			fVeryHot			= ((Flags2 & ED_VeryHot) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED			= ((Flags2 & ED_RESERVED) > 0);
+			fOnFoot					= ((Flags2 & ED_OnFoot) > 0);
+			fInTaxi					= ((Flags2 & ED_InTaxi) > 0);
+			fInMultiCrew			= ((Flags2 & ED_InMultiCrew) > 0);
+			fOnFootInStation		= ((Flags2 & ED_OnFootInStation) > 0);
+			fOnFootOnPlanet			= ((Flags2 & ED_OnFootOnPlanet) > 0);
+			fAimDownSight			= ((Flags2 & ED_AimDownSight) > 0);
+			fLowOxygen				= ((Flags2 & ED_LowOxygen) > 0);
+			fLowHealth				= ((Flags2 & ED_LowHealth) > 0);
+			fCold					= ((Flags2 & ED_Cold) > 0);
+			fHot					= ((Flags2 & ED_Hot) > 0);
+			fVeryCold				= ((Flags2 & ED_VeryCold) > 0);
+			fVeryHot				= ((Flags2 & ED_VeryHot) > 0);
+			fGlideMode				= ((Flags2 & ED_GlideMode) > 0);
+			fOnFootInHanger			= ((Flags2 & ED_OnFootInHanger) > 0);
+			fOnFootSocialSpace		= ((Flags2 & ED_OnFootSocialSpace) > 0);
+			fOnFootExterior			= ((Flags2 & ED_OnFootExterior) > 0);
+			fBreathableAtmosphere	= ((Flags2 & ED_BreathableAtmosphere) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
 
 
 			OldFlags2 = Flags2;											// Keep track of last Flags Value to track when Flag bits change
@@ -675,11 +675,11 @@
 		}
 
 		Flags	= stfnGetKeyValue("Flags", INTEGER);
-		Flags2	= stfnGetKeyValue("Flags2", INTEGER);
+//		Flags2	= stfnGetKeyValue("Flags2", INTEGER);
 		
 		if(Flags != 0) {
 			stfnProcessFlags(0);
-			stfnProcessFlags2();
+//			stfnProcessFlags2();
 		}
 		else {
 			fnSoundFX("tada");
