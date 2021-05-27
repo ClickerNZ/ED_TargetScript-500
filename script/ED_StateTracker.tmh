@@ -430,7 +430,7 @@
 				}
 			}
 			
-			if (fDocked != dk) {		// Framework - currently testing - may not be viable in current form without additional information from journal
+			if (fMainShip & (fDocked != dk)) {		// Framework - currently testing - may not be viable in current form without additional information from journal
 							
 				if (fDocked) {							
 					if (AutoHanger) {
@@ -480,8 +480,8 @@
 			OldFlags = Flags;											// Keep track of last Flags Value to track when Flag bits change
 			
 			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
-				printf("\x0a===============\x0a");
-				printf("Set FLAGS:\X0A");				
+				printf("\x0a==================\x0a");
+				printf("Bits set in FLAGS:\X0A");				
 				if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
 				if (fsdJump) 				printf("Hyperjump\x0a");
 				if (fAltFromAvgRad) 		printf("Radius-ALT\x0a");
@@ -580,8 +580,8 @@
 			OldFlags2 = Flags2;											// Keep track of last Flags2 Value to track when Flags2 bits change
 			
 			if (ShowFlags) {											// Printout active flag bits when 'ShowFlags' is set 
-				printf("\x0a===============\x0a");
-				printf("Set FLAGS2:\X0A");
+				printf("\x0a===================\x0a");
+				printf("Bits set in FLAGS2:\X0A");
 				if (fOnFoot)	 			printf("On Foot\x0a");
 				if (fInTaxi) 				printf("In Taxi\x0a");
 				if (fInMultiCrew) 			printf("In Multi Crew\x0a");
