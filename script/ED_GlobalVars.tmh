@@ -47,6 +47,9 @@
 	int Debug				= 0;		// Debug mode for testing. 0 = OFF, 1 = ON. Prints additional info to console
 	int StartupLock			= 1;		// Prevent triggering keystrokes during initialisation
 	int GameLoaded			= 0;		// Set in fnGameStarted() when game is detected as running (ie Flags != 0)
+	
+	int Odyssey				= 0;		// 0 = Horizons, 1 = Odyssey. We check this when game starts running via presence of 'Flags2' Key in status.json
+	
 	int ConnectionStatus	= 0;		// Track if "ShowConnectionStatus" is on or off to avoid accidental toggle off during mode switch
 	int ReverseThrust		= 0;		// Set/Reset in tgReverseThrust()
 	int SpeedbrakeDeployed	= 0;		// Set/Reset in tgReverseThrust() and used in tgLandingGear()
