@@ -93,11 +93,18 @@
 					}
 					OldFlags = Flags;
 
-//					Flags2 = stfnGetKeyValue("Flags2", INTEGER);
-//					if (OldFlags2 != Flags2)	{
-//						stfnProcessFlags2();
-//					}
-//					OldFlags2 = Flags2;
+					if (Odyssey) {
+						Flags2 = stfnGetKeyValue("Flags2", INTEGER);
+						if (Flags2 == -1) {
+							Odyssey = 0;
+						}
+						else {
+							if (OldFlags2 != Flags2)	{
+								stfnProcessFlags2();
+							}
+							OldFlags2 = Flags2;
+						}
+					}
 				}			
 				sprintf(&lastJson, "%s", &myJson);
 				lastJson[strlen(&lastJson)] = NUL;			//terminate char array 
@@ -158,8 +165,15 @@
 		// Find the Key (pattern) ...
 
 		int Start = findstr(&myJson, &pattern);						// 'findstr()' is my version of 'strstr()' in sys.tmh...which doesn't work...defined in ED_Functions.tmh 
-		if (Start == -1) {
-			printf("Key %s NOT Found\x0a", &pattern);
+																	// 'Start' contains the character count to the first character of the Keyname, if found. 
+		if (Start == -1) {											// 'Start' contains -1 if the Keyname is not found 
+			myResult = strcmp(&pattern, "Flags2");
+			if (myResult == 0) {
+				printf("Key %s NOT Found - Odyssey not running\x0a\x0a", &pattern);
+			}
+			else {
+				printf("Key %s NOT Found\x0a", &pattern);
+			}	
 			return -1;
 		}
 		
@@ -269,6 +283,7 @@
 		if (Flags == 0) {		
 			if(GameLoaded == YES) {										// Detects when Game halts
 				GameLoaded = NO;
+				Odyssey = 0;											// Turn off Flags2 processing
 
 				VoiceTxt = "Game halted -";
 				if(TrainingMode == ENABLED){
@@ -649,12 +664,12 @@
 	
 	int stfnStartCheck() {
 		int fp;								// file pointer (handle)
-		int ValidStatusFile = 0;
+//		int ValidStatusFile = 0;
 		
 		fp = fopen(&StatusFile, "r");
 		if (fp) {
 			fclose(fp);
-			ValidStatusFile = YES;
+//			ValidStatusFile = YES;
 			printf("\x0a\status.json file set correctly in ED_UserSettings");
 		}
 		else {
@@ -669,21 +684,29 @@
 			printf("\x0a\status.json location set to %s\x0a\x0a", &StatusFile);			
 		}
 		
-		if (ValidStatusFile == YES) {
+//		if (ValidStatusFile == YES) {
 			stfnReadStatusJson();																	// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
 			ActKey(KEYON+REXEC(hReadStatusJson, StatusReadRate, "stfnReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
-		}
+//		}
 
-		Flags	= stfnGetKeyValue("Flags", INTEGER);
-//		Flags2	= stfnGetKeyValue("Flags2", INTEGER);
+		if (Flags == 0) fnSoundFX("tada");
 		
-		if(Flags != 0) {
-			stfnProcessFlags(0);
-//			stfnProcessFlags2();
-		}
-		else {
-			fnSoundFX("tada");
-		}
+//		Flags = stfnGetKeyValue("Flags", INTEGER);
+		
+//		if(Flags != 0) {
+//			stfnProcessFlags(0);
+//			Flags2 = stfnGetKeyValue("Flags2", INTEGER);
+//			if (Flags2 != -1) {
+//				Odyssey = 1;					// Flags2 presence means we're running Odyssey
+//				stfnProcessFlags2();
+//			}
+//			else {
+//				Odyssey = 0;
+//			}
+//		}
+//		else {
+//			fnSoundFX("tada");
+//		}
 	}
 
 	// FUNCTION:	Save states not included in status.json
