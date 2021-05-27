@@ -251,9 +251,9 @@
 //	define ED_RESERVED				0x0000000040000000	
 //	define ED_RESERVED				0x0000000080000000
 
-//---------------------------------//
-//  Corresponding Flags Variables  //
-//---------------------------------//
+//----------------------------------//
+//  Corresponding Flags2 Variables  //
+//----------------------------------//
 
 	int Flags2					=	0;		// contains the Flags2 key value integer 
 	int OldFlags2				=	0;		// track when Flags2 key value changes 
