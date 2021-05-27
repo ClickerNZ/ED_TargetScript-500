@@ -4,7 +4,7 @@
 //----------------------------------------------------------------------//
 
 // This file:	ED_Main.tmc 		v5.0.0
-// Supports:	Elite Dangerous 	v?.? (Odyssey)
+// Supports:	Elite Dangerous 	v4.0.0.102 (Odyssey)
 // Requires:	TARGET 				v3.0.20.826
 //				Joystick firmware	v12
 //				Throttle firmware 	v23
@@ -28,7 +28,7 @@
 // Index:	Line		FUNCTION
 //			Line 65:	include statements
 //			Line 82: 	int main()
-//			Line 154:	int EventHandle()
+//			Line 159:	int EventHandle()
 
 // PREFACE
 //
@@ -40,7 +40,7 @@
 // Also included within the package is a change log to document where I've added features (intended and unintended!) and some sample 
 // Windows batch files to assist in lanching ED, this script and any attendant apps you may wish to use at run time.
 //
-// I am not a proffessional coder/programmer however, the philosophy I've chosen for this script package is to try to keep the code
+// I am not a proffessional coder/programmer, however the philosophy I've chosen for this script package is to try to keep the code
 // within a '.tmh' file relevant to the function title and below 1000 lines where possible.
 //
 // Indexes near the top of each file should assist in finding functions of interest.
@@ -139,6 +139,11 @@ include "ED_Toggles.tmh"
 		initTFRPRudder();
 
 		printf("\x0a\++	Initialise Hardware	...	Complete	++\x0a");
+
+	// -----------------//
+	// Check Game State //
+	// -----------------//
+
 		printf("\x0a\++	Check Game state ...\x0a");
 		
 		stfnStartCheck();														// Check for vital files and game start
