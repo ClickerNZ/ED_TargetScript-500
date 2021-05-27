@@ -577,9 +577,9 @@
 //			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
 
 
-			OldFlags2 = Flags2;											// Keep track of last Flags Value to track when Flag bits change
+			OldFlags2 = Flags2;											// Keep track of last Flags2 Value to track when Flags2 bits change
 			
-			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
+			if (ShowFlags) {											// Printout active flag bits when 'ShowFlags' is set 
 				printf("\x0a===============\x0a");
 				printf("Set FLAGS2:\X0A");
 				if (fOnFoot)	 			printf("On Foot\x0a");
@@ -594,11 +594,11 @@
 				if (fHot) 					printf("Hot\x0a");
 				if (fVeryCold) 				printf("Very Cold\x0a");
 				if (fVeryHot) 				printf("Very Hot\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
+				if (fGlideMode)				printf("Glide Mode\x0a");
+				if (fOnFootInHanger)		printf("On Foot In Hanger\x0a");
+				if (fOnFootSocialSpace)		printf("On Foot in Social Space\x0a");
+				if (fOnFootExterior)		printf("On Foot Exterior\x0a");
+				if (fBreathableAtmosphere)	printf("Breathable Atmosphere\x0a");
 //				if (fRESERVED) 				printf("RESERVED\x0a");
 //				if (fRESERVED) 				printf("RESERVED\x0a");
 //				if (fRESERVED) 				printf("RESERVED\x0a");
