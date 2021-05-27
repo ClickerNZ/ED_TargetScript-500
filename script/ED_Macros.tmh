@@ -52,7 +52,7 @@
 	int fnCustomCommands() {
 
 		// Being Lazy...I've put this here rather than create yet another function
-		// Select MapKey Assignment profile
+		// Selects MapKey Assignment profile
 		
 		if (Flags == 0 & TrainingMode == ENABLED) {
 			printf("\x0a\Training Mode Enabled\x0a");		
