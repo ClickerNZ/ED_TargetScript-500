@@ -565,7 +565,7 @@
 				);
 		}
 				
-		MapKey(&Throttle, EFROVER, 0);														// <not currently used>
+		MapKey(&Throttle, EFROVER, 0);															// <not currently used>
 
 //		(Engine Fuel Flow - Left)
 //		-------------------------
@@ -574,13 +574,13 @@
 			MapKey(&Throttle, EFLNORM, 0);
 		}
 		else {
-			MapKeyUMD(&Throttle, EFLNORM,
-				EXEC("fnDebug(2);"),															// U - Debug tool: Turn ShowFlags ON
-				EXEC("fnDebug(1);"),															// M - Debug tool: Turn Debug ON
-				EXEC("fnDebug(3);")																// D - Debug tool: Turn Debug and ShowFlags ON		
+			MapKeyUMD(&Throttle, EFLNORM,														//		-- DEBUG TOOL --	//
+				EXEC("fnDebug(2);"),															// U - Debug OFF,	ShowFlags ON
+				EXEC("fnDebug(1);"),															// M - Debug ON,	ShowFlags OFF
+				EXEC("fnDebug(3);")																// D - Debug ON,	ShowFlags ON		
 				);
 	
-			MapKeyR(&Throttle, EFLNORM, EXEC("fnDebug(0);"));	// RELEASE						// Debug tool: Turn Debug and ShowFlags OFF 
+			MapKeyR(&Throttle, EFLNORM, EXEC("fnDebug(0);"));	// RELEASE						// Turn Debug and ShowFlags OFF 
 		}
 				
 		MapKey(&Throttle, EFLOVER, 0);															// <not currently used>
@@ -597,11 +597,11 @@
 			MapKey(&Throttle, IDLELOFF, EXEC("fnIdleLock(0);"));								// Exit Hanger, Lift off if in Ship, else Handbrake off if in SRV
 		}
 
-//		(Engine Idle - Right)
+//		(Engine Idle - Right)																	// NOTE: You can use these if Throttles are decoupled
 //		---------------------
 		
-		MapKey(&Throttle, IDLERON, 0);														// <not currently used>
-		MapKey(&Throttle, IDLEROFF, 0);														// <not currently used>
+		MapKey(&Throttle, IDLERON, 0);															// <not currently used>
+		MapKey(&Throttle, IDLEROFF, 0);															// <not currently used>
 
 	}	// end of MainKeyMap
 	
@@ -1102,12 +1102,12 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, EFLNORM,
-				EXEC("fnVPOutput(\"Turn Showflags on\");"),
-				EXEC("fnVPOutput(\"Turn Debug on\");"),
-				EXEC("fnVPOutput(\"Turn Debug and Showflags on\");")
+				EXEC("fnVPOutput(\"De bug OFF, Showflags ON\");"),
+				EXEC("fnVPOutput(\"De bug ON, Showflags OFF\");"),
+				EXEC("fnVPOutput(\"De bug ON, Showflags ON\");")
 				);
 	
-			MapKeyR(&Throttle, EFLNORM, EXEC("fnVPOutput(\"Turn Debug and Showflags off\");"));		// RELEASE
+			MapKeyR(&Throttle, EFLNORM, EXEC("fnVPOutput(\"Debug OFF, Showflags OFF\");"));		// RELEASE
 		}
 
 //		(Engine Idle - Left)
