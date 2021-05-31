@@ -117,7 +117,7 @@ include "ED_Toggles.tmh"
 		SetShiftButton(&Joystick, S3, &Throttle, PSF, PSB);						// ** DO NOT TOUCH **  Joystick Nosewheel Switch (S3) = IO, Throttle pinky switch (PSF/PSB) = UMD
 
 		SetKBRate(PulseTime, DelayTime);										// Base Settings 	(See ED_UserSettings.tmh)
-		SetKBLayout(KBLayout);													//					(See ED_Defines.ttm)
+		SetKBLayout(KBLayout);													//					(See ED_ScriptDefines.ttm)
 	
 		fnPIPMode(RESET);														// Reset PIPMode
 
@@ -127,7 +127,7 @@ include "ED_Toggles.tmh"
 		initTextToSpeech();														// Initialise Text-To-Speech engine
 		initSoundFX();															// Initialise Sound Effects engine
 		
-		fnCustomCommands();														// Initialise Custom Macros (See EDMacros.tmh)
+		fnCustomCommands();														// Initialise Custom Macros (See ED_Macros.tmh)
 		
 
 // -------------------------- //
