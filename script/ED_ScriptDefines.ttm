@@ -36,7 +36,7 @@
 
 // START
 
-	define KBLayout 							KB_ENG					// Default Keyboard Layout
+	define KBLayout 							KB_ENG					// Default Keyboard Layout. Options = KB_FR or KB_GER
 
 //----------------------------------------------------------------------//
 // SCRIPT VERSION VARIABLES                                             //
