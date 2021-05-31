@@ -110,10 +110,12 @@
 				lastJson[strlen(&lastJson)] = NUL;			//terminate char array 
 			}
 		}
-		else {
-			printf("\x0a");
-			fnVPOutput("FATAL ERROR: Status.jason file not found", 100);
-			Abort();
+		else {												// ED must have the file locked for reading?
+//			printf("\x0a");
+//			fnVPOutput("FATAL ERROR: Status.jason file not found", 100);
+//			Abort();
+			printf("ERROR: Status.jason file not found\x0a");
+			fnSoundFX("ding");
 		}		
 	}
 
