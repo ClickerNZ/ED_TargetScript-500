@@ -1154,6 +1154,10 @@
 			printf("FIGHTER:\x0a");
 			printf("Fighter states not coded in this version\x0a\x0a");
 		}
+		if (Flags2 != 0) {
+			printf("On Foot:\x0a");
+				stfnDumpFlags();
+		}
 		if (Flags != 0) {
 			printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
 		}
