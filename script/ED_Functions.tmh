@@ -1225,7 +1225,7 @@
 
 
 	// FUNCTION:	Checks FSD starts spooling up after hitting FSD
-	// CALLED FROM:	tgWarpDrive() as AutoRepeat so this call can be cancelled
+	// CALLED FROM:	tgWarpDrive() as AutoRepeat so can be cancelled by StopAutoRepeat(hFSSDCharge)
 	// PARAMETER:	EngineText - Supercruise or Warpdrive selection 
 	// NOTE:		FSD may not spool up for several reasons. Obscured Target, Insufficient fuel/Target too far etc
 
@@ -1244,12 +1244,14 @@
 				fnNotValid(EngineText, reason);
 				printf("%s:	DISENGAGED	<<\x0a", EngineText);
 				chkcounter = 0;
-				StopAutoRepeat(hFSDCharge);				// Stop AutoRepeat that called this function.				
+				StopAutoRepeat(hFSDCharge);				// Stop AutoRepeat once threshold has been breached
+				InitWarpDrive = DISABLED;
 			}
 		}
-		else {
-			chkcounter = 0;
-			StopAutoRepeat(hFSDCharge);
+		else {											// FSD Charging is detected so ...
+			chkcounter = 0;								// ... reset the counter ...
+			StopAutoRepeat(hFSDCharge);					// ... Stop this function loop 
+			InitWarpDrive = DISABLED;					// ... Reset InitWarpDrive 
 		}
 	}
 
@@ -1275,12 +1277,14 @@
 				fnNotValid(EngineText, reason);
 				printf("%s:	DISENGAGED	<<\x0a", EngineText);
 				MLCount = 0;
-				StopAutoRepeat(hMassLocked);				// Stop AutoRepeat that called this function.				
+				StopAutoRepeat(hMassLocked);				// Stop AutoRepeat that called this function
+				InitWarpDrive = DISABLED;
 			}
 		}
 		else {
 			MLCount = 0;
 			StopAutoRepeat(hMassLocked);
+			InitWarpDrive = DISABLED;
 			tgWarpDrive(EngineText); 
 		}
 	}
