@@ -179,7 +179,7 @@
 			PULSE+UIBack,
 			LOCK);
 
-		// MACRO: Toggle 'Wingman Beacon' - WING
+		// MACRO: Toggle 'Wingman Beacon' - TEAM				// Under additional testing for Odyssey
 		mNAVBeaconWing = CHAIN(
 			LOCK+PULSE+SystemPanel, D(500),						// 4, e, e, e, right, down, down, down, down, spc, down, spc, up, up, up, up, left, q, q, q, 4
 			PULSE+UINextPanel, D(),								// Limitation: This will only work correctly if Target Panel cursor in
@@ -190,10 +190,10 @@
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
-			PULSE+UISelect, D(500),
+			PULSE+UISelect, D(750),								// Increase from 500 for Odyssey
 			PULSE+UIDown, D(),
-			PULSE+UISelect, D(500),
-			PULSE+UIUp, D(),		 							// send selector back to home position when done
+			PULSE+UISelect, D(750),
+			PULSE+UIUp, D(),		 							// send selector back to home position when done <<-- TEST
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
@@ -204,7 +204,7 @@
 			PULSE+UIBack,
 			LOCK);
 
-		// MACRO: Toggle 'Wingman Beacon' - OFF
+		// MACRO: Toggle 'Wingman Beacon' - OFF					// Under additional testing for Odyssey
 		mNAVBeaconOff = CHAIN(
 			LOCK+PULSE+SystemPanel, D(500),						// 4, e, e, e, right, down, down, down, down, spc, spc, up, up, up, up, left, q, q, q, 4
 			PULSE+UINextPanel, D(),								// Limitation: This will only work correctly if Target Panel cursor in
@@ -215,9 +215,9 @@
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
-			PULSE+UISelect, D(500),
-			PULSE+UISelect, D(500),
-			PULSE+UIUp, D(),		 							// send selector back to home position when done
+			PULSE+UISelect, D(750),								// Increase from 500 for Odyssey
+			PULSE+UISelect, D(750),
+			PULSE+UIUp, D(),		 							// send selector back to home position when done <<-- TEST
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
@@ -228,10 +228,9 @@
 			PULSE+UIBack,
 			LOCK);
 
-		// MACRO: Enter hanger then facilities + refuel/repair/restock >>> NOTE: Due to differences between Carrier and Starport we need to comment a bunch of key presses		
+		// MACRO: Enter hanger then facilities + refuel/repair/restock >>> NOTE: Re-code commented code for Odyssey
 		mEnterHanger = CHAIN(
 			LOCK,
-			// Fleet Carriers New Menu items when docked
 			PULSE+UISelect, D(2000),							//Refuel
 			PULSE+UIRight, D(),
 			PULSE+UISelect, D(2000),							//Repair
