@@ -55,7 +55,7 @@
 //			Line 1176:	int fnGetTOD()
 //			Line 1193:	int fnGetDate()
 //			Line 1221:	int fnCheckFSDCharge()
-//			Line 1251	int fnCheckFSDMassLocked()
+//			Line 1251:	int fnCheckFSDMassLocked()
 //			Line 1278:	int findstr()
 //			Line 1303:	int ModKey()			// not used
 
