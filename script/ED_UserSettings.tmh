@@ -158,21 +158,6 @@
 	define DefaultPIPMode		3						// Set this to your preferred PIPMode. Value is set on the fly via H4P (see fnPIPMode() in ED_Functions.tmh)
 
 
-//---------//
-// Timings //
-//---------//
-
-	// These delay settings affect how fast the script executes key presses etc.
-	// If you find the macros are dropping characters, then the delay is too short.
-	// "LongPress" is a personal setting. I find a half second is about right for me.
-	
-	define 	PulseTime 			33						// PULSE+ Delay time (ms) - Used as key-hold-down time.
-	define 	DelayTime 			75						// D() Delay time 	 (ms) - Used in macros as the time between releasing one key and pressing the next.
-	define 	LongPress	 		500						// Tempo Delay 		 (ms) - Used in Tempos. ie hold switch/button for 0.5 seconds for alternate function
-	
-	define 	DiscoDelay			6100					// Discovery scanner 'hold-trigger' timer (6.1 seconds)
-	
-
 //--------------------------//
 // General Status Variables //
 //--------------------------//
