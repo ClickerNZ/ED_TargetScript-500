@@ -508,7 +508,7 @@
 			WarpDrive = Supercruise;			// USB[0x54] = "/"
 		}
 
-		if (fFSDCharging ! InitWarpDrive == ENABLED) {
+		if (fFSDCharging | InitWarpDrive == ENABLED) {
 			printf("%s	CANCELLED	<<\x0a", EngineText);
 			ActKey(PULSE+KEYON+WarpDrive);
 			fnTextToSpeech("FSD Charge sequence cancelled");
