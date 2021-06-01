@@ -28,7 +28,8 @@
 //			Line 512:	int stfnProcessFlags2()
 //			Line 612: 	int stfnProcessGuiFocus()
 //			Line 650: 	int stfnStartCheck()
-//			line 707:	int stfnMyStates()
+//			Line 707:	int stfnMyStates()
+//			Line xxx:	int stfnDumpFlags()
 	
 // START
 
@@ -124,10 +125,14 @@
 	// Input:		Key name (pattern: string), key value type (vtype: FLOAT, INTEGER, STRING)
 	// Output:		Returns key value
 	
-	// Valid Key Names: pattern(vtype);
-	//				Flags(INTEGER), Flags2 (INTEGER), Pips(STRING), Firegroup(INTEGER), GuiFocus(INTEGER), FuelMain(FLOAT), FuelReservoir(FLOAT)
+	// Valid Key Names:	pattern(vtype) for HORIZONS
+	//				Flags(INTEGER), Pips(STRING), Firegroup(INTEGER), GuiFocus(INTEGER), FuelMain(FLOAT), FuelReservoir(FLOAT)
 	//				Cargo(INTEGER), LegalState(STRING), Latitude(FLOAT), Longitude(FLOAT), Altitude(INTEGER), Heading(INTEGER)
 	//				BodyName(STRING), PlanetRadius(INTEGER), timestamp(STRING), event(STRING)
+
+	//					pattern(vtype) for additional Keys in ODYSSEY
+	//				Flags2(INTEGER), when on foot, the following will be available;
+	//				Oxygen(FLOAT), Health(FLOAT), Temperature(INTEGER), SelectedWeapon(STRING), Gravity(FLOAT)
 
 	// GlobalVars
 
@@ -481,45 +486,12 @@
 			
 			OldFlags = Flags;											// Keep track of last Flags Value to track when Flag bits change
 			
-			if (ShowFlags) {											// Printout active flag bits wwhen 'ShowFlags' is set 
-				printf("\x0a==================\x0a");
-				printf("Bits set in FLAGS:\X0A");				
-				if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
-				if (fsdJump) 				printf("Hyperjump\x0a");
-				if (fAltFromAvgRad) 		printf("Radius-ALT\x0a");
-				if (fNightVision) 			printf("Night Vision\x0a");
-				if (fHUDAnalysis) 			printf("AnalysisHUD\x0a");
-				if (fSRV) 					printf("In SRV\x0a");
-				if (fFighter) 				printf("In Fighter\x0a");
-				if (fMainShip) 				printf("In MainShip\x0a");
-				if (fInterdicted) 			printf("Being Interdicted\x0a");
-				if (fDanger) 				printf("!!! DANGER !!!\x0a");
-				if (fLatLong) 				printf("Lat\\Lon available\x0a");
-				if (fOverHeating) 			printf("Over Heating\x0a");
-				if (fLowFuel) 				printf("Low Fuel\x0a");
-				if (fFSDCooldown) 			printf("FSD Cooldown\x0a");
-				if (fFSDCharging) 			printf("FSD Charging\x0a");
-				if (fMassLocked) 			printf("FSD Masslocked\x0a");
-				if (fSRVDriveAssist) 		printf("SRV Drive Assist\x0a");
-				if (fSRVTurretRetracted) 	printf("SRV Turret Retracted\x0a");
-				if (fSRVTurretView) 		printf("SRV Turret View\x0a");
-				if (fSRVHandbrake) 			printf("SRV Handbrake\x0a");
-				if (fFuelScoop) 			printf("Fuel Scoop Deployed\x0a");
-				if (fSilentRunning) 		printf("Silent Running\x0a");
-				if (fCargoScoop) 			printf("Cargo Scoop Deployed\x0a");
-				if (fLights) 				printf("Lights On\x0a");
-				if (fInWing) 				printf("In Wing\x0a");
-				if (fHardpoints) 			printf("Hardpoints Deployed\x0a");
-				if (fFAOff) 				printf("Flight Assist OFF\x0a");
-				if (fSupercruise) 			printf("Supercruise Engaged\x0a");
-				if (fShieldsUp) 			printf("Shields Up\x0a");
-				if (fLandingGear) 			printf("Landing Gear Deployed\x0a");
-				if (fLanded) 				printf("Landed on planet\x0a");
-				if (fDocked) 				printf("Docked\x0a");
-				printf("===============\x0a");
-			}			
+			if (ShowFlags) {											// Printout active flag bits when 'ShowFlags' is set 
+				stfnDumpFlags();
+			}
 		}
 	}
+	
 	// END of stfnProcessFlags()
 
 
@@ -537,90 +509,54 @@
 
 		// Process 'Flags2' value...most significant bit order
 		
-//			if (Flags2 < 0) {											// Most significant bit is set 
-//				fRESERVED			= ON;
-//			}
-//			else {
-//				fRESERVED			= OFF;
-//			}
+//		if (Flags2 < 0) {											// Most significant bit is set 
+//			fRESERVED			= ON;
+//		}
+//		else {
+//			fRESERVED			= OFF;
+//		}
 			
-			// Bitwise-And of the negative number works for all bits other than most significant bit 
+		// Bitwise-And of the negative number works for all bits other than most significant bit 
 					
-			fOnFoot					= ((Flags2 & ED_OnFoot) > 0);					// 'ED_...' masks defined within 'ED_ScriptDefines' file 
-			fInTaxi					= ((Flags2 & ED_InTaxi) > 0);
-			fInMultiCrew			= ((Flags2 & ED_InMultiCrew) > 0);
-			fOnFootInStation		= ((Flags2 & ED_OnFootInStation) > 0);
-			fOnFootOnPlanet			= ((Flags2 & ED_OnFootOnPlanet) > 0);
-			fAimDownSight			= ((Flags2 & ED_AimDownSight) > 0);
-			fLowOxygen				= ((Flags2 & ED_LowOxygen) > 0);
-			fLowHealth				= ((Flags2 & ED_LowHealth) > 0);
-			fCold					= ((Flags2 & ED_Cold) > 0);
-			fHot					= ((Flags2 & ED_Hot) > 0);
-			fVeryCold				= ((Flags2 & ED_VeryCold) > 0);
-			fVeryHot				= ((Flags2 & ED_VeryHot) > 0);
-			fGlideMode				= ((Flags2 & ED_GlideMode) > 0);
-			fOnFootInHanger			= ((Flags2 & ED_OnFootInHanger) > 0);
-			fOnFootSocialSpace		= ((Flags2 & ED_OnFootSocialSpace) > 0);
-			fOnFootExterior			= ((Flags2 & ED_OnFootExterior) > 0);
-			fBreathableAtmosphere	= ((Flags2 & ED_BreathableAtmosphere) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
-//			fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+		fOnFoot					= ((Flags2 & ED_OnFoot) > 0);					// 'ED_...' masks defined within 'ED_ScriptDefines' file 
+		fInTaxi					= ((Flags2 & ED_InTaxi) > 0);
+		fInMultiCrew			= ((Flags2 & ED_InMultiCrew) > 0);
+		fOnFootInStation		= ((Flags2 & ED_OnFootInStation) > 0);
+		fOnFootOnPlanet			= ((Flags2 & ED_OnFootOnPlanet) > 0);
+		fAimDownSight			= ((Flags2 & ED_AimDownSight) > 0);
+		fLowOxygen				= ((Flags2 & ED_LowOxygen) > 0);
+		fLowHealth				= ((Flags2 & ED_LowHealth) > 0);
+		fCold					= ((Flags2 & ED_Cold) > 0);
+		fHot					= ((Flags2 & ED_Hot) > 0);
+		fVeryCold				= ((Flags2 & ED_VeryCold) > 0);
+		fVeryHot				= ((Flags2 & ED_VeryHot) > 0);
+		fGlideMode				= ((Flags2 & ED_GlideMode) > 0);
+		fOnFootInHanger			= ((Flags2 & ED_OnFootInHanger) > 0);
+		fOnFootSocialSpace		= ((Flags2 & ED_OnFootSocialSpace) > 0);
+		fOnFootExterior			= ((Flags2 & ED_OnFootExterior) > 0);
+		fBreathableAtmosphere	= ((Flags2 & ED_BreathableAtmosphere) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
+//		fRESERVED				= ((Flags2 & ED_RESERVED) > 0);
 
-
-			OldFlags2 = Flags2;											// Keep track of last Flags2 Value to track when Flags2 bits change
+		OldFlags2 = Flags2;											// Keep track of last Flags2 Value to track when Flags2 bits change
 			
-			if (ShowFlags) {											// Printout active flag bits when 'ShowFlags' is set 
-				printf("\x0a===================\x0a");
-				printf("Bits set in FLAGS2:\X0A");
-				if (fOnFoot)	 			printf("On Foot\x0a");
-				if (fInTaxi) 				printf("In Taxi\x0a");
-				if (fInMultiCrew) 			printf("In Multi Crew\x0a");
-				if (fOnFootInStation) 		printf("On Foot In Station\x0a");
-				if (fOnFootOnPlanet) 		printf("On Foot On Planet\x0a");
-				if (fAimDownSight) 			printf("Aim Down Sight\x0a");
-				if (fLowOxygen) 			printf("Low Oxygen\x0a");
-				if (fLowHealth) 			printf("Low Health\x0a");
-				if (fCold) 					printf("Cold\x0a");
-				if (fHot) 					printf("Hot\x0a");
-				if (fVeryCold) 				printf("Very Cold\x0a");
-				if (fVeryHot) 				printf("Very Hot\x0a");
-				if (fGlideMode)				printf("Glide Mode\x0a");
-				if (fOnFootInHanger)		printf("On Foot In Hanger\x0a");
-				if (fOnFootSocialSpace)		printf("On Foot in Social Space\x0a");
-				if (fOnFootExterior)		printf("On Foot Exterior\x0a");
-				if (fBreathableAtmosphere)	printf("Breathable Atmosphere\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-//				if (fRESERVED) 				printf("RESERVED\x0a");
-				printf("===============\x0a");
-			}			
-
-	
+		if (ShowFlags) {											// Printout active flag bits when 'ShowFlags' is set 
+			stffnDumpFlags();
+		}				
 	}
+	
 	//END of stfnProcessFlags2()
 	
 	
@@ -824,6 +760,87 @@
 			fnNotValid(fnName, reason);
 			printf("stfnMyStates Action = %d\x0a", action);
 		}
+	}
+
+	// FUNCTION:	Dump currently set Flags and Flags2 Key Values to console
+	
+	int stfnDumpFlags() {
+
+		printf("Flags	=	%d\x0a", Flags);
+		printf("\x0a==================\x0a");
+		printf("Bits set in FLAGS:\x0a");				
+		if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
+		if (fsdJump) 				printf("Hyperjump\x0a");
+		if (fAltFromAvgRad) 		printf("Radius-ALT\x0a");
+		if (fNightVision) 			printf("Night Vision\x0a");
+		if (fHUDAnalysis) 			printf("AnalysisHUD\x0a");
+		if (fSRV) 					printf("In SRV\x0a");
+		if (fFighter) 				printf("In Fighter\x0a");
+		if (fMainShip) 				printf("In MainShip\x0a");
+		if (fInterdicted) 			printf("Being Interdicted\x0a");
+		if (fDanger) 				printf("!!! DANGER !!!\x0a");
+		if (fLatLong) 				printf("Lat\\Lon available\x0a");
+		if (fOverHeating) 			printf("Over Heating\x0a");
+		if (fLowFuel) 				printf("Low Fuel\x0a");
+		if (fFSDCooldown) 			printf("FSD Cooldown\x0a");
+		if (fFSDCharging) 			printf("FSD Charging\x0a");
+		if (fMassLocked) 			printf("FSD Masslocked\x0a");
+		if (fSRVDriveAssist) 		printf("SRV Drive Assist\x0a");
+		if (fSRVTurretRetracted) 	printf("SRV Turret Retracted\x0a");
+		if (fSRVTurretView) 		printf("SRV Turret View\x0a");
+		if (fSRVHandbrake) 			printf("SRV Handbrake\x0a");
+		if (fFuelScoop) 			printf("Fuel Scoop Deployed\x0a");
+		if (fSilentRunning) 		printf("Silent Running\x0a");
+		if (fCargoScoop) 			printf("Cargo Scoop Deployed\x0a");
+		if (fLights) 				printf("Lights On\x0a");
+		if (fInWing) 				printf("In Wing\x0a");
+		if (fHardpoints) 			printf("Hardpoints Deployed\x0a");
+		if (fFAOff) 				printf("Flight Assist OFF\x0a");
+		if (fSupercruise) 			printf("Supercruise Engaged\x0a");
+		if (fShieldsUp) 			printf("Shields Up\x0a");
+		if (fLandingGear) 			printf("Landing Gear Deployed\x0a");
+		if (fLanded) 				printf("Landed on planet\x0a");
+		if (fDocked) 				printf("Docked\x0a");
+		printf("===============\x0a");
+
+		if (Odyssey) {		
+			printf("Flags2	=	%d\x0a", Flags2);
+			printf("\x0a===================\x0a");
+			printf("Bits set in FLAGS2:\X0A");
+			if (fOnFoot)	 			printf("On Foot\x0a");
+			if (fInTaxi) 				printf("In Taxi\x0a");
+			if (fInMultiCrew) 			printf("In Multi Crew\x0a");
+			if (fOnFootInStation) 		printf("On Foot In Station\x0a");
+			if (fOnFootOnPlanet) 		printf("On Foot On Planet\x0a");
+			if (fAimDownSight) 			printf("Aim Down Sight\x0a");
+			if (fLowOxygen) 			printf("Low Oxygen\x0a");
+			if (fLowHealth) 			printf("Low Health\x0a");
+			if (fCold) 					printf("Cold\x0a");
+			if (fHot) 					printf("Hot\x0a");
+			if (fVeryCold) 				printf("Very Cold\x0a");
+			if (fVeryHot) 				printf("Very Hot\x0a");
+			if (fGlideMode)				printf("Glide Mode\x0a");
+			if (fOnFootInHanger)		printf("On Foot In Hanger\x0a");
+			if (fOnFootSocialSpace)		printf("On Foot in Social Space\x0a");
+			if (fOnFootExterior)		printf("On Foot Exterior\x0a");
+			if (fBreathableAtmosphere)	printf("Breathable Atmosphere\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+//			if (fRESERVED) 				printf("RESERVED\x0a");
+			printf("===============\x0a");
+		}	
 	}
 
 // END
