@@ -488,7 +488,7 @@
 				EXEC("fnLEDBrightness(INCREASE);")												// D - Increase LED Brightness 
 				);
 				
-			MapKeyRUMD(&Throttle, FLAPU,				// RELEASE
+			MapKeyRUMD(&Throttle, FLAPU,					// RELEASE
 				0,																				// RU -
 				PULSE+GalMap,																	// RM - Galaxy View - OFF
 				0																				// RD -
@@ -502,7 +502,7 @@
 				PULSE+LED(&Throttle, LED_INTENSITY, 0)											// D - Turn Throttle Base LEDs off 
 				);
 				
-			MapKeyRUMD(&Throttle, FLAPD,				// RELEASE
+			MapKeyRUMD(&Throttle, FLAPD,					// RELEASE
 				0,																				// RU -
 				PULSE+SystemMap,																// RM - System Map - OFF
 				EXEC("fnLEDBrightness();")														// RD - Turn Throttle Base LEDs on
@@ -517,8 +517,8 @@
 			MapKey(&Throttle, APUOFF, 0);
 		}
 		else {
-			MapKey(&Throttle, APUON, EXEC("fnDeploySRV(DEPLOY);"));								// "Start"	- Deploy SRV
-			MapKey(&Throttle, APUOFF, EXEC("fnDeploySRV(RECOVER);"));							// "OFF"	- Board Ship
+			MapKey(&Throttle, APUON, EXEC("fnDeploySRV(DEPLOY);"));								// "APU Start"	= Deploy SRV
+			MapKey(&Throttle, APUOFF, EXEC("fnDeploySRV(RECOVER);"));							// "AAPU OFF"	= Board Ship
 		}
 
 //		(Engine Operate - Right)
@@ -559,7 +559,7 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, EFRNORM,
-				EXEC("GameLoaded = 0;"),														// U - Reset GameLoaded flag
+				EXEC("stfnDumpFlags();"),														// U - Dump Flags to Console
 				EXEC("fnSetLEDs();"),															// M - Reset Status LEDs
 				EXEC("fnPrintState();")															// D - Print Status Page
 				);
@@ -1085,9 +1085,9 @@
 		}
 		else {
 			MapKeyUMD(&Throttle, EFRNORM,
-				EXEC("fnVPOutput(\"Set Gameloaded flag to off\");"),
+				EXEC("fnVPOutput(\"Dump Flags to Con-sole\");"),
 				EXEC("fnVPOutput(\"Reset status LEDs\");"),
-				EXEC("fnVPOutput(\"Print status page to console\");")
+				EXEC("fnVPOutput(\"Print status page to Con-sole\");")
 				);
 		}
 				
