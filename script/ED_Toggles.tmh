@@ -485,6 +485,10 @@
 	// TOGGLE: Warp Drive
 	// Parameter: 'JumpType'. Valid: 0 = Supercruise, 1 = Frameshift Drive
 	// Flags: fSupercruise, fsdJump
+	
+	// Global Variables
+	
+	int	InitWarpDrive = DISABLED;				// Enables tracking when we call tgWarpDrive twice before any status flags change (eg FSDCharging)
 
 	int tgWarpDrive(int JumpType) {
 		int EngineText;
@@ -492,7 +496,7 @@
 		int fnName;
 		int reason;
 		int VoiceTxt;
-		
+				
 		if (JumpType) {
 			fnName = "Warp Drive";
 			EngineText = "Warp Drive:	";
@@ -504,11 +508,12 @@
 			WarpDrive = Supercruise;			// USB[0x54] = "/"
 		}
 
-		if (fFSDCharging) {
+		if (fFSDCharging ! InitWarpDrive == ENABLED) {
 			printf("%s	CANCELLED	<<\x0a", EngineText);
 			ActKey(PULSE+KEYON+WarpDrive);
-			fnTextToSpeech("FSD Chharge sequence cancelled");
+			fnTextToSpeech("FSD Charge sequence cancelled");
 			StopAutoRepeat(hFSDCharge);									// Stop FSDCharge check if hit cancel inside 3 seconds 
+			InitWarpDrive = DISABLED;
 			return 0;
 		}
 		if (fFSDCooldown) {
@@ -541,15 +546,17 @@
 			ActKey(PULSE+KEYON+WarpDrive);										// This *should* work even if we don't drop due to velocity
 			SelectDrop = 1;														// Drop selected, not forced
 			printf("%s:	DISENGAGED	<<\x0a", EngineText);
+			InitWarpDrive = DISABLED;
 		}
 		else {
 			if (fHardpoints)	tgHardpoints();									// Retract hardpoints if deployed
 			if (fLandingGear)	tgLandingGear(RETRACT);							// Retract landing gear if deployed
-			if (fCargoScoop)	tgCargoScoop(RETRACT);							// Retract cargo scoop if deployed 
+			if (fCargoScoop)	tgCargoScoop(RETRACT);							// Retract cargo scoop if deployed			
 			ActKey(PULSE+KEYON+WarpDrive);										// ...and...punch it!
 			printf("%s:	ENGAGED	>>\x0a", EngineText);
 			WDRetries = 0;														// Reset failed Warpdrive counter
 			AutoRepeat(hFSDCharge, 500, &fnCheckFSDCharge, EngineText);			// Check for FSD Charge failure
+			InitWarpDrive = ENABLED;
 		}
 	}
 
