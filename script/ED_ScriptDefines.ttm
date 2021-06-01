@@ -44,7 +44,23 @@
 
 	define VMajor		 						5						// Script Version Major Value			ie. 2.x.x
 	define VMinor		 						0						// Script Version Minor Value			ie. x.3.x
-	define VPoint								"0"						// Script Version Point Update			ie. x.x.4
+	define VPoint								"0_BETA"				// Script Version Point Update			ie. x.x.4
+
+
+//---------//
+// Timings //
+//---------//
+
+	// These delay settings affect how fast the script executes key presses etc.
+	// If you find the macros are dropping characters, then the delay is too short.
+	// "LongPress" is a personal setting. I find a half second is about right for me.
+	
+	define 	PulseTime 			33						// PULSE+ Delay time (ms) - Used as key-hold-down time.
+	define 	DelayTime 			100						// D() Delay time 	 (ms) - Used in macros as the time between releasing one key and pressing the next. Increase from 75 for Odyssey
+	define 	LongPress	 		500						// Tempo Delay 		 (ms) - Used in Tempos. ie hold switch/button for 0.5 seconds for alternate function
+	
+	define 	DiscoDelay			6100					// Discovery scanner 'hold-trigger' timer (6.1 seconds)
+	
 
 //-------------------//
 // PIPMAPPER DEFINES //
