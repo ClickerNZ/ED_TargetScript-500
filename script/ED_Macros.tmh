@@ -193,6 +193,7 @@
 			PULSE+UISelect, D(750),								// Increase from 500 for Odyssey
 			PULSE+UIDown, D(),
 			PULSE+UISelect, D(750),
+			PULSE+UIRight, D(),
 			PULSE+UIUp, D(),		 							// send selector back to home position when done <<-- TEST
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
@@ -217,6 +218,7 @@
 			PULSE+UIDown, D(),
 			PULSE+UISelect, D(750),								// Increase from 500 for Odyssey
 			PULSE+UISelect, D(750),
+			PULSE+UIRight, D(),
 			PULSE+UIUp, D(),		 							// send selector back to home position when done <<-- TEST
 			PULSE+UIUp, D(),
 			PULSE+UIUp, D(),
