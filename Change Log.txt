@@ -22,13 +22,11 @@ v5.0.0	- New Major release - Odyssey
 		- Add new stfnProcessFlags2() function within ED_StateTracker.tmh 		
 		- Create defines for REXEC() and AutoRepeat() handles (ie 'hName') to be used instead of cryptic numbers
 		- Create stfnDumpFlags() function to print current Flags/Flags2 set bits to console
-		- TESTING 	- Macros ... delays tweaked to fix selection not moving back up tree to top for Wing Beacon toggle 
-		- TESTING 	- Warp Drive function not working as well as I'd like ... trying to catch fast cancel of Warp drive
-		- TESTING	- Warp Drive function not working as well as I'd like ... ensure MASSLOCKED retry count is resetting properly
+		- Wing Beacon macro fixed for Odyssey - selection not moving back up tree to top for Wing Beacon toggle 
+		- Game START and HALT now tested via myJson string length  (no longer via Flags NEQ 0) due to Odyssey changes
 		- TESTING	- Station Services now aligned to Fleet Carriers ... recode to repair all except paint
 		- TESTING	- SRV Deploy/Recall
 		- TESTING	- DISMISS/RECALL Ship
-		- TESTING	- Disembark/Embark to/from onFoot/Ship displays correct messages
 		- TESTING	- Recode Status Page Printout to include Flags2 bits
 
 v4.2.1	- New Point Release
