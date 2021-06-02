@@ -88,19 +88,20 @@
 						printf("\x0a\myJson	  = %s \x0a", &myJson);
 						printf("strlen(myJson) = %d\x0a\x0a", strlen(&myJson));				
 					}
+					
 					Flags = stfnGetKeyValue("Flags", INTEGER);
-					if (OldFlags != Flags)	{
+					if (OldFlags != Flags)	{							// Process 'Flags' only when it changes
 						stfnProcessFlags(0);
 					}
 					OldFlags = Flags;
-
+					
 					if (Odyssey) {
 						Flags2 = stfnGetKeyValue("Flags2", INTEGER);
 						if (Flags2 == -1) {
 							Odyssey = 0;
 						}
 						else {
-							if (OldFlags2 != Flags2)	{
+							if (OldFlags2 != Flags2) {					// Process 'Flags2' only when it changes
 								stfnProcessFlags2();
 							}
 							OldFlags2 = Flags2;
@@ -108,14 +109,14 @@
 					}
 				}			
 				sprintf(&lastJson, "%s", &myJson);
-				lastJson[strlen(&lastJson)] = NUL;			//terminate char array 
+				lastJson[strlen(&lastJson)] = NUL;						//terminate char array 
 			}
 		}
-		else {												// ED must have the file locked for reading?
+		else {															// ED must have the file locked for reading?
 //			printf("\x0a");
 //			fnVPOutput("FATAL ERROR: Status.jason file not found", 100);
 //			Abort();
-			printf("ERROR: Status.jason file not found\x0a");
+			printf("ERROR: Status.jason file not found\x0a");			// trap if status.json is suddenly unavailable during game
 			fnSoundFX("ding");
 		}		
 	}
@@ -173,10 +174,10 @@
 
 		int Start = findstr(&myJson, &pattern);						// 'findstr()' is my version of 'strstr()' in sys.tmh...which doesn't work...defined in ED_Functions.tmh 
 																	// 'Start' contains the character count to the first character of the Keyname, if found. 
-		if (Start == -1) {											// 'Start' contains -1 if the Keyname is not found 
+		if (Start == -1) {											// 'Start' contains -1 if the Keyname is not found
 			myResult = strcmp(&pattern, "Flags2");
-			if (myResult == 0) {
-				printf("Key %s NOT Found - Odyssey not running\x0a\x0a", &pattern);
+			if (myResult == 0) {									// Ignore for Flags2 until Horizons is defunct, then remove this test.
+				// printf("Key %s NOT Found - Odyssey not running\x0a\x0a", &pattern);
 			}
 			else {
 				printf("Key %s NOT Found\x0a", &pattern);
@@ -287,7 +288,7 @@
 		int cs = fCargoScoop;											// LED 4 Tracking
 		int lg = fLandingGear;											// LED 5 Tracking
 				
-		if (Flags == 0) {		
+		if (strlen(&myJson) == 68) {									// When Game is halted, string length of status.json = 68 chars 
 			if(GameLoaded == YES) {										// Detects when Game halts
 				GameLoaded = NO;
 				Odyssey = 0;											// Turn off Flags2 processing
@@ -315,7 +316,7 @@
 				stfnMyStates(SAVE);
 			}
 		}
-		else {		// Flags != 0										// Game is running 
+		else {		// strlen(&myJson) > 68								// Game is running 
 
 		// TARGET uses 32 bit signed precision for its integers.
 		// Integers larger than 2,147,483,648 wrap around to negative number
@@ -627,7 +628,7 @@
 			ActKey(KEYON+REXEC(hReadStatusJson, StatusReadRate, "stfnReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
 //		}
 
-		if (Flags == 0) fnSoundFX("tada");
+		if (strlen(&myJson) == 68) fnSoundFX("tada");
 		
 //		Flags = stfnGetKeyValue("Flags", INTEGER);
 		
@@ -766,8 +767,8 @@
 	
 	int stfnDumpFlags() {
 
-		printf("Flags	=	%d\x0a", Flags);
-		printf("\x0a==================\x0a");
+		printf("\x0a\Flags	=	%d\x0a", Flags);
+		printf("=========================\x0a");
 		printf("Bits set in FLAGS:\x0a");				
 		if (fSRVHiBeam) 			printf("SRVHiBeam\x0a");
 		if (fsdJump) 				printf("Hyperjump\x0a");
@@ -801,11 +802,11 @@
 		if (fLandingGear) 			printf("Landing Gear Deployed\x0a");
 		if (fLanded) 				printf("Landed on planet\x0a");
 		if (fDocked) 				printf("Docked\x0a");
-		printf("===============\x0a");
+		printf("=========================\x0a");
 
 		if (Odyssey) {		
-			printf("Flags2	=	%d\x0a", Flags2);
-			printf("\x0a===================\x0a");
+			printf("\x0a\Flags2	=	%d\x0a", Flags2);
+			printf("=========================\x0a");
 			printf("Bits set in FLAGS2:\X0A");
 			if (fOnFoot)	 			printf("On Foot\x0a");
 			if (fInTaxi) 				printf("In Taxi\x0a");
@@ -839,7 +840,7 @@
 //			if (fRESERVED) 				printf("RESERVED\x0a");
 //			if (fRESERVED) 				printf("RESERVED\x0a");
 //			if (fRESERVED) 				printf("RESERVED\x0a");
-			printf("===============\x0a");
+			printf("=========================\x0a");
 		}	
 	}
 
