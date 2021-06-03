@@ -36,10 +36,8 @@
 // Channel 0:	All Voice Channels MUTED
 // Channel 1:	Voice Attack
 // Channel 2:	In game Voice Comms (Game = Elite Dangerous)
-// Channel 3:	Discord
+// Channel 3:	Discord or Team Speak etc
 // Channel 4:	All Voice Channels OPEN
-
-// STATUS:		TESTING
 
 // Index:	Line		FUNCTION
 //			Line 178:	initCommsChannels()
@@ -51,8 +49,8 @@
 // Global Vars
 // =================================================================================================== 
 	define MuteChannel1			L_ALT+USB[0x3B]			// LALT+F2		(Map this to VoiceAttack and set to mute while key pressed)
-	define MuteChannel2			L_ALT+USB[0x3C]			// LALT+F3		(Map this to E:D in game Voice Channel
-	define MuteChannel3			USB[0x5D]				// NUMPAD 5		(Map this to Discord/Twitch/OBS/Youtube)
+	define MuteChannel2			L_ALT+USB[0x3A]			// LALT+F1		(Map this to E:D in game Voice Channel)
+	define MuteChannel3			USB[0x5D]				// NUMPAD 5		(Map this to Team Speak/Discord/Twitch/OBS/Youtube)
 
 // General
 
