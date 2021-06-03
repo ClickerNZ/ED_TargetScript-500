@@ -82,13 +82,7 @@
 				myJson[myResult] 	= 0;								// terminates char array with nul
 				
 				newJson = strcmp(&myJson, &lastJson);
-				if (newJson != 0) {
-					if (Debug) {
-						printf("Function: stfnReadStatusJson();\x0a"); 
-						printf("\x0a\myJson	  = %s \x0a", &myJson);
-						printf("strlen(myJson) = %d\x0a\x0a", strlen(&myJson));				
-					}
-					
+				if (newJson != 0) {					
 					Flags = stfnGetKeyValue("Flags", INTEGER);
 					if (OldFlags != Flags)	{							// Process 'Flags' only when it changes
 						stfnProcessFlags(0);
@@ -142,10 +136,6 @@
 	// ----------
 
 	int stfnGetKeyValue(alias pattern, int vtype) {
-
-		if (Debug) {
-			printf("\x0a\Function: stfnGetKeyValue(\"%s\", %d))\x0a", &pattern, vtype);
-		}
 		
 		int 	PatLen = strlen(&pattern);
 				
@@ -238,11 +228,7 @@
 		}
 		
 		keyvalue[chrpnt] = NUL;										// terminate char array with a nul 
-		
-		if (Debug) {
-			printf("key:	%s	value:	%s\x0a", &pattern, &keyvalue);
-		}
-		
+				
 		// Return converted key-value...
 		
 		if (vtype == FLOAT) {											// convert string to float
@@ -312,7 +298,9 @@
 					ReverseThrust = !ReverseThrust;
 				}
 				
-				fnSetLEDs();											// Turn off Status LEDs
+				fnSetLEDs();															// Turn off Status LEDs, then...
+				ActKey(PULSE+KEYON+LED(&Throttle, LED_ONOFF, LED_CURRENT-LED0)); 		// set GLOBAL LED OFF
+
 				stfnMyStates(SAVE);
 			}
 		}
@@ -590,10 +578,6 @@
 			
 			if (GUIFocus == GUI_Codex)			prttxt = "Codex";
 
-			if (Debug) {
-				printf("Function: stfnProcessGuiFocus();\x0a");
-				printf("GUIFocus		%d, %s\x0a", GUIFocus, prttxt);
-			}
 			return GUIFocus;
 		}
 	}
@@ -675,11 +659,6 @@
 
 		if (action == SAVE)	{
 						
-			if (Debug) {
-				printf("Function: stfnMyStates();\x0a");
-				printf("Size of MyStates = %d\x0a", sizeof(&MyStates));
-			}
-
 			// Build our struct array
 			MyStates.sVolume	=	VoiceVolume;
 			MyStates.sDismissed =	ShipDismissed;
@@ -697,17 +676,7 @@
 					fnVPOutput("Error writing MyStates to status file", 100);
 				}	
 				else {
-					if (Debug) {
-						printf("MyStates successfully saved: \x0a");
-						printf("sVolume	= [%d]\x0a", MyStates.sVolume);
-						printf("sDismissed	= [%d]\x0a", MyStates.sDismissed);
-						printf("sCurves	= [%d]\x0a", MyStates.sCurves);
-						printf("sLEDLevel	= [%d]\x0a", MyStates.sLEDLevel);
-						printf("Timestamp	= [%s]\x0a", fnGetTOD());
-					}
-					else {
-						printf("MyStates successfully saved @ %s\x0a", fnGetTOD());
-					}
+					printf("MyStates successfully saved @ %s\x0a", fnGetTOD());
 				}
 			}
 			else {
@@ -733,17 +702,7 @@
 					OldCurves		= MyStates.sCurves;
 					LEDLevel		= MyStates.sLEDLevel;
 					
-					if (Debug) {
-						printf("\x0a\MyStates successfully loaded:-\x0a");
-						printf("VoiceVolume	= [%d]\x0a", VoiceVolume);
-						printf("ShipDismissed	= [%d]\x0a", ShipDismissed);
-						printf("OldCurves	= [%d]\x0a", OldCurves);
-						printf("LEDLevel	= [%d]\x0a", LEDLevel); 						
-						printf("Timestamp	= [%s]\x0a", fnGetTOD());
-					}
-					else {
-						printf("\x0a\MyStates successfully loaded @ %s\x0a\x0a", fnGetTOD());
-					}					
+					printf("\x0a\MyStates successfully loaded @ %s\x0a\x0a", fnGetTOD());
 				}
 				else {
 					fnVPOutput("Error reading MyStates from status file", 100);
