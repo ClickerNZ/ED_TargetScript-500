@@ -296,7 +296,7 @@
 			MapKeyR(&Throttle, PSB, EXEC("StopAutoRepeat(hSoundFX);"));		//RELEASE			//  Cancel reminder soundfx					
 		}
 
-//		(Coolie Switch)		// Frame Shift Drive functions
+//		(Coolie Switch)		// Frame Shift Drive functions and Alternate YAW
 //		---------------
 
 		if (MapKeyProfile == BASIC) {
@@ -308,28 +308,38 @@
 		else {
 			MapKey(&Throttle, CSU, EXEC("tgWarpDrive(0);"));		// Toggle: Engage Super-cruise Engine
 			MapKey(&Throttle, CSD, EXEC("tgWarpDrive(1);"));		// Toggle: Initiate Hyper Jump
-			MapKey(&Throttle, CSL, PULSE+SelectNextSystemInRoute);	// Select Next System in Route
-			MapKey(&Throttle, CSR, PULSE+OrbitLines);				// Toggle: Turn Orbit lines ON/OFF
+			MapKeyIO(&Throttle, CSL, 
+				PULSE+SelectNextSystemInRoute,						// I - Target Next System in jump route 
+				YawLeft												// O - Alt YAW if no Rudder
+				);
+			MapKeyIO(&Throttle, CSR,
+				PULSE+OrbitLines,									// I - Toggle Orbit Lines ON/OFF 
+				YawRight											// O - Alt YAW if no Rudder
+				);
 		}
 		
 //		(Mike Switch)		// Alternate Roll/Yaw or Communications Controller functions
 //		-------------
 
-		if (EnableTFRPRudder == DISABLED) {
-			MapKey(&Throttle, MSU, RollLeft);					// Alternate Roll Control - Counter Clockwise
-			MapKey(&Throttle, MSD, RollRight);					// Alternate Roll Control - Clockwise
-			MapKey(&Throttle, MSL, YawRight);					// Alternate Yaw Control - Left 
-			MapKey(&Throttle, MSR, YawLeft);					// Alternate Yaw Control - Right 
+		if(CommsModule == ENABLED) {
+			MapKey(&Throttle, MSU, EXEC("fnChannelSelect(NEXT);"));		// Select Next Channel. Wrap when Channel > 4
+			MapKey(&Throttle, MSD, EXEC("fnChannelSelect(PREVIOUS);"));	// Select Prev Channel. Wrap when Channel < 0
+			MapKey(&Throttle, MSL, EXEC("fnCommStatus();"));			// Output Comms Status
+			MapKey(&Throttle, MSR, EXEC("fnCommStatus();"));			// Output Comms Status	
+			MapKeyIO(&Throttle, MSP, 
+				EXEC("fnPTTMode();"), 									// Toggle PTT Mode
+				EXEC("fnMicControl(ON);")								// PTT
+				);
+			
+			MapKeyR(&Throttle, MSP, EXEC("fnMicControl(OFF);"));			// RELEASE PTT
 		}
 		else {
-			MapKey(&Throttle, MSU, 0);							// <not mapped>
-			MapKey(&Throttle, MSD, 0);							// <not mapped>
-			MapKey(&Throttle, MSL, 0);							// <not mapped>
-			MapKey(&Throttle, MSR, 0);							// <not mapped>
+			MapKey(&Throttle, MSU, 0);									// <not mapped>
+			MapKey(&Throttle, MSD, 0);									// <not mapped>
+			MapKey(&Throttle, MSL, 0);									// <not mapped>
+			MapKey(&Throttle, MSR, 0);									// <not mapped>
+			MapKey(&Throttle, MSP, 0);									// <not mapped>
 		}
-			
-		MapKey(&Throttle, MSP, 0);								// Reserved for Communications functions
-		
 		
 //		(Speed Brake)		// Reverse Throttle function modifiers
 //		-------------
@@ -674,7 +684,7 @@
 			MapKey(&Joystick, S3, EXEC("fnVPOutput(\"Not mapped\");"));
 		}
 		else {	
-			MapKey(&Joystick, S3, TEMPO(EXEC("fnVPOutput(\"I O layer button\");"), 0));
+			MapKey(&Joystick, S3, EXEC("fnVPOutput(\"I O layer button\");"));
 		}
 
 //		(Joystick Pinky Lever Switch)
@@ -848,30 +858,47 @@
 //		(Coolie Switch)		// Frame Shift Drive functions
 //		---------------
 
-
-		MapKey(&Throttle, CSU, EXEC("fnVPOutput(\"Toggle Supercruise\");"));
-		MapKey(&Throttle, CSD, EXEC("fnVPOutput(\"Toggle System jump\");"));
-		MapKey(&Throttle, CSL, EXEC("fnVPOutput(\"Select next system in route\");"));
-		MapKey(&Throttle, CSR, EXEC("fnVPOutput(\"Toggle orbit lines\");"));
+		if (MapKeyProfile == BASIC) {
+			MapKey(&Throttle, CSU, EXEC("fnVPOutput(\"Toggle Supercruise\");"));
+			MapKey(&Throttle, CSD, EXEC("fnVPOutput(\"Toggle System jump\");"));
+			MapKey(&Throttle, CSL, EXEC("fnVPOutput(\"Select next system in route\");"));
+			MapKey(&Throttle, CSR, EXEC("fnVPOutput(\"Toggle orbit lines\");"));
+		}
+		else {
+			MapKey(&Throttle, CSU, EXEC("fnVPOutput(\"Toggle Supercruise\");"));
+			MapKey(&Throttle, CSD, EXEC("fnVPOutput(\"Toggle System jump\");"));
+			MapKeyIO(&Throttle, CSL, 
+				EXEC("fnVPOutput(\"Select next system in route\");"),
+				EXEC("fnVPOutput(\"Yaw Left\");")
+				);
+			MapKeyIO(&Throttle, CSR, 
+				EXEC("fnVPOutput(\"Toggle orbit lines\");"),
+				EXEC("fnVPOutput(\"Yaw Right\");")			
+				);		
+		}
 
 
 //		(Mike Switch)		// Communications Controller functions
 //		-------------
 
-		if (EnableTFRPRudder == 0) {
-			MapKey(&Throttle, MSU, EXEC("fnVPOutput(\"Alternate Roll Control Left\");"));
-			MapKey(&Throttle, MSD, EXEC("fnVPOutput(\"Alternate Roll Control Right\");"));
-			MapKey(&Throttle, MSL, EXEC("fnVPOutput(\"Alternate Yaw Control Right\");"));
-			MapKey(&Throttle, MSR, EXEC("fnVPOutput(\"Alternate Yaw Control Left\");"));
+		if(CommsModule == ENABLED) {
+			MapKey(&Throttle, MSU, EXEC("fnVPOutput(\"Select next Comms channel\");"));
+			MapKey(&Throttle, MSD, EXEC("fnVPOutput(\"Select previous Comms Channel\");"));
+			MapKey(&Throttle, MSL, EXEC("fnVPOutput(\"Output Comms Status\");"));
+			MapKey(&Throttle, MSR, EXEC("fnVPOutput(\"Output Comms Status\");"));
+			MapKeyIO(&Throttle, MSP, 
+				EXEC("fnVPOutput(\"Toggle PTT Mode\");"),
+				EXEC("fnVPOutput(\"Push To Talk\");")
+				);
 		}
 		else {
 			MapKey(&Throttle, MSU, EXEC("fnVPOutput(\"Not mapped\");"));
 			MapKey(&Throttle, MSD, EXEC("fnVPOutput(\"Not mapped\");"));
 			MapKey(&Throttle, MSL, EXEC("fnVPOutput(\"Not mapped\");"));
 			MapKey(&Throttle, MSR, EXEC("fnVPOutput(\"Not mapped\");"));		
+			MapKey(&Throttle, MSP, EXEC("fnVPOutput(\"Not mapped\");"));
 		}
 		
-		MapKey(&Throttle, MSP, EXEC("fnVPOutput(\"Not mapped\");"));
 	
 //		(Speed Brake)		// Reverse Throttle function modifiers
 //		-------------
