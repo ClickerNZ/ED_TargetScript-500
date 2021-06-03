@@ -72,7 +72,8 @@ include "ED_Initialise.tmh"
 include "ED_Functions.tmh"
 include "ED_StateTracker.tmh"
 include "ED_Toggles.tmh"
-// include "ED_CommsControl.tmh"		// ENABLE 'CommsModule' in UserSettings to use CommsControl
+include "ED_CommsControl.tmh"			// UNTESTED: ENABLE 'CommsModule' in UserSettings to use CommsControl and...
+										// ... remove the comments in front of the initCommsChannels() call below.
 
 
 // --------------- //
@@ -128,6 +129,10 @@ include "ED_Toggles.tmh"
 		initSoundFX();															// Initialise Sound Effects engine
 		
 		fnCustomCommands();														// Initialise Custom Macros (See ED_Macros.tmh)
+		
+		if (CommsModule == ENABLED) {
+			initCommsChannels();												// Initialise Communications Control
+		}
 		
 
 // -------------------------- //
