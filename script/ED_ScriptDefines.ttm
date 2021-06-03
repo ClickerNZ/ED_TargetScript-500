@@ -103,8 +103,11 @@
 	define SET									1
 	define RESET								0
 	
+	define PREVIOUS								0
 	define NEXT									1
-	define PREVIOUS								2
+
+	define HOLD									0
+	define PUSH									1
 	
 	define EXIT									0
 	define ENTER								1
@@ -116,9 +119,6 @@
 	define DEPLOY								1
 	define RETRACT								0
 	define RECOVER								0
-	
-	define DebugON								1
-	define DebugOFF								0
 	
 	define NOCHANGE								0
 	define INCREASE								1
