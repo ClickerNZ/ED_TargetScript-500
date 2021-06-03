@@ -23,6 +23,14 @@
 
 // START
 
+//////////////////////////////////
+//////////////////////////////////
+//								//
+//			NOT TESTED			//
+//								//
+//////////////////////////////////
+//////////////////////////////////
+
 // For the purposes of this exercise I'm going to use the following;
 //
 // Channel 0:	All Voice Channels MUTED
@@ -100,18 +108,19 @@
 		// Set microphone to mute
 		mike = 0;
 		
-		// Set PTT Mode to HOLD
-		PTTMode = 0;
+		// Set PTT Mode to TOGGLE 
+		PTTMode = 1;
 		
 		CommsInitialised = 1;
 		
 	}
 
-//	FUNCTION:	Channel selector
+//	FUNCTION:	Channel selector (Mike Switch UP/DOWN)
+//	Parameter:	Select. Valid = NEXT or PREVIOUS
 
-	int fnChannelSelect(int x) {
+	int fnChannelSelect(int Select) {
 		
-		if (x) Channel	= Channel + 1;
+		if (Select == NEXT) Channel	= Channel + 1;
 		else Channel 	= Channel - 1;
 		
 		if (Channel < 0) Channel = 4;
@@ -138,26 +147,27 @@
 	
 	}
 	
-// FUNCTION: Controls the communications functions. Uses &Throttle[MSP] as PTT
+//	FUNCTION:	Controls the communications functions (Mike Switch PUSH)
+//	Parameter:	PTT. Valid = ON or OFF 
 	
 	int fnMicControl(int PTT) {
-		if (PTTMode) {						// Push and Hold To Talk
-			if (PTT) {
-				mike = 1;
+		if (PTTMode == HOLD) {				// Hold To Talk
+			if (PTT == ON) {
+				mike = ON;
 				printf("Mike = %d\x0a", mike);
 			}
 			else {							// Release to Mute 
-				mike = 0;
+				mike = OFF;
 				printf("Mike = %d\x0a", mike);
 			}
 		}
 		else {								// Toggle Talk/Mute 
-			if (PTT) {
+			if (PTT == ON) {
 				mike = !mike;
 				printf("Mike = %d\x0a", mike);
 			}
 		}
-		if (mike == 1) {
+		if (mike == ON) {
 			if (Channel == 0) {
 				if (CH1) {
 					ActKey(CHAIN(PULSE+KEYON+MuteChannel1, D()));
@@ -246,21 +256,19 @@
 	}
 	
 
-//	TOGGLE:	PTT Mode = HOLD or TOGGLE ON/OFF 
+//	TOGGLE:	PTT Mode = HOLD or TOGGLE ON/OFF (S3+Short Mike Switch Press)
 	
 	int tgPTTMode() {
 		int VoiceTxt;
 		
 		PTTMode = !PTTMode;
-		if (PTTMode) 	VoiceTxt = "PTT Mode: HOLD";
-		else			VoiceTxt = "PTT Mode: Toggle";
+		if (PTTMode) 	VoiceTxt = "PTT Mode: Push To Talk";
+		else			VoiceTxt = "PTT Mode: Toggle OPEN/CLOSE";
 
-//		printf("%s\x0a", VoiceTxt);
-//		fnTextToSpeech(VoiceTxt);
 		fnVPOutput(VoiceTxt);
 	}
 	
-// FUNCTION: Report Comms Status
+// FUNCTION: Report Comms Status (S3+LONG Mike Switch Press)
 
 	int fnCommStatus() {
 		char s;
@@ -275,7 +283,6 @@
 		else			VoiceTxt = "toggle";
 		
 		sprintf(&s, "PTT Mode %s, Channel %d, mike %s", VoiceTxt, Channel, mic);
-//		fnTextToSpeech(&s);
 		fnVPOutput(&s);
 	}
 		
