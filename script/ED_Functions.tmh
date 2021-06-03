@@ -328,11 +328,7 @@
 				sprintf(&SysCmd, "start %s -v %s %s %s %s", &VoicePath, &volume, &VoiceCMD, Voice, text);
 			}
 			SysCmd[strlen(&SysCmd)] = NUL;							// terminate char array with nul
-			if (Debug) {
-				printf("\x0a\Function: fnTextToSpeech();\x0a");
-				printf("SysCmd:		= %s\x0a", &SysCmd);
-				printf("strlen(&SysCmd)	= %d\x0a\x0a", strlen(&SysCmd));
-			}
+
 			system(&SysCmd);										// send command to Windows
 		}
 	}
@@ -403,11 +399,6 @@
 			sprintf(&SysCmd, "start %s %s /vol %d /loop %d %s%s", &SoundPath, &SoundCMD, vol, loops, &WAVPath, wavfile);
 			SysCmd[strlen(&SysCmd)] = NUL;							// terminate char array 
 
-			if (Debug) {
-				printf("\x0a\Function: fnSoundFX();\x0a");
-				printf("SysCmd:		= %s\x0a", &SysCmd);
-				printf("strlen(&SysCmd)	= %d\x0a\x0a", strlen(&SysCmd));
-			}
 			system(&SysCmd);										// send command to Windows			
 		}
 	}
