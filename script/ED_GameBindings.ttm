@@ -35,7 +35,7 @@
 
 						//   -- NOTES --   //
 
-// Assigning ALT+F3 to aa define results in a 'brrringg' noise in TARGET Script Editor/GUI 
+// Assigning ALT+F3 to a define results in a 'brrringg' noise in TARGET Script Editor/GUI 
 
 // BINDINGS: If you change any of these you MUST also change binding in game
 // This should include the commented ones!
@@ -285,11 +285,9 @@
 //	define GPUCaptureVideoAuto 					L_ALT+USB[0x43] 		// LALT+F10		(Note: Default NVidia Capture of ALT+F10 conflicts with HiRes Screenshots)
 //	define GPUCaptureManual 					L_ALT+USB[0x42]			// LALT+F9		(Map this & above to your NVidia/AMD/Fraps capture software)
 
-		// REFER ED_CommsControl.tmh //
-//	define MuteTeamSpeak		 				L_ALT+USB[0x3C]			// LALT+F3		(Map this to your Discord/Ventrilo/Mumble/Skype/TeamSpeak PTT Key)
-//	define ExternalVoiceCommsPTT				USB[0x55]				// NUMPAD *		ALREADY USED ABOVE (Map this to your Twitch/OBS/Youtube -> Secondary External PTT Key)
-//	define MuteVoiceAttack		 				L_ALT+USB[0x3B]			// LALT+F2
+		// COMMUNICATIONS CONTROL //
 
+//	NOTE: Communications Control bindings now defined in ED_CommsControl.tmh
 
 //----------------------------------------------------------------------//
 // BINDINGS SECTION ENDS HERE											//
