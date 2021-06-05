@@ -5,7 +5,7 @@
 
 // This file: ED_UserSettings.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -53,7 +53,7 @@
 
 	// NOTE:		Set the 'alias' below to point to the Elite Dangerous journal folder / status.json file
 	//				The below path is usually where the Elite Dangerous journal files can be found.
-	//				Just replace '<username>' with your windows username.
+	//				Just replace '<username>' with your Windows username, NOT your CMDR Name!!!
 	
 //	alias	JournalFolder		= "C:\\Users\\<username>\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
 //	alias	StatusFile			= "C:\\Users\\<username>\\Saved Games\\Frontier Developments\\Elite Dangerous\\status.json";
@@ -84,7 +84,7 @@
 	// Run voice.exe in a command prompt (from where you copied it) with no arguments etc to see a list of options
 	// Run voice.exe -l to get a list of installed voices. Additional voices available via download from microsoft.com
 	// https://support.microsoft.com/en-nz/help/22805/windows-10-supported-narrator-languages-voices 
-	// To make the voices visible to non MS apps (voice.exe), you need to tweak the registry using the method described here;
+	// To make the voices visible to non MS apps including voice.exe, you need to tweak the registry using the method described here;
 	// https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/
 	// VoiceVolume should be set to the relative volume level (%) for voice.exe 
 	// VoiceCMD is example on how to set command line arguments. -r <rate> ... range = -10 (slowest) to +10 (fastest)
@@ -119,7 +119,7 @@
 
 	alias	VoiceCMD			= "-r 1";				// "-r 0" = normal rate. "-r 2" = 20% faster
 	
-	define	TrainingMode		ENABLED					// ENABLED or DISABLED. When game stopped pressing a button/switch announces basic function
+	define	TrainingMode		ENABLED					// ENABLED or DISABLED. When game is not running, pressing a button/switch announces basic function
 	define	AnnounceTraining	DISABLED				// DISABLED = Do not annnounce training mode, ENABLED = Announce training mode
 
 //------------------//
@@ -164,18 +164,18 @@
 
 	int 	ShowFlags			= DISABLED;				// Set/Reset in fnDebug() and used in stfnProcessFlags()
 	
-	define	AutoHanger			DISABLED				// !! TESTING !!	// 1 = Initiate Hanger+Station Services automatically when docked, 0 = don't
-														// !! TESTING !!	// Hanger services on Carrier is completely different to stations
+	define	AutoHanger			DISABLED				// !! TESTING !!	// ENABLED = Initiate Hanger+Station Services automatically when docked, DISABLED = don't
+														// !! TESTING !!	// Hanger services on Carrier is completely different to stations in Horizons
 															
 	define	AutoHUD				DISABLED				//	Enable to toggle HUD to Analysis Mode when FSD engaged
-	define	AutoGearUP			DISABLED				//	Enable to retract landing gear when lifting off
+	define	AutoGearUP			DISABLED				//	Enable to retract landing gear when lifting off using the script 'launch' function 
 	define	AutoGearDOWN		DISABLED				//	Enable to deploy landing gear when request docking
 	define	AutoHeatsink		ENABLED					//	Enable to fire a heatsink when temp > 100% (requires launcher and ammo)
 	define	AutoStrobe			ENABLED					//	Enable to strobe silent running if in danger and shields drop
 	
 	define	CommsModule			ENABLED					//	ED_CommsControl
 	
-	define	ChatTABs			3						//	Set to number of Chat Tabs you have setup within the Comms Panel, in game. (Valid = 1-4)
+	define	ChatTABs			2						//	Set to number of Chat Tabs you have setup within the Comms Panel, in game. (Valid = 1-4)
 
 //--------------------------//
 // Axis Curves and Settings //
@@ -215,12 +215,11 @@
 	 
 	// Define curve & zoom arrays
 	// --------------------------   APPAT-O	APPAT-I	APAH	APALT-O	APALT-I	// Used within fnSetCurves() and applied to JS, Rudder and Slew  (x, y & z axis)
-	short	Joystick_Curve[] 	= {	1,		2,		0,		3,		4 };	// Autopilot (Up = MILD curves, down = SLOWER curves)
+	short	Joystick_Curve[] 	= {	1,		2,		0,		3,		4 };	// Autopilot switch (Up = MILD curves, down = SLOWER curves)
 	
-	short	Rudder_Curve[]		= { 1,		2,		0,		3,		4 };	// Autopilot (Up = MILD curves, down = SLOWER curves)
+	short	Rudder_Curve[]		= { 1,		2,		0,		3,		4 };	// Autopilot switch (Up = MILD curves, down = SLOWER curves)
 	 
 	short	Slew_Curve[]		= {	2,		2,		0,		2,		2 };	// Set Slew Curve
 								//	MILD	MEDIUM	NONE	SLOW	SLOWEST
-
 
 // END
