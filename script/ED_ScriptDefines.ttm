@@ -8,7 +8,7 @@
 // Below are the global, static, state and boolean definitions used within the script package
 // Also contains global ststus.json integer variable flags for ease of maintenance and readability
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
