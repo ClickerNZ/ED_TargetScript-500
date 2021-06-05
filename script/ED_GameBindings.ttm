@@ -5,7 +5,7 @@
 
 // This file: ED_GameBindings.ttm (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // NOTE: If you change anything under 'BINDINGS SECTION', you MUST ensure you also change within
 // the Control bindings within the game itself.
