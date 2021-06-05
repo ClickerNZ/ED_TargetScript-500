@@ -7,7 +7,7 @@
 // Contains MapKey Statements for all button and switch actions
 // Contains MapKey Statements to announce via TextToSpeech and printf for each button or switch action (training mode)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -27,11 +27,11 @@
 //			Line 45: 	int MainKeyMap()
 //			Line 57:		Joystick Triggers
 //			Line 257:		Throttle Lever Switches
-//			Line 391:		Throttle Base Switches
-//			Line 620: 	int TrainingMap()
-//			Line 629:		Joystick Triggers
-//			Line 805:		Throttle Lever Switches
-//			Line 931:		Throttle Base Switches
+//			Line 401:		Throttle Base Switches
+//			Line 630: 	int TrainingMap()
+//			Line 640:		Joystick Triggers
+//			Line 815:		Throttle Lever Switches
+//			Line 958:		Throttle Base Switches
 
 
 // START
