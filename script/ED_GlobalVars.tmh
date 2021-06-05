@@ -5,7 +5,7 @@
 
 // This file: ED_GlobalVars.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // NOTE:	All user related settings can be found in the ED_UserSettings.tmh file
 //			Changing any of the below global variables will have significant effect on the script
