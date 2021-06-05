@@ -9,7 +9,7 @@
 //				Joystick firmware	v12
 //				Throttle firmware 	v23
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -26,9 +26,9 @@
 // ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 65:	include statements
-//			Line 82: 	int main()
-//			Line 159:	int EventHandle()
+//			Line 56:	include statements
+//			Line 83: 	int main()
+//			Line 166:	int EventHandle()
 
 // PREFACE
 //
