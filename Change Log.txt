@@ -26,12 +26,13 @@ v5.0.0	- New Major release - Odyssey
 		- Game START and HALT now tested via myJson string length  (no longer via Flags NEQ 0) due to Odyssey changes
 		- Include Communications Control code (ED_CommsControl.tmh)
 		- Remove old debug code
+		- Remove redundant commented code
 		- TESTING	- Station Services now aligned to Fleet Carriers ... recode to repair all except paint
 		- TESTING	- SRV Deploy/Recall
 		- TESTING	- DISMISS/RECALL Ship
 		- TESTING	- Recode Status Page Printout to include Flags2 bits
-		- TO DO 	- Remove commented code
-		- TO Do		- Release 
+		- TO DO		- Redo keybinds sheet to include binds used for Odyssey (when On Foot)
+		- TO DO		- Release 
 
 v4.2.1	- New Point Release
 		- Fix name of TrainingMap in fnCustomCommands()
