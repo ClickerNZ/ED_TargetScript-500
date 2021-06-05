@@ -5,7 +5,7 @@
 
 // This file: ED_Functions.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -22,7 +22,7 @@
 // ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 68: 	int fnNotValid()
+//			Line 69: 	int fnNotValid()
 //			Line 92: 	int fnSetCurves()
 //			Line 161: 	int fnSetSliderCurve()
 //			Line 192: 	int fnGetFlightMode()
@@ -31,33 +31,33 @@
 //			Line 247: 	int fnSetLEDs()
 //			Line 278: 	int fnFlashStart()
 //			Line 312: 	int fnTextToSpeech()
-//			Line 344: 	int fnVoiceVolume()
-//			Line 397: 	int fnSoundFX()
-//			Line 418: 	int fnGameStarted()
-//			Line 497: 	int fnPIPMode()
-//			Line 548: 	int fnPIPManager()
-//			Line 585: 	int fnPIPMapper()
-//			Line 625: 	int fnAdvFireControl()
-//			Line 698: 	int fnAdvancedSCB()
-//			Line 730: 	int fnHeatsink()
-//			Line 744: 	int fnChaff()
-//			Line 762: 	int fnDeploySRV()
-//			line 806:	int fnDRShip()
-//			Line 835: 	int fnRequestDock()
-//			Line 857: 	int fnHangerServices()
-//			Line 901:	int fnIdleLock()
-//			Line 928:	int fnClearChatBox()
-//			Line 983: 	int fnModeSwitch()
-//			Line 1039:	int fnVPOutput()
-//			Line 1051: 	int fnPrintState()
-//			Line 1062: 	int fnStateDump()
-//			Line 1151: 	int fnDebug()
-//			Line 1176:	int fnGetTOD()
-//			Line 1193:	int fnGetDate()
-//			Line 1221:	int fnCheckFSDCharge()
-//			Line 1251:	int fnCheckFSDMassLocked()
-//			Line 1278:	int findstr()
-//			Line 1303:	int ModKey()			// not used
+//			Line 340: 	int fnVoiceVolume()
+//			Line 393: 	int fnSoundFX()
+//			Line 409: 	int fnGameStarted()
+//			Line 503: 	int fnPIPMode()
+//			Line 554: 	int fnPIPManager()
+//			Line 591: 	int fnPIPMapper()
+//			Line 631: 	int fnAdvFireControl()
+//			Line 704: 	int fnAdvancedSCB()
+//			Line 736: 	int fnHeatsink()
+//			Line 750: 	int fnChaff()
+//			Line 768: 	int fnDeploySRV()
+//			line 812:	int fnDRShip()
+//			Line 841: 	int fnRequestDock()
+//			Line 863: 	int fnHangerServices()
+//			Line 907:	int fnIdleLock()
+//			Line 939:	int fnCheckFSDCharge()
+//			Line 971:	int fnCheckFSDMassLocked()
+//			Line 1000:	int fnClearChatBox()
+//			Line 1055: 	int fnModeSwitch()
+//			Line 1111:	int fnVPOutput()
+//			Line 1123: 	int fnPrintState()
+//			Line 1134: 	int fnStateDump()
+//			Line 1227: 	int fnDebug()
+//			Line 1252:	int fnGetTOD()
+//			Line 1270:	int fnGetDate()
+//			Line 1292:	int findstr()
+//			Line 1319:	int ModKey()			// not used
 
 //------------------//
 // CUSTOM FUNCTIONS //
@@ -927,6 +927,72 @@
 	}
 
 
+	// FUNCTION:	Checks FSD starts spooling up after hitting FSD
+	// CALLED FROM:	tgWarpDrive() as AutoRepeat so can be cancelled by StopAutoRepeat(hFSSDCharge)
+	// PARAMETER:	EngineText - Supercruise or Warpdrive selection 
+	// NOTE:		FSD may not spool up for several reasons. Obscured Target, Insufficient fuel/Target too far etc
+
+	// GLOBAL VARIABLES
+	
+	int chkcounter = 0;
+	
+	int fnCheckFSDCharge(int EngineText) {
+		int reason;
+		
+		chkcounter = chkcounter + 1;
+		
+		if(fFSDCharging == 0) {
+			if(chkcounter > 6) {
+				reason = "FSD charge failed";
+				fnNotValid(EngineText, reason);
+				printf("%s:	DISENGAGED	<<\x0a", EngineText);
+				chkcounter = 0;
+				StopAutoRepeat(hFSDCharge);				// Stop AutoRepeat once threshold has been breached
+				InitWarpDrive = DISABLED;
+			}
+		}
+		else {											// FSD Charging is detected so ...
+			chkcounter = 0;								// ... reset the counter ...
+			StopAutoRepeat(hFSDCharge);					// ... Stop this function loop 
+			InitWarpDrive = DISABLED;					// ... Reset InitWarpDrive 
+		}
+	}
+
+
+	// FUNCTION:	Checks we've cleared MassLock for 2 seconds
+	// CALLED FROM:	tgWarpDrive() as AutoRepeat so this call can be cancelled
+	// PARAMETER:	EngineText - Supercruise or Warpdrive selection 
+	// NOTE:		Check every 0.5 sec and punch FSD if cleared
+
+	// GLOBAL VARIABLES
+	
+	int MLCount = 0;
+	
+	int fnCheckFSDMasslocked(int EngineText) {
+		int reason;
+		
+		MLCount = MLCount + 1;
+		
+		if(fMassLocked) {
+			printf("%s	MASSLOCKED	... Retry #%d of 4\x0a", EngineText, MLCount);
+			if(MLCount >= 4) {
+				reason = "we are currently masslocked";
+				fnNotValid(EngineText, reason);
+				printf("%s:	DISENGAGED	<<\x0a", EngineText);
+				MLCount = 0;
+				StopAutoRepeat(hMassLocked);				// Stop AutoRepeat that called this function
+				InitWarpDrive = DISABLED;
+			}
+		}
+		else {
+			MLCount = 0;
+			StopAutoRepeat(hMassLocked);
+			InitWarpDrive = DISABLED;
+			tgWarpDrive(EngineText); 
+		}
+	}
+
+
 	// FUNCTION:	Clears the chat boxes
 	// Parameter:	'mode'. Valid = 0 or 1
 	//				mode 0 clears current selected chatbox. mode 1 clears all chatbaxes
@@ -1186,10 +1252,11 @@
 	int fnGetTOD() {
 
 		int	TOD	= " NOW ";								// Set type and format
-		
+
 		system("time /T > c:\\tod.txt");				// Create local timestamp
 
 		int fp = fopen("c:\\tod.txt", "r");
+
 		if (fp) {
 			fread(TOD, 1, 5, fp);						// Read local timestamp
 			fclose(fp);
@@ -1219,72 +1286,6 @@
 	}
 
 
-	// FUNCTION:	Checks FSD starts spooling up after hitting FSD
-	// CALLED FROM:	tgWarpDrive() as AutoRepeat so can be cancelled by StopAutoRepeat(hFSSDCharge)
-	// PARAMETER:	EngineText - Supercruise or Warpdrive selection 
-	// NOTE:		FSD may not spool up for several reasons. Obscured Target, Insufficient fuel/Target too far etc
-
-	// GLOBAL VARIABLES
-	
-	int chkcounter = 0;
-	
-	int fnCheckFSDCharge(int EngineText) {
-		int reason;
-		
-		chkcounter = chkcounter + 1;
-		
-		if(fFSDCharging == 0) {
-			if(chkcounter > 6) {
-				reason = "FSD charge failed";
-				fnNotValid(EngineText, reason);
-				printf("%s:	DISENGAGED	<<\x0a", EngineText);
-				chkcounter = 0;
-				StopAutoRepeat(hFSDCharge);				// Stop AutoRepeat once threshold has been breached
-				InitWarpDrive = DISABLED;
-			}
-		}
-		else {											// FSD Charging is detected so ...
-			chkcounter = 0;								// ... reset the counter ...
-			StopAutoRepeat(hFSDCharge);					// ... Stop this function loop 
-			InitWarpDrive = DISABLED;					// ... Reset InitWarpDrive 
-		}
-	}
-
-
-	// FUNCTION:	Checks we've cleared MassLock for 2 seconds
-	// CALLED FROM:	tgWarpDrive() as AutoRepeat so this call can be cancelled
-	// PARAMETER:	EngineText - Supercruise or Warpdrive selection 
-	// NOTE:		Check every 0.5 sec and punch FSD if cleared
-
-	// GLOBAL VARIABLES
-	
-	int MLCount = 0;
-	
-	int fnCheckFSDMasslocked(int EngineText) {
-		int reason;
-		
-		MLCount = MLCount + 1;
-		
-		if(fMassLocked) {
-			printf("%s	MASSLOCKED	... Retry #%d of 4\x0a", EngineText, MLCount);
-			if(MLCount >= 4) {
-				reason = "we are currently masslocked";
-				fnNotValid(EngineText, reason);
-				printf("%s:	DISENGAGED	<<\x0a", EngineText);
-				MLCount = 0;
-				StopAutoRepeat(hMassLocked);				// Stop AutoRepeat that called this function
-				InitWarpDrive = DISABLED;
-			}
-		}
-		else {
-			MLCount = 0;
-			StopAutoRepeat(hMassLocked);
-			InitWarpDrive = DISABLED;
-			tgWarpDrive(EngineText); 
-		}
-	}
-
-
 	//	FUNCTION:	Find substring within a string and return first char position or -1 if not found
 	//	NOTE:		sys.tmh has strstr() listed to provide this functionality, however it seems to always
 	//				return a '0' no matter what you plug in. So, I decided to write my own.
@@ -1311,9 +1312,11 @@
 	}
 
 
-	// Not yet used...found in discord provided by Dar|{cyde
+	// Not used...found in discord provided by Dar|{cyde
 	// Usage example: ModKey(L_ALT, 1);
-	// Note: Potentially better than defining a macro in ED-Defines.ttm as it relaeases 'mod' after 'key' and not before
+	// Note: Potentially better than defining a macro combo-key in ED-Defines.ttm,
+	// as it relaeases 'mod' after 'key' and not before
+	
 	int ModKey(int mod=0, int key=0) { 
 	    return CHAIN(DOWN+mod, D(), PULSE+key, D(), UP+mod);
 	}
