@@ -5,7 +5,7 @@
 
 // This file: ED_CommsControl.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 /// LEGEND: 
 // ========================================================================
@@ -40,11 +40,11 @@
 // Channel 4:	All Voice Channels OPEN
 
 // Index:	Line		FUNCTION
-//			Line 178:	initCommsChannels()
-//			Line 111:	fnChannelSelect()
-//			Line 142:	fnMicControl()
-//			Line 250:	tgPTTMode()
-//			Line 264:	fnCommStatus()
+//			Line 85:	initCommsChannels()
+//			Line 119:	fnChannelSelect()
+//			Line 151:	fnMicControl()
+//			Line 259:	tgPTTMode()
+//			Line 271:	fnCommStatus()
 		
 // Global Vars
 // =================================================================================================== 
