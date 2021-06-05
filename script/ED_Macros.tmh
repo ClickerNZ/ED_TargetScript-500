@@ -5,7 +5,7 @@
 
 // This file: ED_Macros.ttm (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -22,7 +22,7 @@
 // ========================================================================
 
 // Index:	Line			FUNCTION
-//			Line 53:		fnCustomCommands()
+//			Line 52:		fnCustomCommands()
 //			Line 75: 		mRequestDock
 //			Line 88: 		mDeploySRV
 //			Line 100: 		mBoardShip
@@ -32,10 +32,10 @@
 //			Line 149: 		mFastModeSwitch2
 //			Line 162: 		mReportCrimesToggle
 //			Line 183: 		mNAVBeaconWing
-//			Line 208: 		mNAVBeaconOff
-//			Line 232: 		mEnterHanger
-//			Line 258: 		mLaunch
-//			Line 269:		mChangeColours
+//			Line 209: 		mNAVBeaconOff
+//			Line 234: 		mEnterHanger
+//			Line 259: 		mLaunch
+//			Line 270:		mChangeColours
 
 
 // START
@@ -190,9 +190,9 @@
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
 			PULSE+UIDown, D(),
-			PULSE+UISelect, D(750),								// Increase from 500 for Odyssey
+			PULSE+UISelect, D(500),
 			PULSE+UIDown, D(),
-			PULSE+UISelect, D(750),
+			PULSE+UISelect, D(500),
 			PULSE+UIRight, D(),
 			PULSE+UIUp, D(),		 							// send selector back to home position when done <<-- TEST
 			PULSE+UIUp, D(),
