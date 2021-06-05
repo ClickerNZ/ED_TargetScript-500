@@ -5,7 +5,7 @@
 
 // This file: ED_StateTracker.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -22,14 +22,14 @@
 // ========================================================================
 
 // Index:	Line		FUNCTION
-//			Line 46: 	int stfnReadStatusJson()
-//			Line 129: 	int stfnGetKeyValue()
-//			Line 245: 	int stfnProcessFlags()
-//			Line 512:	int stfnProcessFlags2()
-//			Line 612: 	int stfnProcessGuiFocus()
-//			Line 650: 	int stfnStartCheck()
-//			Line 707:	int stfnMyStates()
-//			Line xxx:	int stfnDumpFlags()
+//			Line 47: 	int stfnReadStatusJson()
+//			Line 135: 	int stfnGetKeyValue()
+//			Line 247: 	int stfnProcessFlags()
+//			Line 484:	int stfnProcessFlags2()
+//			Line 548: 	int stfnProcessGuiFocus()
+//			Line 582: 	int stfnStartCheck()
+//			Line 626:	int stfnMyStates()
+//			Line 700:	int stfnDumpFlags()
 	
 // START
 
@@ -107,9 +107,6 @@
 			}
 		}
 		else {															// ED must have the file locked for reading?
-//			printf("\x0a");
-//			fnVPOutput("FATAL ERROR: Status.jason file not found", 100);
-//			Abort();
 			printf("ERROR: Status.jason file not found\x0a");			// trap if status.json is suddenly unavailable during game
 			fnSoundFX("ding");
 		}		
@@ -166,12 +163,9 @@
 																	// 'Start' contains the character count to the first character of the Keyname, if found. 
 		if (Start == -1) {											// 'Start' contains -1 if the Keyname is not found
 			myResult = strcmp(&pattern, "Flags2");
-			if (myResult == 0) {									// Ignore for Flags2 until Horizons is defunct, then remove this test.
-				// printf("Key %s NOT Found - Odyssey not running\x0a\x0a", &pattern);
-			}
-			else {
+			if (myResult != 0) {									// Ignore for Flags2 until Horizons is defunct, then remove this test.
 				printf("Key %s NOT Found\x0a", &pattern);
-			}	
+			}
 			return -1;
 		}
 		
@@ -587,12 +581,10 @@
 	
 	int stfnStartCheck() {
 		int fp;								// file pointer (handle)
-//		int ValidStatusFile = 0;
 		
 		fp = fopen(&StatusFile, "r");
 		if (fp) {
 			fclose(fp);
-//			ValidStatusFile = YES;
 			printf("\x0a\status.json file set correctly in ED_UserSettings");
 		}
 		else {
@@ -607,29 +599,10 @@
 			printf("\x0a\status.json location set to %s\x0a\x0a", &StatusFile);			
 		}
 		
-//		if (ValidStatusFile == YES) {
-			stfnReadStatusJson();																	// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
-			ActKey(KEYON+REXEC(hReadStatusJson, StatusReadRate, "stfnReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
-//		}
+		stfnReadStatusJson();																	// Read status.json first time before starting loop. Won't work otherwise. I don't know why.
+		ActKey(KEYON+REXEC(hReadStatusJson, StatusReadRate, "stfnReadStatusJson();", RNOSTOP));	// StatusReadRate is set in UserSettings file
 
-		if (strlen(&myJson) == 68) fnSoundFX("tada");
-		
-//		Flags = stfnGetKeyValue("Flags", INTEGER);
-		
-//		if(Flags != 0) {
-//			stfnProcessFlags(0);
-//			Flags2 = stfnGetKeyValue("Flags2", INTEGER);
-//			if (Flags2 != -1) {
-//				Odyssey = 1;					// Flags2 presence means we're running Odyssey
-//				stfnProcessFlags2();
-//			}
-//			else {
-//				Odyssey = 0;
-//			}
-//		}
-//		else {
-//			fnSoundFX("tada");
-//		}
+		if (strlen(&myJson) == 68) fnSoundFX("tada");		
 	}
 
 	// FUNCTION:	Save states not included in status.json
