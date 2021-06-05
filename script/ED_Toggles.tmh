@@ -5,7 +5,7 @@
 
 // This file: ED_Toggles.tmh (v5.0.0) ... supports Elite Dangerous (Odyssey)
 
-// Refer Change Log.txt in same folder
+// Refer Change Log.txt in parent folder
 
 // LEGEND: 
 // ========================================================================
@@ -28,16 +28,16 @@
 //			Line 148: 	int tgLights()
 //			Line 207: 	int tgSilentRunning()
 //			Line 250: 	int tgCargoScoop()
-//			Line 292: 	int tgLandingGear()
-//			Line 328: 	int tgReverseThrust()
-//			Line 359:	int tgBoost()
-//			Line 383: 	int tgHardpoints()
-//			Line 421: 	int tgHUDMode()
-//			Line 437: 	int tgFSSMode()
-//			Line 465: 	int tgPlanetView()
-//			Line 489: 	int tgWarpDrive()
-//			Line 559: 	int tgExtCamera()
-//			Line 574:	int tgXAxis()
+//			Line 287: 	int tgLandingGear()
+//			Line 323: 	int tgReverseThrust()
+//			Line 354:	int tgBoost()
+//			Line 378: 	int tgHardpoints()
+//			Line 416: 	int tgHUDMode()
+//			Line 432: 	int tgFSSMode()
+//			Line 460: 	int tgPlanetView()
+//			Line 488: 	int tgWarpDrive()
+//			Line 561: 	int tgExtCamera()
+//			Line 576:	int tgXAxis()
 	
 	
 // START
@@ -507,7 +507,7 @@
 			printf("%s	CANCELLED	<<\x0a", EngineText);
 			ActKey(PULSE+KEYON+WarpDrive);
 			fnTextToSpeech("FSD Charge sequence cancelled");
-			StopAutoRepeat(hFSDCharge);									// Stop FSDCharge check if hit cancel inside 3 seconds 
+			StopAutoRepeat(hFSDCharge);											// Stop FSDCharge check if hit cancel inside 3 seconds 
 			InitWarpDrive = DISABLED;
 			return 0;
 		}
