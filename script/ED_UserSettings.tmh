@@ -173,7 +173,7 @@
 	define	AutoHeatsink		ENABLED					//	Enable to fire a heatsink when temp > 100% (requires launcher and ammo)
 	define	AutoStrobe			ENABLED					//	Enable to strobe silent running if in danger and shields drop
 	
-	define	CommsModule			ENABLED					//	ED_CommsControl
+	define	CommsModule			DISABLED				//	ED_CommsControl
 	
 	define	ChatTABs			2						//	Set to number of Chat Tabs you have setup within the Comms Panel, in game. (Valid = 1-4)
 
