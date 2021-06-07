@@ -21,17 +21,18 @@ v5.0.0	- New Major release - Odyssey
 		- Add new Odyssey based status.json Flags2 defines and global variables
 		- Add new stfnProcessFlags2() function within ED_StateTracker.tmh 		
 		- Create defines for REXEC() and AutoRepeat() handles (ie 'hName') to be used instead of cryptic numbers
-		- Create stfnDumpFlags() function to print current Flags/Flags2 set bits to console
+		- Create stfnDumpFlags() function to print current GUI Focus and Flags/Flags2 set bits to console
 		- Wing Beacon macro fixed for Odyssey - selection not moving back up tree to top for Wing Beacon toggle 
 		- Game START and HALT now tested via myJson string length  (no longer via Flags NEQ 0) due to Odyssey changes
 		- Include Communications Control code (ED_CommsControl.tmh)
 		- Remove old debug code
 		- Remove redundant commented code
-		- Add defines (commented) for On-Foot binds in binds sheet and map them in the binds file 
+		- Add defines (commented) for On-Foot binds in binds sheet and map them in the binds file
+		- Refactor stfnProcessGuiFocus()
 		- TESTING	- Station Services now aligned to Fleet Carriers ... recode to repair all except paint
-		- TESTING	- SRV Deploy/Recall
-		- TESTING	- DISMISS/RECALL Ship
-		- TESTING	- Recode Status Page Printout to include Flags2 bits
+//		- TESTING	- SRV Deploy/Recall
+//		- TESTING	- DISMISS/RECALL Ship
+		- TO DO 	- Recode Status Page Printout to include Flags2 bits
 		- TO DO		- Release 
 
 v4.2.1	- New Point Release
