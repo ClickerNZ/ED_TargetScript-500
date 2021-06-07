@@ -48,9 +48,9 @@
 		
 // Global Vars
 // =================================================================================================== 
-	define MuteChannel1			L_ALT+USB[0x3F]			// LALT+F6		(Map this to VoiceAttack and set to mute while key pressed)
+	define MuteChannel1			USB[0x5E]				// NUMPAD 6		(Map this to VoiceAttack and set to mute while key pressed)
 	define MuteChannel2			L_ALT+USB[0x3E]			// LALT+F5		(Map this to E:D in game Voice Channel)
-	define MuteChannel3			USB[0x5D]				// NUMPAD 5		(Map this to Team Speak/Discord/Twitch/OBS/Youtube)
+	define MuteChannel3			L_ALT+USB[0x3F]			// LALT+F6		(Map this to Discord or Teamspeak etc and set to unmute while key pressed)
 
 // General
 
