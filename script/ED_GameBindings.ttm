@@ -121,12 +121,6 @@
 	define FlightAssist 						USB[0x1D] 				// Z
 //	define AlternativeFlightMode 				USB[0x40]				// F7
 
-		// SRV CONTROLS //
-	define SRVHandbrake 						USB[0x1B] 				// X
-	define SRVTurret 							USB[0x18]				// U	(same as deploy/retract Hardpoints
-	define SRVVerticalThrust 					USB[0x15] 				// R
-	define SRVRecallDismissShip					L_ALT+USB[0x1B]			// LALT+X
-
 		// SHIP SYSTEMS //
 	define CargoScoop 							USB[0x4A] 				// HOME
 	define JettisonAllCargo 					USB[0x4D] 				// END
@@ -170,6 +164,21 @@
 //	define FighterFollow 						L_ALT+USB[0x09]			// LALT+F
 //	define FighterOpen	 						L_ALT+USB[0x12]			// LALT+O
 
+		// MULTICREW //							(Note: These are not currently mapped in ED)
+//	define MultiCrewModeToggle							 				// <not mapped>
+//	define MultiCrewPrimaryFire							 				// <not mapped>
+//	define MultiCrewSecondaryFire						 				// <not mapped>
+//	define MultiCrewPrimaryUtilFire						 				// <not mapped>
+//	define MultiCrewSecondaryUtilFire					 				// <not mapped>
+//	define MultiCrewCycleUIForward						 				// <not mapped>
+//	define MultiCrewCycleUIBack							 				// <not mapped>
+
+		// SRV CONTROLS //
+	define SRVHandbrake 						USB[0x1B] 				// X
+	define SRVTurret 							USB[0x18]				// U	(same as deploy/retract Hardpoints
+	define SRVVerticalThrust 					USB[0x15] 				// R
+	define SRVRecallDismissShip					L_ALT+USB[0x1B]			// LALT+X
+
 		// UI NAVIGATION //
 	define UISelect 							USB[0x2C] 				// Space
 	define UIBack 								USB[0x2A]				// BACKSPACE
@@ -189,15 +198,6 @@
 	define SystemMap 							USB[0x33] 				// ;
 	define GalMap 								':'				 		// LSHIFT+;
 //	define FriendsView									 				// <not mapped>
-
-		// MULTICREW //							(Note: These are not currently mapped in ED)
-//	define MultiCrewModeToggle							 				// <not mapped>
-//	define MultiCrewPrimaryFire							 				// <not mapped>
-//	define MultiCrewSecondaryFire						 				// <not mapped>
-//	define MultiCrewPrimaryUtilFire						 				// <not mapped>
-//	define MultiCrewSecondaryUtilFire					 				// <not mapped>
-//	define MultiCrewCycleUIForward						 				// <not mapped>
-//	define MultiCrewCycleUIBack							 				// <not mapped>
 
 		// HOLO-ME //							(Note: These are not currently mapped in ED)
 //	define HoloMEUndo									 				// <not mapped>
@@ -266,8 +266,58 @@
 //	define CameraFocusIn												// Same as ZoomIn
 //	define CameraFocusOut												// Same as ZoomOut
 
+
+		// ON FOOT //
+//	define WalkForward							USB[0x1A]				// w
+//	define WalkBackward							USB[0x16] 				// s
+//	define StrafeLeft							USB[0x04]				// a
+//	define StrafeRight							USB[0x07]				// d
+//	define TurnLeft														// Mouse Left
+//	define TurnRight													// Mouse Right 
+//	define Sprint 								USB[0x0D] 				// j
+//	define Walk									USB[0x1C]				// y
+//	define Crouch		 						USB[0x06] 				// c
+//	define Jump 								USB[0x2C] 				// Space
+//	define Interact								USB[0x08]				// e
+//	define SecondaryInteract					USB[0x2B]				// TAB
+//	define Reload								USB[0x15]				// r
+//	define SelectTool							USB[0x17]				// t
+//	define FlashLight 							USB[0x49] 				// INSERT
+//	define NightVision							L_ALT+USB[0x49]			// LALT+INSERT
+//	define SelectSuitTool						USB[0x09]				// f
+//	define InsightHub 							USB[0x0B]				// h
+//	define EnergyLink 							USB[0x0F] 				// l
+//	define Melee 								USB[0x10] 				// m
+//	define ProfileAnalyzer						USB[0x13]				// p
+//	define ToggleShields 						USB[0x19] 				// v 
+//	define ClearAuthLevel						L_ALT+USB[0x04]			// LALT+a
+//	define EnergyCell 							USB[0x34]				// '
+//	define HealthPack		 					L_ALT+USB[0x06]			// LALT+c
+//	define ThrowGrenade							USB[0x1B]				// x
+//	define NextGrenadeType						L_ALT+USB[0x36]			// LALT+,
+//	define PrevGrenadeType 						L_ALT+USB[0x37]			// LALT+.
+//	define EMPGrenade							L_ALT+USB[0x08]			// LALT+e
+//	define FragGrenade							L_ALT+USB[0x09]			// LALT+f
+//	define ShieldGrenade						L_ALT+USB[0x16]			// LALT+s
+//	define PrimaryWeapon						L_ALT+USB[0x1E]			// LALT+1
+//	define SecondaryWeapon						L_ALT+USB[0x1F]			// LALT+2
+//	define SwitchWeapon							USB[0x1D]				// z
+//	define NextWeapon							USB[0x36]				// ,
+//	define PrevWeapon 							USB[0x37]				// .
+//	define HolsterWeapon 						USB[0x18] 				// u
+//	define AimSights							USB[0x14]				// q
+//	define FireWeapon													// Mouse Button 1
+//	define ItemWheelUp							L_ALT+USB[0x52]			// LALT+UP Arrow
+//	define ItemWheelDown						L_ALT+USB[0x51]			// LALT+DOWN Arrow
+//	define ItemWheelLeft						L_ALT+USB[0x50]			// LALT+LEFT Arrow
+//	define ItemWheelRight						L_ALT+USB[0x4F]			// LALT+RIGHT Arrow
+//	define ItemWheelSelect												// Mouse Button 3
+//	define BattleStats							USB[0x05]				// b
+//	define tgToolMode							USB[0x0A]				// g
+//	define tgHelp								L_ALT+USB[0x0B]			// LALT+h
+
+
 		// MISCELLANEOUS //
-//	define InternalVoiceCommsPTT 				USB[0x  ]				// <not mapped>
 	define ExtCamera		 					USB[0x5D] 				// NUMPAD 5
 //	define ExtCameraSRV							USB[0x5D]				// NUMPAD 5
 	define OrbitLines	 						USB[0x2E] 				// =
