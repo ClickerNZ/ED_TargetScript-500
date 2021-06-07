@@ -547,32 +547,23 @@
 
 	int stfnProcessGuiFocus() {
 		int GUIFocus;
-		int prttxt;
 
 		if (Flags != 0) {
 			GUIFocus = stfnGetKeyValue("GuiFocus", INTEGER);
-			if (GUIFocus == GUI_None)			prttxt = "No Focus";
-			if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
-			if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
-			if (GUIFocus == GUI_CommsPanel)		prttxt = "Comms Panel";
-			if (GUIFocus == GUI_RolePanel)		prttxt = "Role Panel";
-			if (GUIFocus == GUI_StationSvcs)	prttxt = "Station Services";
-			if (GUIFocus == GUI_GalaxyMap)		prttxt = "Galaxy Map";
-			if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
-			if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
-			if (GUIFocus == GUI_FSSMode) {		prttxt = "FSS Mode";
+			if (GUIFocus == GUI_FSSMode) {
 				FSSMode = ON;
 			}
 			else FSSMode = OFF;
 			
-			if (GUIFocus == GUI_SAAMode) {		prttxt = "SAA Mode";
+			if (GUIFocus == GUI_SAAMode) {
 				SAAMode = ON;
 			}
 			else SAAMode = OFF;
 			
-			if (GUIFocus == GUI_Codex)			prttxt = "Codex";
-
 			return GUIFocus;
+		}
+		else {
+			return -1;
 		}
 	}
 
@@ -699,6 +690,27 @@
 	
 	int stfnDumpFlags() {
 
+		int GUIFocus;
+		int prttxt;
+		
+		GUIFocus = stfnGetKeyValue("GuiFocus", INTEGER);
+		
+		if (GUIFocus == GUI_None)			prttxt = "No Focus";
+		if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
+		if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
+		if (GUIFocus == GUI_CommsPanel)		prttxt = "Comms Panel";
+		if (GUIFocus == GUI_RolePanel)		prttxt = "Role Panel";
+		if (GUIFocus == GUI_StationSvcs)	prttxt = "Station Services";
+		if (GUIFocus == GUI_GalaxyMap)		prttxt = "Galaxy Map";
+		if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
+		if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
+		if (GUIFocus == GUI_FSSMode) 		prttxt = "FSS Mode";		
+		if (GUIFocus == GUI_SAAMode) 		prttxt = "SAA Mode";		
+		if (GUIFocus == GUI_Codex)			prttxt = "Codex";
+		if (GUIFocus == -1)					prttxt = "Flags = 0, No GUIFocus Key?";
+		
+		printf("\x0a\GUI Focus = %s\x0a", prttxt);
+		
 		printf("\x0a\Flags	=	%d\x0a", Flags);
 		printf("=========================\x0a");
 		printf("Bits set in FLAGS:\x0a");				
