@@ -27,11 +27,11 @@ v5.0.0	- New Major release - Odyssey
 		- Include Communications Control code (ED_CommsControl.tmh)
 		- Remove old debug code
 		- Remove redundant commented code
+		- Add defines (commented) for On-Foot binds in binds sheet and map them in the binds file 
 		- TESTING	- Station Services now aligned to Fleet Carriers ... recode to repair all except paint
 		- TESTING	- SRV Deploy/Recall
 		- TESTING	- DISMISS/RECALL Ship
 		- TESTING	- Recode Status Page Printout to include Flags2 bits
-		- TO DO		- Redo keybinds sheet to include binds used for Odyssey (when On Foot)
 		- TO DO		- Release 
 
 v4.2.1	- New Point Release
