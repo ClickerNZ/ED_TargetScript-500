@@ -108,7 +108,7 @@
 		}
 		else {															// ED must have the file locked for reading?
 			printf("ERROR: Status.jason file not found\x0a");			// trap if status.json is suddenly unavailable during game
-			fnSoundFX("ding");
+			fnSoundFX("wstop");
 		}		
 	}
 
