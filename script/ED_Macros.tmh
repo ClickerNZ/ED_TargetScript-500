@@ -34,8 +34,8 @@
 //			Line 183: 		mNAVBeaconWing
 //			Line 209: 		mNAVBeaconOff
 //			Line 234: 		mEnterHanger
-//			Line 259: 		mLaunch
-//			Line 270:		mChangeColours
+//			Line 249: 		mLaunch
+//			Line 260:		mChangeColours
 
 
 // START
@@ -241,16 +241,6 @@
 			PULSE+UIRight, D(),
 			PULSE+UISelect, D(2000),							//Enter Hanger		
 			PULSE+UIDown, D(),
-//			PULSE+UISelect, D(5500),							//Starport/Carrier Services
-//			PULSE+UIRight, D(),
-//			PULSE+UIRight, D(),
-//			PULSE+UIUp, D(),									// ... we want be be positioned over bottom selection
-//			PULSE+UISelect, D(2000),							// 
-//			PULSE+UIRight, D(),
-//			PULSE+UIRight, D(),			
-//			PULSE+UISelect, D(2000),							// Repair all
-//			PULSE+UILeft, D(),
-//			PULSE+UILeft, D(),
 			PULSE+UISelect, D(),								// Back			
 			LOCK);
 			
