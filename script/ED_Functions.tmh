@@ -53,11 +53,11 @@
 //			Line 1111:	int fnVPOutput()
 //			Line 1123: 	int fnPrintState()
 //			Line 1134: 	int fnStateDump()
-//			Line 1227: 	int fnDebug()
-//			Line 1252:	int fnGetTOD()
+//			Line 1272: 	int fnDebug()
+//			Line 1297:	int fnGetTOD()
 //			Line 1270:	int fnGetDate()
-//			Line 1292:	int findstr()
-//			Line 1319:	int ModKey()			// not used
+//			Line 1315:	int findstr()
+//			Line 1365:	int ModKey()			// not used
 
 //------------------//
 // CUSTOM FUNCTIONS //
@@ -1133,89 +1133,139 @@
 
 	int fnStateDump() {
 
+		// Must declare all local variables outside of any logical tests
+		
 		int myJsonTimeStamp;
 
 		int AL, AR, BL, CR, DA, FA, FM, HB, HD, HI, HM, HP, JT;
 		int LG, ML, NV, PM, RT, SB, SH, SL, SP, SR, TR, TV, WD;
 		float LT, LN;
 
-		if (fSilentRunning)			SR = "ON";			else	SR = "OFF";
-		if (fCargoScoop)			CR = "DEPLOYED";	else	CR = "RETRACTED";
-		if (fLandingGear)			LG = "DEPLOYED";	else	LG = "RETRACTED";
-		if (fLights)				SL = "ON";			else	SL = "OFF";
-		if (fNightVision)			NV = "ON";			else	NV = "OFF";
-		if (fHardpoints)			HP = "DEPLOYED";	else	HP = "RETRACTED";
-		if (fFAOff)		 			FA = "OFF"; 		else 	FA = "ON";
-		if (fHUDAnalysis) 			HM = "ANALYSIS";	else 	HM = "COMBAT";
-		if (FSSMode) 				FM = "ON"; 			else 	FM = "OFF";
-		if (ReverseThrust) 			RT = "REVERSE"; 	else	RT = "FORWARD";
-		if (SpeedbrakeDeployed) 	SB = "DEPLOYED";	else	SB = "RETRACTED";
-		if (fSRVTurretRetracted)	TR = "RETRACTED";	else	TR = "DEPLOYED";
-		if (fSRVTurretView)			TV = "TRUE";		else	TV = "FALSE";
-		if (fSRVDriveAssist)		DA = "ON";			else	DA = "OFF";
-		if (fSRVHandbrake)			HB = "ON";			else	HB = "OFF";
-		if (fShieldsUp)				SH = "UP";			else	SH = "DOWN";
-		if (fMassLocked)			ML = "YES";			else	ML = "NO";
-		if (fAltFromAvgRad)			AR = "Radius-ALT";	else	AR = "Radar-ALT";
+		if (Flags != 0) {
+			if (fSilentRunning)			SR = "ON";			else	SR = "OFF";
+			if (fCargoScoop)			CR = "DEPLOYED";	else	CR = "RETRACTED";
+			if (fLandingGear)			LG = "DEPLOYED";	else	LG = "RETRACTED";
+			if (fLights)				SL = "ON";			else	SL = "OFF";
+			if (fNightVision)			NV = "ON";			else	NV = "OFF";
+			if (fHardpoints)			HP = "DEPLOYED";	else	HP = "RETRACTED";
+			if (fFAOff)		 			FA = "OFF"; 		else 	FA = "ON";
+			if (fHUDAnalysis) 			HM = "ANALYSIS";	else 	HM = "COMBAT";
+			if (FSSMode) 				FM = "ON"; 			else 	FM = "OFF";
+			if (ReverseThrust) 			RT = "REVERSE"; 	else	RT = "FORWARD";
+			if (SpeedbrakeDeployed) 	SB = "DEPLOYED";	else	SB = "RETRACTED";
+			if (fSRVTurretRetracted)	TR = "RETRACTED";	else	TR = "DEPLOYED";
+			if (fSRVTurretView)			TV = "TRUE";		else	TV = "FALSE";
+			if (fSRVDriveAssist)		DA = "ON";			else	DA = "OFF";
+			if (fSRVHandbrake)			HB = "ON";			else	HB = "OFF";
+			if (fShieldsUp)				SH = "UP";			else	SH = "DOWN";
+			if (fMassLocked)			ML = "YES";			else	ML = "NO";
+			if (fAltFromAvgRad)			AR = "Radius-ALT";	else	AR = "Radar-ALT";
 
-		if (fLatLong) {
-			LT = stfnGetKeyValue("Latitude", FLOAT);			// get fp value
-			LN = stfnGetKeyValue("Longitude", FLOAT);			// get fp value
-			HD = stfnGetKeyValue("Heading", INTEGER);			// get as integer
-			AL = stfnGetKeyValue("Altitude", INTEGER);			// get as integer
-		}
-
-		if (!fSupercruise & !fsdJump) WD = "DISENGAGED";
-		else if (fsdJump) WD = "Hyperjump";
-		else WD = "Supercruise";
-
-		stfnGetKeyValue("timestamp", STRING);		// sets 'keyvalue' char array to status.json timestamp
-
-		printf("\x0aShip System States @ %s       JSON-Timestamp: %s       Flags: %u\x0a", fnGetTOD(), &keyvalue, Flags);
-		printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
-		if (fMainShip) {
-			SP = "IN SPACE";						// Default, unless...
-			if (fLanded)						SP = "LANDED  ";
-			if (fDocked)						SP = "DOCKED  ";
-			if (!fLanded & !fDocked & fLatLong)	SP = "ORBIT   ";
-
-			printf("MAIN SHIP:	%s	Shields:		%s		Mass Locked:	%s\x0a", SP, SH, ML);
 			if (fLatLong) {
-				printf("Altitude:		%04d		Heading: 	%03d		Lat/Long:	%0.3f, %0.3f\x0a", AL, HD, LT, LN);
+				LT = stfnGetKeyValue("Latitude", FLOAT);			// get fp value
+				LN = stfnGetKeyValue("Longitude", FLOAT);			// get fp value
+				HD = stfnGetKeyValue("Heading", INTEGER);			// get as integer
+				AL = stfnGetKeyValue("Altitude", INTEGER);			// get as integer
 			}
-			printf("HUD Mode:	%s	Ship Lights:	%s		Night Vision:	%s\x0a", HM, SL, NV);
-			printf("Cargo Scoop:	%s	Landing Gear:	%s	Hardpoints:	%s\x0a", CR, LG, HP);
-			printf("FSS Mode:	%s		Supercruise:	%s	Silent Running:	%s\x0a", FM, WD, SR);
-			printf("Flight Assist:	%s		Thrust Vector:	%s	Speed Brake:	%s\x0a", FA, RT, SB);
-		}
-		if (fSRV) {		
-			if (!fLights) {
-				BL = "OFF";
+
+			if (!fSupercruise & !fsdJump) WD = "DISENGAGED";
+			else if (fsdJump) WD = "Hyperjump";
+			else WD = "Supercruise";
+			
+			stfnGetKeyValue("timestamp", STRING);					// sets &keyvalue
+
+			printf("\x0aShip System States @ %s       JSON-Timestamp: %s       Flags: %u\x0a", fnGetTOD(), &keyvalue, Flags);
+			printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
+			if (fMainShip) {
+				SP = "IN SPACE";						// Default, unless...
+				if (fLanded)						SP = "LANDED  ";
+				if (fDocked)						SP = "DOCKED  ";
+				if (!fLanded & !fDocked & fLatLong)	SP = "ORBIT   ";
+
+				printf("MAIN SHIP:	%s	Shields:		%s		Mass Locked:	%s\x0a", SP, SH, ML);
+				if (fLatLong) {
+					printf("Altitude:		%04d		Heading: 	%03d		Lat/Long:	%0.3f, %0.3f\x0a", AL, HD, LT, LN);
+				}
+				printf("HUD Mode:	%s	Ship Lights:	%s		Night Vision:	%s\x0a", HM, SL, NV);
+				printf("Cargo Scoop:	%s	Landing Gear:	%s	Hardpoints:	%s\x0a", CR, LG, HP);
+				printf("FSS Mode:	%s		Supercruise:	%s	Silent Running:	%s\x0a", FM, WD, SR);
+				printf("Flight Assist:	%s		Thrust Vector:	%s	Speed Brake:	%s\x0a", FA, RT, SB);
 			}
-			else {
-				if (fSRVHiBeam) {
-					BL = "HI";
+			else if (fSRV) {		
+				if (!fLights) {
+					BL = "OFF";
 				}
 				else {
-					BL = "LO";
+					if (fSRVHiBeam) {
+						BL = "HI";
+					}
+					else {
+						BL = "LO";
+					}
 				}
+				
+				printf("SRV:		Heading: %d		Lat/Long:	%0.3f, %0.3f\x0a", HD, LT, LN);
+				printf("Cargo Scoop:	%s		SRV Lights:	%s\x0a", CR, BL);
+				printf("Turret:		%s		Turret View:	%s\x0a", TR, TV);
+				printf("Drive Assist:	%s			Gear Selector:	%s\x0a", DA, RT);
+				printf("Handbrake:	%s			Shields: 		%s\x0a", HB, SH);
 			}
-			
-			printf("SRV:		Heading: %d		Lat/Long:	%0.3f, %0.3f\x0a", HD, LT, LN);
-			printf("Cargo Scoop:	%s		SRV Lights:	%s\x0a", CR, BL);
-			printf("Turret:		%s		Turret View:	%s\x0a", TR, TV);
-			printf("Drive Assist:	%s			Gear Selector:	%s\x0a", DA, RT);
-			printf("Handbrake:	%s			Shields: 		%s\x0a", HB, SH);
-		}
-		if (fFighter) {
-			printf("FIGHTER:\x0a");
-			printf("Fighter states not coded in this version\x0a\x0a");
-		}
-		if (Flags2 != 0) {
-			printf("On Foot:\x0a");
+			else if (fFighter) {
+				printf("FIGHTER:\x0a");
+				printf("Fighter states not coded in this version\x0a\x0a");
+			}
+			else {
 				stfnDumpFlags();
+			}
 		}
-		if (Flags != 0) {
+		
+	//	Oxygen(FLOAT), Health(FLOAT), Temperature(INTEGER), SelectedWeapon_Localised(STRING), Gravity(FLOAT)
+		int Temp, Weapon, Locn1, Locn2, MC, Atmos, O2Lvl, Body1, Body2, Glide, Perspective;
+		float O2, Health, Gravity;
+
+		if (Odyssey) {
+		
+			Body2 = "Normal";
+			
+			if (fOnFoot)				Locn1 = "On Foot";
+			if (fInTaxi)				Locn2 = " in Taxi";
+			if (fInMultiCrew)			MC = "Multicrew"; else MC = "Alone";
+			if (fOnFootInStation)		Locn2 = " in Station";
+			if (fOnFootOnPlanet)		Locn2 = " on Planet";
+			if (fAimDownSight)			Perspective = "Sights"; else Perspective = "Normal";
+			if (fLowOxygen)				O2Lvl = "LOW"; 		else O2Lvl = "Fine";
+			if (fLowHealth)				Body1 = "Injured";	else Body1 = "Healthy";
+			if (fCold)					Body2 = "Cold";
+			if (fHot)					Body2 = "Hot";
+			if (fVeryCold)				Body2 = "Very Cold";
+			if (fVeryHot)				Body2 = "Very Hot";
+			if (fGlideMode)				Glide = "YES"; else Glide = "NO";
+			if (fOnFootInHanger)		Locn2 = " in Hanger";
+			if (fOnFootSocialSpace)		Locn2 = " in Social Space";
+			if (fOnFootExterior)		Locn2 = " outside";
+			if (fBreathableAtmosphere)	Atmos = "Breathable"; else Atmos = "Unbreathable";
+			
+			Temp 	= stfnGetKeyValue("Temperature", INTEGER);
+			Weapon	= stfnGetKeyValue("SelectedWeapon_Localised", STRING);
+			O2		= stfnGetKeyValue("Oxygen", FLOAT);
+			Health	= stfnGetKeyValue("Health", FLOAT);
+			Gravity	= stfnGetKeyValue("Gravity", FLOAT);
+			
+			stfnGetKeyValue("timestamp", STRING);
+
+			printf("\x0aPersonal States @ %s       JSON-Timestamp: %s       Flags2: %u\x0a", fnGetTOD(), &keyvalue, Flags2);
+			printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
+
+			printf("Location:	%s, %s\x0a", Locn1, Locn2);
+			printf("Atmosphere:	%s\x0a", Atmos);
+			printf("Gravity:		%0.2f\x0a", Gravity);
+			printf("Situation:	%s\x0a", MC);
+			printf("Health:		Body=%s,	%0.2f\x0a", Body1, Health);
+			printf("Environment:	%s,		%0.2f degrees\x0a", Body2, Temp);
+			printf("Oxygen Level:	%s%,		%0.2f\x0a", O2, O2Lvl);
+			printf("Weapon:		%s,	Perspective:	%s\x0a", Weapon, Perspective);
+		}
+		if (strlen(&myJson) > 68) {
 			printf("-----------------------------------------------------------------------------------------------------------------------------------------------\x0a");
 		}
 	}
