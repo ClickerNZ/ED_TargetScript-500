@@ -1,7 +1,7 @@
 
 Version 5.0.0 (Odyssey)
 
-STATUS: BETA
+STATUS: RELEASE
 
 HISTORY:
 
