@@ -44,7 +44,7 @@
 
 	define VMajor		 						5						// Script Version Major Value			ie. 2.x.x
 	define VMinor		 						0						// Script Version Minor Value			ie. x.3.x
-	define VPoint								"0_BETA"				// Script Version Point Update			ie. x.x.4
+	define VPoint								"0"						// Script Version Point Update			ie. x.x.4
 
 
 //---------//
