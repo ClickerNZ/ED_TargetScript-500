@@ -45,6 +45,7 @@ status.json file that Elite Dangerous writes to the journal folder.
 Together, these enable the script to align all of the state tracking I need.
 - Version 410b no longer uses the external C++ file. I've replaced this with an REXEC statement to run fnsReadStatusJson() every 500 ms.
 - Version 420 and later contain changes required for ED 3.7 - Fleet Carriers
+- Version 500 and later contain changes and additional code to support ED 4.0 - Odyssey
 
 PACKAGE CONTENTS: 
 
@@ -52,8 +53,19 @@ When publishing or sharing this script the following should be included in the z
 - This readme file
 - The license file
 - User reference guide (pdf)
-- ED_Main.tmc, ED_Functions.tmh, ED_Macros.ttm, ED_Toggles.tmh, ED_StateTracker.tmh, 
-- ED_MapKeyAssignment.tmh, ED_Defines.ttm, ED_GlobalVars.tmh, ED_UserSettings.tmh 
+- The following script files;
+		ED_CommsControl.tmh
+		ED_Functions.tmh
+		ED_GameBindings.ttm
+		ED_GlobalVars.tmh
+		ED_Initialise.tmh
+		ED_Macros.tmh
+		ED_Main.tmc
+		ED_MapKeyAssignment.tmh
+		ED_ScriptDefines.ttm
+		ED_StateTracker.tmh
+		ED_Toggles.tmh
+		ED_UserSettings.tmh
 - Voice.exe (users can find this on github and check out the source if they wish)
 - sounder.exe (users can find this on github via the same author as voice.exe)
 - target_enhanced.tmh As of version 4.0.0, I use a modified target.tmh file which itself was modified by Sedenion
