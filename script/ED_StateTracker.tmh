@@ -27,9 +27,9 @@
 //			Line 247: 	int stfnProcessFlags()
 //			Line 484:	int stfnProcessFlags2()
 //			Line 548: 	int stfnProcessGuiFocus()
-//			Line 582: 	int stfnStartCheck()
-//			Line 626:	int stfnMyStates()
-//			Line 700:	int stfnDumpFlags()
+//			Line 573: 	int stfnStartCheck()
+//			Line 617:	int stfnMyStates()
+//			Line 691:	int stfnDumpFlags()
 	
 // START
 
@@ -162,10 +162,10 @@
 		int Start = findstr(&myJson, &pattern);						// 'findstr()' is my version of 'strstr()' in sys.tmh...which doesn't work...defined in ED_Functions.tmh 
 																	// 'Start' contains the character count to the first character of the Keyname, if found. 
 		if (Start == -1) {											// 'Start' contains -1 if the Keyname is not found
-			myResult = strcmp(&pattern, "Flags2");
-			if (myResult != 0) {									// Ignore for Flags2 until Horizons is defunct, then remove this test.
-				printf("Key %s NOT Found\x0a", &pattern);
-			}
+//			myResult = strcmp(&pattern, "Flags2");
+//			if (myResult != 0) {									// Ignore for Flags2 until Horizons is defunct, then remove this test.
+//				printf("Key %s NOT Found\x0a", &pattern);
+//			}
 			return -1;
 		}
 		
@@ -234,7 +234,7 @@
 
 		if (vtype == STRING) {			
 			strdel(&keyvalue, 0, 0);								// Just remove leading quote and...
-			return 0;												// ...use the global keyvalue on return
+			return 0;												// ...use the global &keyvalue on return
 		}
 	}
 	// End of stfnGetKeyValue()
@@ -483,7 +483,7 @@
 	
 	int stfnProcessFlags2() {
 	
-		int VoiceTxt;
+//		int VoiceTxt;
 
 		// TARGET uses 32 bit signed precision for its integers.
 		// Integers larger than 2,147,483,648 wrap around to negative number
@@ -694,21 +694,24 @@
 		int prttxt;
 		
 		GUIFocus = stfnGetKeyValue("GuiFocus", INTEGER);
+		if (GUIFocus == -1) {
+			prttxt = "Key not found";
+		}
+		else {
 		
-		if (GUIFocus == GUI_None)			prttxt = "No Focus";
-		if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
-		if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
-		if (GUIFocus == GUI_CommsPanel)		prttxt = "Comms Panel";
-		if (GUIFocus == GUI_RolePanel)		prttxt = "Role Panel";
-		if (GUIFocus == GUI_StationSvcs)	prttxt = "Station Services";
-		if (GUIFocus == GUI_GalaxyMap)		prttxt = "Galaxy Map";
-		if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
-		if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
-		if (GUIFocus == GUI_FSSMode) 		prttxt = "FSS Mode";		
-		if (GUIFocus == GUI_SAAMode) 		prttxt = "SAA Mode";		
-		if (GUIFocus == GUI_Codex)			prttxt = "Codex";
-		if (GUIFocus == -1)					prttxt = "Flags = 0, No GUIFocus Key?";
-		
+			if (GUIFocus == GUI_None)			prttxt = "No Focus";
+			if (GUIFocus == GUI_SystemPanel)	prttxt = "System Panel";
+			if (GUIFocus == GUI_TargetPanel)	prttxt = "Target Panel";
+			if (GUIFocus == GUI_CommsPanel)		prttxt = "Comms Panel";
+			if (GUIFocus == GUI_RolePanel)		prttxt = "Role Panel";
+			if (GUIFocus == GUI_StationSvcs)	prttxt = "Station Services";
+			if (GUIFocus == GUI_GalaxyMap)		prttxt = "Galaxy Map";
+			if (GUIFocus == GUI_SystemMap)		prttxt = "System Map";
+			if (GUIFocus == GUI_OrreryMap)		prttxt = "Orrery Map";
+			if (GUIFocus == GUI_FSSMode) 		prttxt = "FSS Mode";		
+			if (GUIFocus == GUI_SAAMode) 		prttxt = "SAA Mode";		
+			if (GUIFocus == GUI_Codex)			prttxt = "Codex";		
+		}
 		printf("\x0a\GUI Focus = %s\x0a", prttxt);
 		
 		printf("\x0a\Flags	=	%d\x0a", Flags);
